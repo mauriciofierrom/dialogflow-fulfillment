@@ -21,19 +21,17 @@ import Data.Aeson ( FromJSON
 import Data.Foldable (asum)
 import GHC.Generics
 
-newtype Text = Text { tText :: Maybe [String] } deriving (Eq, Show)
+newtype Text = Text { text :: Maybe [String] } deriving (Eq, Show)
 
 instance FromJSON Text where
   parseJSON = withObject "text" $ \o -> do
     firstText <- o .: "text"
-    tText <- firstText .: "text"
+    text <- firstText .: "text"
     return Text{..}
 
 instance ToJSON Text where
   toJSON t = object [
-    -- "text" .= object [
-    "text" .= tText t ]
-                    -- ]
+    "text" .= text t ]
 
 newtype SimpleResponses = SimpleResponses { simpleResponses :: [SimpleResponse] }
   deriving (Eq, Generic, Show)
@@ -88,7 +86,7 @@ instance ToJSON SpeechText where
     SSML ssml -> object ["ssml" .= ssml]
 
 data SimpleResponse =
-  SimpleResponse { simpleResponseText :: SpeechText -- these fields are mutually exclusive vv
+  SimpleResponse { simpleResponseText :: SpeechText
                  , displayText :: Maybe String
                  } deriving (Eq, Show)
 
