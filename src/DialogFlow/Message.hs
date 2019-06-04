@@ -8,6 +8,7 @@ module DialogFlow.Message
   , Text(..)
   , SimpleResponses(..)
   , SimpleResponse(..)
+  , SpeechText(..)
   ) where
 
 import Data.Aeson ( FromJSON
