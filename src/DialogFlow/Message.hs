@@ -5,6 +5,7 @@
 
 module DialogFlow.Message
   ( Button(..)
+  , toObject
   , Text(..)
   , SimpleResponses(..)
   , SimpleResponse(..)
@@ -16,11 +17,15 @@ import Data.Aeson ( FromJSON
                   , ToJSON
                   , toJSON
                   , object
+                  , Value(..)
+                  , Object(..)
                   , withObject
                   , (.:)
                   , (.=))
 import Data.Foldable (asum)
 import GHC.Generics
+
+import qualified Data.HashMap.Strict as HM
 
 newtype Text = Text { text :: Maybe [String] } deriving (Eq, Show)
 
@@ -44,17 +49,6 @@ instance FromJSON SimpleResponses where
   parseJSON = withObject "simpleResponses" $ \msr ->
     SimpleResponses <$> msr .: "simpleResponses"
 
-instance FromJSON SimpleResponse where
-  parseJSON = withObject "simpleResponse" $ \sr ->
-    SimpleResponse <$> sr .: "textToSpeech" <*> sr .: "displayText"
-
-instance ToJSON SimpleResponse where
-  toJSON sr =
-    -- object [ "simpleResponses" .=
-      object [ "textToSpeech" .= simpleResponseText sr
-             , "displayText" .= displayText sr
-             ]
-           -- ]
 
 data Image = Image { iImageUri :: Maybe String
                      , accessibilityText :: Maybe String
@@ -91,6 +85,14 @@ data SimpleResponse =
                  , displayText :: Maybe String
                  } deriving (Eq, Show)
 
+instance FromJSON SimpleResponse where
+  parseJSON = withObject "simpleResponse" $ \sr ->
+    SimpleResponse <$> sr .: "textToSpeech" <*> sr .: "displayText"
+
+instance ToJSON SimpleResponse where
+  toJSON SimpleResponse{..} = Object $
+    toObject simpleResponseText <> HM.fromList ["displayText" .= displayText ]
+
 data BasicCard =
   BasicCard { bsTitle :: Maybe String
             , bsSubtitle :: Maybe String
@@ -125,3 +127,8 @@ data ListSelect =
 
 newtype CarouselSelect =
   CarouselSelect { csItems :: [Item] } deriving (Eq, Generic, Show)
+
+toObject :: ToJSON a => a -> Object
+toObject a = case toJSON a of
+  Object o -> o
+  _        -> error "toObject: value isn't an Object"

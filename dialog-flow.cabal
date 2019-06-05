@@ -67,6 +67,7 @@ library
       aeson
     , base ^>=4.12.0.0
     , text
+    , unordered-containers
 
   -- Directories containing source files.
   hs-source-dirs:      src
@@ -84,7 +85,8 @@ test-suite dialog-flow-test
       test
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-      base ^>=4.12.0.0
+      aeson
+    , base ^>=4.12.0.0
     , dialog-flow
     , hspec
     , hspec-discover
