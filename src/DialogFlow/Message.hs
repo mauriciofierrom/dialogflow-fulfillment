@@ -17,7 +17,7 @@ import Data.Aeson ( FromJSON
                   , toJSON
                   , object
                   , Value(..)
-                  , Object(..)
+                  , Object
                   , withObject
                   , (.:)
                   , (.=))
