@@ -5,7 +5,6 @@
 
 module DialogFlow.Message
   ( Button(..)
-  , toObject
   , Text(..)
   , SimpleResponses(..)
   , SimpleResponse(..)
