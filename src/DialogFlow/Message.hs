@@ -55,6 +55,12 @@ data BasicCardContent = BasicCardImage (Msg 'MsgImage)
                       | BasicCardFormattedText String
                       deriving (Show)
 
+instance ToJSON BasicCardContent where
+  toJSON = \case
+    BasicCardImage image -> object [ "image" .= image ]
+    BasicCardFormattedText formattedText -> object [ "formattedText" .= formattedText ]
+
+
 data SpeechText = TextToSpeech String -- ^ The plain text of the speech output
                 | SSML String -- ^ Structured spoken response to the user in SSML format
                 deriving (Eq, Show)

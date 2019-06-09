@@ -42,3 +42,9 @@ spec = do
         let image = Image (Just "the uri") (Just "the ally text")
             expectedJson = "{\"accessibilityText\":\"the ally text\",\"imageUri\":\"the uri\"}"
          in encode image `shouldBe` expectedJson
+  describe "BasicCardContent toJSON" $ do
+    context "when it is an Image" $
+      it "should have the desired structure" $
+        let image = BasicCardImage (Image (Just "the uri") (Just "the ally text"))
+            expectedJson = "{\"image\":{\"accessibilityText\":\"the ally text\",\"imageUri\":\"the uri\"}}"
+         in encode image `shouldBe` expectedJson
