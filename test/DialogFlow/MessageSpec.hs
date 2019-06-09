@@ -36,3 +36,9 @@ spec = do
       let cardButton = CardButton "the text" "the postback"
           expectedJson = "{\"text\":\"the text\",\"postback\":\"the postback\"}"
        in encode cardButton `shouldBe` expectedJson
+  describe "Message toJSON" $ do
+    describe "Image" $
+      it "should have the desired structure" $
+        let image = Image (Just "the uri") (Just "the ally text")
+            expectedJson = "{\"accessibilityText\":\"the ally text\",\"imageUri\":\"the uri\"}"
+         in encode image `shouldBe` expectedJson

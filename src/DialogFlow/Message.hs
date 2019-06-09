@@ -166,7 +166,8 @@ data Message where
 -- TODO: Make sure homoiconicity is respected
 instance Show (Msg t) where
   show (Text ts) = "Text " <> show ts
-  show (Image mbUri mbDescription) = "Image " <> show mbUri <> " " <> show mbDescription
+  show (Image mbUri mbAccessibilityText) =
+    "Image " <> show mbUri <> " " <> show mbAccessibilityText
   show (QuickReplies  mbTitle mbReplies) =
     "QuickReplies " <> show mbTitle <> " " <> show mbReplies
   show (Card mbTitle mbSubtitle mbUri mbCardButtons) =
@@ -184,6 +185,11 @@ instance Show (Msg t) where
   show (LinkOutSuggestion name uri) = "LinkOuSuggestion " <> name <> " " <> uri
   show (ListSelect mbTitle items) = "ListSelect " <> show mbTitle <> " " <> show items
   show (CarouselSelect items) = "CarouselSelect " <> show items
+
+instance ToJSON (Msg t) where
+  toJSON (Image uri accesibilityText) =
+    object [ "imageUri" .= uri
+           , "accessibilityText" .= accesibilityText ]
 
 data ListItem = ListItem
   { liInfo :: SelectItemInfo -- ^ Additional information about this option
