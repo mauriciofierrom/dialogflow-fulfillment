@@ -3,12 +3,15 @@
 {-# LANGUAGE GADTs #-}
 {-# LANGUAGE LambdaCase #-}
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE RecordWildCards #-}
 
 module DialogFlow.Message
   ( CardButton(..)
   , BasicCardContent(..)
   , ListItem(..)
   , CarouselItem(..)
+  , SpeechText(..)
+  , SimpleResponse(..)
   , Msg( Text
        , Image
        , QuickReplies
@@ -28,19 +31,25 @@ import Data.Aeson ( FromJSON
                   , ToJSON
                   , toJSON
                   , object
-                  -- , Value(..)
-                  -- , Object
+                  , Value(..)
                   , withObject
                   , (.:)
                   , (.=))
 import Data.Foldable (asum)
 
--- import qualified Data.HashMap.Strict as HM
+import qualified Data.HashMap.Strict as HM
+
+import DialogFlow.Util
 
 data CardButton = CardButton
   { cbText :: String -- ^ The text to show on the button
   , cbPostback :: String -- ^ The text to send to the DialogFlow API or URI to open
   } deriving (Eq, Show)
+
+instance ToJSON CardButton where
+  toJSON CardButton{..} =
+    object [ "text" .= cbText
+           , "postback" .= cbPostback ]
 
 data BasicCardContent = BasicCardImage (Msg 'MsgImage)
                       | BasicCardFormattedText String
@@ -64,6 +73,10 @@ data SimpleResponse = SimpleResponse
   { simpleResponseText :: SpeechText -- ^ The speech text
   , displayText :: Maybe String -- ^ The text to display
   } deriving (Eq, Show)
+
+instance ToJSON SimpleResponse where
+  toJSON SimpleResponse{..} = Object $
+    toObject simpleResponseText <> HM.fromList ["displayText" .= displayText ]
 
 newtype OpenUriAction = OpenUriAction
   { unOpenUriAction :: String -- ^ The HTTP or HTTPS scheme URI

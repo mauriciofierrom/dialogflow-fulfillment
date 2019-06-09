@@ -31,3 +31,8 @@ spec = do
               "{\"displayText\":\"the maybe text\",\"ssml\":\"the xml\"}"
             simpleResponse = SimpleResponse (SSML "the xml") (Just "the maybe text")
          in encode simpleResponse `shouldBe` expectedJson
+  describe "CardButton toJSON" $ do
+    it "should have the desired structure" $
+      let cardButton = CardButton "the text" "the postback"
+          expectedJson = "{\"text\":\"the text\",\"postback\":\"the postback\"}"
+       in encode cardButton `shouldBe` expectedJson
