@@ -7,6 +7,9 @@ import Test.Hspec
 
 import DialogFlow.Message
 
+-- TODO: Make tests less flaky. Currently it depends on the order the fields are
+-- generated, and iirc the aeson docs states they don't make assurances about
+-- it.
 spec :: Spec
 spec = do
   describe "SpeechText toJSON" $ do
@@ -53,6 +56,11 @@ spec = do
           basicCardButton = BasicCardButton "the title" openUriAction
           expectedJson = "{\"openUriAction\":{\"uri\":\"the uri\"},\"title\":\"the title\"}"
        in encode basicCardButton `shouldBe` expectedJson
+  describe "Suggestion toJSON" $ do
+    it "should have the desired structure" $
+      let suggestion = Suggestion "the title"
+          expectedJson = "{\"title\":\"the title\"}"
+       in encode suggestion `shouldBe` expectedJson
   describe "Message toJSON" $ do
     context "Image" $ do
       it "should have the desired structure" $

@@ -14,6 +14,7 @@ module DialogFlow.Message
   , OpenUriAction(..)
   , SpeechText(..)
   , SimpleResponse(..)
+  , Suggestion(..)
   , Msg( Text
        , Image
        , QuickReplies
@@ -106,6 +107,10 @@ instance ToJSON BasicCardButton where
 newtype Suggestion = Suggestion
   { unSuggestionTitle :: String -- ^ The text shown in the suggestion chip
   } deriving (Eq, Show)
+
+instance ToJSON Suggestion where
+  toJSON s =
+    object [ "title" .= unSuggestionTitle s ]
 
 data SelectItemInfo = SelectItemInfo
   { siiKey :: String -- ^ A unique key that will be sent back to the agent if this response is given
