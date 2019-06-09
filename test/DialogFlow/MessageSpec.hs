@@ -61,6 +61,11 @@ spec = do
       let suggestion = Suggestion "the title"
           expectedJson = "{\"title\":\"the title\"}"
        in encode suggestion `shouldBe` expectedJson
+  describe "SelectedItemInfo toJSON" $ do
+    it "should have the desired structure" $
+      let selectedItemInfo = SelectItemInfo "the key" ["a synonym"]
+          expectedJson = "{\"key\":\"the key\",\"synonyms\":[\"a synonym\"]}"
+       in encode selectedItemInfo `shouldBe` expectedJson
   describe "Message toJSON" $ do
     context "Image" $ do
       it "should have the desired structure" $
