@@ -1,14 +1,26 @@
-{-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE DeriveGeneric #-}
-{-# LANGUAGE RecordWildCards #-}
+{-# LANGUAGE DataKinds #-}
+{-# LANGUAGE FlexibleContexts #-}
+{-# LANGUAGE GADTs #-}
 {-# LANGUAGE LambdaCase #-}
+{-# LANGUAGE OverloadedStrings #-}
 
 module DialogFlow.Message
-  ( Button(..)
-  , Text(..)
-  , SimpleResponses(..)
-  , SimpleResponse(..)
-  , SpeechText(..)
+  ( CardButton(..)
+  , BasicCardContent(..)
+  , ListItem(..)
+  , CarouselItem(..)
+  , Msg( Text
+       , Image
+       , QuickReplies
+       , Card
+       , SimpleResponses
+       , BasicCard
+       , Suggestions
+       , LinkOutSuggestion
+       , ListSelect
+       , CarouselSelect
+       )
+  , Message(..)
   ) where
 
 import Data.Aeson ( FromJSON
@@ -16,58 +28,27 @@ import Data.Aeson ( FromJSON
                   , ToJSON
                   , toJSON
                   , object
-                  , Value(..)
-                  , Object
+                  -- , Value(..)
+                  -- , Object
                   , withObject
                   , (.:)
                   , (.=))
 import Data.Foldable (asum)
-import GHC.Generics
 
-import qualified Data.HashMap.Strict as HM
+-- import qualified Data.HashMap.Strict as HM
 
-newtype Text = Text { text :: Maybe [String] } deriving (Eq, Show)
+data CardButton = CardButton
+  { text :: String -- ^ The text to show on the button
+  , postback :: String -- ^ The text to send to the DialogFlow API or URI to open
+  } deriving (Eq, Show)
 
-instance FromJSON Text where
-  parseJSON = withObject "text" $ \o -> do
-    firstText <- o .: "text"
-    text <- firstText .: "text"
-    return Text{..}
+data BasicCardContent = BasicCardImage (Msg 'MsgImage)
+                      | BasicCardFormattedText String
+                      -- deriving (Show)
 
-instance ToJSON Text where
-  toJSON t = object [
-    "text" .= text t ]
-
-newtype SimpleResponses = SimpleResponses { simpleResponses :: [SimpleResponse] }
-  deriving (Eq, Generic, Show)
-
-instance ToJSON SimpleResponses where
-  toJSON msr = object [ "simpleResponses" .= simpleResponses msr]
-
-instance FromJSON SimpleResponses where
-  parseJSON = withObject "simpleResponses" $ \msr ->
-    SimpleResponses <$> msr .: "simpleResponses"
-
-
-data Image = Image { iImageUri :: Maybe String
-                     , accessibilityText :: Maybe String
-                     } deriving (Eq, Generic, Show)
-
-data QuickReply = QuickReply { title :: Maybe String
-                             , quickReplies :: Maybe [String]
-                             } deriving (Eq, Generic, Show)
-
-data Button = Button { buttonText :: Maybe String
-                     , buttonPostback :: Maybe String
-                     } deriving (Eq, Generic, Show)
-
-data Card = Card { cCardTitle :: Maybe String
-                 , cSubtitle :: Maybe String
-                 , cImageUri :: Maybe String
-                 , cButtons :: Maybe [Button]
-                 } deriving (Eq, Generic, Show)
-
-data SpeechText = TextToSpeech String | SSML String deriving (Eq, Show)
+data SpeechText = TextToSpeech String -- ^ The plain text of the speech output
+                | SSML String -- ^ Structured spoken response to the user in SSML format
+                deriving (Eq, Show)
 
 instance FromJSON SpeechText where
   parseJSON = withObject "textToSpeech or SSML" $ \st ->
@@ -79,55 +60,106 @@ instance ToJSON SpeechText where
     TextToSpeech textToSpeech -> object ["textToSpeech" .= textToSpeech]
     SSML ssml -> object ["ssml" .= ssml]
 
-data SimpleResponse =
-  SimpleResponse { simpleResponseText :: SpeechText
-                 , displayText :: Maybe String
-                 } deriving (Eq, Show)
+data SimpleResponse = SimpleResponse
+  { simpleResponseText :: SpeechText -- ^ The speech text
+  , displayText :: Maybe String -- ^ The text to display
+  } deriving (Eq, Show)
 
-instance FromJSON SimpleResponse where
-  parseJSON = withObject "simpleResponse" $ \sr ->
-    SimpleResponse <$> sr .: "textToSpeech" <*> sr .: "displayText"
+newtype OpenUriAction = OpenUriAction
+  { unOpenUriAction :: String -- ^ The HTTP or HTTPS scheme URI
+  } deriving (Eq, Show)
 
-instance ToJSON SimpleResponse where
-  toJSON SimpleResponse{..} = Object $
-    toObject simpleResponseText <> HM.fromList ["displayText" .= displayText ]
+data BasicCardButton = BasicCardButton
+  { bcbTitle :: String -- ^ The title of the button
+  , bcbOpenUriAction :: OpenUriAction -- ^ Action to take when a user taps on the button
+  } deriving (Eq, Show)
 
-data BasicCard =
-  BasicCard { bsTitle :: Maybe String
-            , bsSubtitle :: Maybe String
-            , bsFormattedText :: String
-            , bsImage :: Maybe Image
-            , bsButtons :: [Button]
-            } deriving (Eq, Generic, Show)
+newtype Suggestion = Suggestion
+  { unSuggestionTitle :: String -- ^ The text shown in the suggestion chip
+  } deriving (Eq, Show)
 
-newtype Suggestions =
-  Suggestions { sugTitle :: String } deriving (Eq, Generic, Show)
+data SelectItemInfo = SelectItemInfo
+  { siiKey :: String -- ^ A unique key that will be sent back to the agent if this response is given
+  , siiSynonyms :: Maybe [String] -- ^ A list of synonyms that can also be used to trigger this item in dialog
+  } deriving (Eq, Show)
 
-data LinkOutSuggestion =
-  LinkOutSuggestion { losDestinationName :: String
-                    , losUri :: String
-                    } deriving (Eq, Generic, Show)
 
-data SelectItemInfo =
-  SelectItemInfo { siiKey :: String
-                 , siiSynonyms :: Maybe [String] } deriving (Eq, Generic, Show)
+data MsgType = MsgText
+             | MsgImage
+             | MsgQuickReplies
+             | MsgCard
+             | MsgSimpleResponses
+             | MsgBasicCard
+             | MsgSuggestions
+             | MsgLinkOutSuggestion
+             | MsgListSelect
+             | MsgCarouselSelect
 
-data Item =
-  Item { iInfo :: SelectItemInfo
-       , iTitle :: String
-       , iDescription :: Maybe String
-       , iImage :: Maybe Image
-       } deriving (Eq, Generic, Show)
+data Msg t where
+  Text
+    :: Maybe [String] -- ^ The collection of the agent's responses
+    -> Msg 'MsgText
 
-data ListSelect =
-  ListSelect { lsTitle :: Maybe String
-             , lsItems :: [Item]
-             } deriving (Eq, Generic, Show)
+  Image
+    :: Maybe String -- ^ The public URI to an image file
+    -> Maybe String -- ^ A text description of the image to be used for accessibility
+    -> Msg 'MsgImage
 
-newtype CarouselSelect =
-  CarouselSelect { csItems :: [Item] } deriving (Eq, Generic, Show)
+  QuickReplies
+    :: Maybe String   -- ^ The title of the collection of quick replies
+    -> Maybe [String] -- ^ The collection of quick replies
+    -> Msg 'MsgQuickReplies
 
-toObject :: ToJSON a => a -> Object
-toObject a = case toJSON a of
-  Object o -> o
-  _        -> error "toObject: value isn't an Object"
+  Card
+    :: Maybe String -- ^ The title of the card
+    -> Maybe String -- ^ The subtitle of the card
+    -> Maybe String -- ^ The public URI to an image file for the card
+    -> Maybe [CardButton] -- ^ The collection of card buttons
+    -> Msg 'MsgCard
+
+  SimpleResponses
+    :: [SimpleResponse] -- ^ The list of simple responses
+    -> Msg 'MsgSimpleResponses
+
+-- TODO: Check if the formattedText and image fields are mutually exclusive
+  BasicCard
+    :: Maybe String -- ^ The title of the card
+    -> Maybe String -- ^ The subtitle of the card
+    -> BasicCardContent -- ^ The body text or image of the card
+    -> Maybe [BasicCardButton] -- ^ The collection of card buttons
+    -> Msg 'MsgBasicCard
+
+  Suggestions
+    :: [Suggestion] -- ^ The list of suggested replies
+    -> Msg 'MsgSuggestions
+
+  LinkOutSuggestion
+    :: String -- ^ The name of the app or site this chip is linking to
+    -> String -- ^ The URI of the app or site to open when the user taps the suggestion chip
+    -> Msg 'MsgLinkOutSuggestion
+
+  ListSelect
+    :: Maybe String -- ^ The overall title of the list
+    -> [ListItem] -- ^ List items
+    -> Msg 'MsgListSelect
+
+  CarouselSelect
+    :: [CarouselItem] -- ^ Carousel items
+    -> Msg 'MsgCarouselSelect
+
+data Message where
+  Message :: (Show (Msg t)) => Msg t -> Message
+
+data ListItem = ListItem
+  { liInfo :: SelectItemInfo -- ^ Additional information about this option
+  , liTitle :: String -- ^ The title of the list item
+  , liDescription :: String -- ^ The main text describing the item
+  , liImage :: Msg 'MsgImage -- ^ The image to display
+  } -- deriving (Eq, Show)
+
+data CarouselItem = CarouselItem
+  { ciInfo :: SelectItemInfo -- ^ Additional info about the option item
+  , ciTitle :: String -- ^ Title of the carousel item
+  , ciDescription :: String -- ^ The body text of the card
+  , ciImage :: Msg 'MsgImage -- ^ The image to display
+  } -- deriving (Eq, Show)
