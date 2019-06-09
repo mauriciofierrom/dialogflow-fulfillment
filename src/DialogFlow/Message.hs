@@ -38,13 +38,13 @@ import Data.Foldable (asum)
 -- import qualified Data.HashMap.Strict as HM
 
 data CardButton = CardButton
-  { text :: String -- ^ The text to show on the button
-  , postback :: String -- ^ The text to send to the DialogFlow API or URI to open
+  { cbText :: String -- ^ The text to show on the button
+  , cbPostback :: String -- ^ The text to send to the DialogFlow API or URI to open
   } deriving (Eq, Show)
 
 data BasicCardContent = BasicCardImage (Msg 'MsgImage)
                       | BasicCardFormattedText String
-                      -- deriving (Show)
+                      deriving (Show)
 
 data SpeechText = TextToSpeech String -- ^ The plain text of the speech output
                 | SSML String -- ^ Structured spoken response to the user in SSML format
@@ -97,7 +97,7 @@ data MsgType = MsgText
 
 data Msg t where
   Text
-    :: Maybe [String] -- ^ The collection of the agent's responses
+    :: [String] -- ^ The collection of the agent's responses
     -> Msg 'MsgText
 
   Image
@@ -150,16 +150,38 @@ data Msg t where
 data Message where
   Message :: (Show (Msg t)) => Msg t -> Message
 
+-- TODO: Make sure homoiconicity is respected
+instance Show (Msg t) where
+  show (Text ts) = "Text " <> show ts
+  show (Image mbUri mbDescription) = "Image " <> show mbUri <> " " <> show mbDescription
+  show (QuickReplies  mbTitle mbReplies) =
+    "QuickReplies " <> show mbTitle <> " " <> show mbReplies
+  show (Card mbTitle mbSubtitle mbUri mbCardButtons) =
+    "Card " <> show mbTitle
+            <> " " <> show mbSubtitle
+            <> " " <> show mbUri
+            <> " " <> show mbCardButtons
+  show (SimpleResponses simpleResponses) = "SimpleRespnses " <> show simpleResponses
+  show (BasicCard mbTitle mbSubtitle mbBasicCardContent mbBasicCardButtons) =
+    "BasicCard " <> show mbTitle
+                 <> " " <> show mbSubtitle
+                 <> " " <> show mbBasicCardContent
+                 <> " " <> show mbBasicCardButtons
+  show (Suggestions suggestions) = "Suggestions " <> show suggestions
+  show (LinkOutSuggestion name uri) = "LinkOuSuggestion " <> name <> " " <> uri
+  show (ListSelect mbTitle items) = "ListSelect " <> show mbTitle <> " " <> show items
+  show (CarouselSelect items) = "CarouselSelect " <> show items
+
 data ListItem = ListItem
   { liInfo :: SelectItemInfo -- ^ Additional information about this option
   , liTitle :: String -- ^ The title of the list item
   , liDescription :: String -- ^ The main text describing the item
   , liImage :: Msg 'MsgImage -- ^ The image to display
-  } -- deriving (Eq, Show)
+  } deriving (Show)
 
 data CarouselItem = CarouselItem
   { ciInfo :: SelectItemInfo -- ^ Additional info about the option item
   , ciTitle :: String -- ^ Title of the carousel item
   , ciDescription :: String -- ^ The body text of the card
   , ciImage :: Msg 'MsgImage -- ^ The image to display
-  } -- deriving (Eq, Show)
+  } deriving (Show)
