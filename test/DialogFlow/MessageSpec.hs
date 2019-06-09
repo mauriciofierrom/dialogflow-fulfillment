@@ -36,15 +36,50 @@ spec = do
       let cardButton = CardButton "the text" "the postback"
           expectedJson = "{\"text\":\"the text\",\"postback\":\"the postback\"}"
        in encode cardButton `shouldBe` expectedJson
-  describe "Message toJSON" $ do
-    describe "Image" $
-      it "should have the desired structure" $
-        let image = Image (Just "the uri") (Just "the ally text")
-            expectedJson = "{\"accessibilityText\":\"the ally text\",\"imageUri\":\"the uri\"}"
-         in encode image `shouldBe` expectedJson
   describe "BasicCardContent toJSON" $ do
     context "when it is an Image" $
       it "should have the desired structure" $
         let image = BasicCardImage (Image (Just "the uri") (Just "the ally text"))
             expectedJson = "{\"image\":{\"accessibilityText\":\"the ally text\",\"imageUri\":\"the uri\"}}"
          in encode image `shouldBe` expectedJson
+  describe "OpenUriAction toJSON" $
+    it "should have the desired structure" $
+      let openUriAction = OpenUriAction "the uri"
+          expectedJson = "{\"uri\":\"the uri\"}"
+       in encode openUriAction `shouldBe` expectedJson
+  describe "BasicCardButton toJSON" $ do
+    it "should have the desired structure" $
+      let openUriAction = OpenUriAction "the uri"
+          basicCardButton = BasicCardButton "the title" openUriAction
+          expectedJson = "{\"openUriAction\":{\"uri\":\"the uri\"},\"title\":\"the title\"}"
+       in encode basicCardButton `shouldBe` expectedJson
+  describe "Message toJSON" $ do
+    context "Image" $ do
+      it "should have the desired structure" $
+        let image = Image (Just "the uri") (Just "the ally text")
+            expectedJson = "{\"accessibilityText\":\"the ally text\",\"imageUri\":\"the uri\"}"
+         in encode image `shouldBe` expectedJson
+    context "BasicCard" $ do
+      context "when it has an image content" $
+        it "should have the desired structure" $
+          let image = Image (Just "the uri") (Just "the ally text")
+              openUriAction = OpenUriAction "the uri"
+              basicCardButton = BasicCardButton "the title" openUriAction
+              basicCard =
+                BasicCard (Just "the title") (Just "the subtitle") (BasicCardImage image) [basicCardButton]
+              imageJson = "{\"accessibilityText\":\"the ally text\",\"imageUri\":\"the uri\"}"
+              expectedJson = "{\"image\":" <> imageJson
+                <> ",\"buttons\":[{\"openUriAction\":{\"uri\":\"the uri\"},\"title\":\"the title\"}]"
+                <> ",\"subtitle\":\"the subtitle\",\"title\":\"the title\"}"
+             in encode basicCard `shouldBe` expectedJson
+      context "when it has a formattedText content" $
+        it "should have the desired structure" $
+          let openUriAction = OpenUriAction "the uri"
+              basicCardButton = BasicCardButton "the title" openUriAction
+              basicCard =
+                BasicCard (Just "the title") (Just "the subtitle") (BasicCardFormattedText "the formatted text") [basicCardButton]
+              expectedJson = "{\"buttons\":[{\"openUriAction\":{\"uri\":\"the uri\"},\"title\":\"the title\"}]"
+                <> ",\"subtitle\":\"the subtitle\",\"title\":\"the title\""
+                <> ",\"formattedText\":\"the formatted text\"}"
+             in encode basicCard `shouldBe` expectedJson
+

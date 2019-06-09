@@ -8,8 +8,10 @@
 module DialogFlow.Message
   ( CardButton(..)
   , BasicCardContent(..)
+  , BasicCardButton(..)
   , ListItem(..)
   , CarouselItem(..)
+  , OpenUriAction(..)
   , SpeechText(..)
   , SimpleResponse(..)
   , Msg( Text
@@ -88,10 +90,18 @@ newtype OpenUriAction = OpenUriAction
   { unOpenUriAction :: String -- ^ The HTTP or HTTPS scheme URI
   } deriving (Eq, Show)
 
+instance ToJSON OpenUriAction where
+  toJSON oua = object [ "uri" .= unOpenUriAction oua ]
+
 data BasicCardButton = BasicCardButton
   { bcbTitle :: String -- ^ The title of the button
   , bcbOpenUriAction :: OpenUriAction -- ^ Action to take when a user taps on the button
   } deriving (Eq, Show)
+
+instance ToJSON BasicCardButton where
+  toJSON BasicCardButton{..} =
+    object [ "title" .= bcbTitle
+           , "openUriAction" .= bcbOpenUriAction ]
 
 newtype Suggestion = Suggestion
   { unSuggestionTitle :: String -- ^ The text shown in the suggestion chip
@@ -145,7 +155,7 @@ data Msg t where
     :: Maybe String -- ^ The title of the card
     -> Maybe String -- ^ The subtitle of the card
     -> BasicCardContent -- ^ The body text or image of the card
-    -> Maybe [BasicCardButton] -- ^ The collection of card buttons
+    -> [BasicCardButton] -- ^ The collection of card buttons
     -> Msg 'MsgBasicCard
 
   Suggestions
@@ -196,6 +206,10 @@ instance ToJSON (Msg t) where
   toJSON (Image uri accesibilityText) =
     object [ "imageUri" .= uri
            , "accessibilityText" .= accesibilityText ]
+  toJSON (BasicCard mbTitle mbSubtitle content buttons) = Object $
+    HM.fromList [ "title" .= mbTitle
+                , "subtitle" .= mbSubtitle
+      , "buttons" .= buttons] <> toObject content
 
 data ListItem = ListItem
   { liInfo :: SelectItemInfo -- ^ Additional information about this option
