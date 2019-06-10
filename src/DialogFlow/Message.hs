@@ -221,6 +221,8 @@ instance ToJSON (Msg t) where
                 , "subtitle" .= mbSubtitle
       , "buttons" .= buttons] <> toObject content
   toJSON (Suggestions xs) = object [ "suggestions" .= xs ]
+  toJSON (LinkOutSuggestion name uri) =
+    object [ "destinationName" .= name, "uri" .= uri ]
 
 data ListItem = ListItem
   { liInfo :: SelectItemInfo -- ^ Additional information about this option

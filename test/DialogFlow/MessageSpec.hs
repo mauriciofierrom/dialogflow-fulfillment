@@ -99,3 +99,8 @@ spec = do
         let suggestions = Suggestions [Suggestion "the suggestion"]
             expectedJson = "{\"suggestions\":[{\"title\":\"the suggestion\"}]}"
          in encode suggestions `shouldBe` expectedJson
+    context "LinkOutSuggestion" $ do
+      it "should have the desired structure" $
+        let linkOutSuggestion = LinkOutSuggestion "the name" "the app"
+            expectedJson = "{\"uri\":\"the app\",\"destinationName\":\"the name\"}"
+         in encode linkOutSuggestion `shouldBe` expectedJson
