@@ -220,6 +220,7 @@ instance ToJSON (Msg t) where
     HM.fromList [ "title" .= mbTitle
                 , "subtitle" .= mbSubtitle
       , "buttons" .= buttons] <> toObject content
+  toJSON (Suggestions xs) = object [ "suggestions" .= xs ]
 
 data ListItem = ListItem
   { liInfo :: SelectItemInfo -- ^ Additional information about this option
