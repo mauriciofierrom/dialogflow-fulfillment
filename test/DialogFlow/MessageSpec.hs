@@ -65,15 +65,15 @@ spec = do
       let selectedItemInfo = SelectItemInfo "the key" ["a synonym"]
           expectedJson = "{\"key\":\"the key\",\"synonyms\":[\"a synonym\"]}"
        in encode selectedItemInfo `shouldBe` expectedJson
-  describe "ListItem toJSON" $ do
+  describe "Item toJSON" $ do
     it "should have the desired structure" $
       let selectedItemInfo = SelectItemInfo "the key" ["a synonym"]
           image = Image (Just "the uri") (Just "the ally text")
-          listItem = ListItem selectedItemInfo "the title" "the description" image
+          item = Item selectedItemInfo "the title" "the description" image
           expectedJson = "{\"image\":{\"accessibilityText\":\"the ally text\",\"imageUri\":\"the uri\"}"
             <> ",\"title\":\"the title\",\"description\":\"the description\""
             <> ",\"info\":{\"key\":\"the key\",\"synonyms\":[\"a synonym\"]}}"
-       in encode listItem `shouldBe` expectedJson
+       in encode item `shouldBe` expectedJson
   describe "Message toJSON" $ do
     context "Image" $ do
       it "should have the desired structure" $
@@ -117,10 +117,20 @@ spec = do
       it "should have the desired structure" $
         let selectedItemInfo = SelectItemInfo "the key" ["a synonym"]
             image = Image (Just "the uri") (Just "the ally text")
-            listItem = ListItem selectedItemInfo "the title" "the description" image
-            listSelect = ListSelect (Just "the title") [listItem]
+            item = Item selectedItemInfo "the title" "the description" image
+            listSelect = ListSelect (Just "the title") [item]
             expectedJson = "{\"items\":[{\"image\":{\"accessibilityText\":\"the ally text\",\"imageUri\":\"the uri\"}"
               <> ",\"title\":\"the title\",\"description\":\"the description\""
               <> ",\"info\":{\"key\":\"the key\",\"synonyms\":[\"a synonym\"]}}]"
               <> ",\"title\":\"the title\"}"
            in encode listSelect `shouldBe` expectedJson
+    context "CarouselSelect" $ do
+      it "should have the desired structure" $
+        let selectedItemInfo = SelectItemInfo "the key" ["a synonym"]
+            image = Image (Just "the uri") (Just "the ally text")
+            item = Item selectedItemInfo "the title" "the description" image
+            carouselSelect = CarouselSelect [item]
+            expectedJson = "{\"items\":[{\"image\":{\"accessibilityText\":\"the ally text\",\"imageUri\":\"the uri\"}"
+              <> ",\"title\":\"the title\",\"description\":\"the description\""
+              <> ",\"info\":{\"key\":\"the key\",\"synonyms\":[\"a synonym\"]}}]}"
+           in encode carouselSelect `shouldBe` expectedJson

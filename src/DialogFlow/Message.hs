@@ -9,8 +9,7 @@ module DialogFlow.Message
   ( CardButton(..)
   , BasicCardContent(..)
   , BasicCardButton(..)
-  , ListItem(..)
-  , CarouselItem(..)
+  , Item(..)
   , OpenUriAction(..)
   , SpeechText(..)
   , SimpleResponse(..)
@@ -179,11 +178,11 @@ data Msg t where
 
   ListSelect
     :: Maybe String -- ^ The overall title of the list
-    -> [ListItem] -- ^ List items
+    -> [Item] -- ^ List items
     -> Msg 'MsgListSelect
 
   CarouselSelect
-    :: [CarouselItem] -- ^ Carousel items
+    :: [Item] -- ^ Carousel items
     -> Msg 'MsgCarouselSelect
 
 data Message where
@@ -226,24 +225,18 @@ instance ToJSON (Msg t) where
   toJSON (ListSelect mbTitle items) =
     object [ "title" .= mbTitle
            , "items" .= items ]
+  toJSON (CarouselSelect items) = object [ "items" .= items ]
 
-data ListItem = ListItem
-  { liInfo :: SelectItemInfo -- ^ Additional information about this option
-  , liTitle :: String -- ^ The title of the list item
-  , liDescription :: String -- ^ The main text describing the item
-  , liImage :: Msg 'MsgImage -- ^ The image to display
+data Item = Item
+  { iInfo :: SelectItemInfo -- ^ Additional information about this option
+  , iTitle :: String -- ^ The title of the list item
+  , iDescription :: String -- ^ The main text describing the item
+  , iImage :: Msg 'MsgImage -- ^ The image to display
   } deriving (Show)
 
-instance ToJSON ListItem where
-  toJSON ListItem{..} =
-    object [ "info" .= liInfo
-           , "title" .= liTitle
-           , "description" .= liDescription
-           , "image" .= liImage ]
-
-data CarouselItem = CarouselItem
-  { ciInfo :: SelectItemInfo -- ^ Additional info about the option item
-  , ciTitle :: String -- ^ Title of the carousel item
-  , ciDescription :: String -- ^ The body text of the card
-  , ciImage :: Msg 'MsgImage -- ^ The image to display
-  } deriving (Show)
+instance ToJSON Item where
+  toJSON Item{..} =
+    object [ "info" .= iInfo
+           , "title" .= iTitle
+           , "description" .= iDescription
+           , "image" .= iImage ]
