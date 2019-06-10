@@ -4,60 +4,33 @@
 
 module DialogFlow.Response where
 
-import Data.Aeson ( FromJSON
-                  , ToJSON
-                  , withObject
-                  , object
+import Data.Aeson ( object
                   , toJSON
-                  , parseJSON
-                  , (.:)
+                  , ToJSON
                   , (.=) )
 
-import GHC.Generics
 
 import DialogFlow.Message
 
-data Response =
-  Response { fulfillmentText :: Maybe String
-           , fulfillmentMessages :: [FulfillmentMessage]
-           , source :: Maybe String
-           , payload :: GooglePayload
-           } deriving (Eq, Show)
-
-instance FromJSON Response where
-  parseJSON = withObject "response" $ \d -> do
-    fulfillmentText <- d .: "fulfillmentText"
-    fulfillmentMessages <- d .: "fulfillmentMessages"
-    source <- d .: "source"
-    payload <- d .: "payload"
-    return Response{..}
+-- TODO: Output contexts & followup event input
+data Response = Response
+  { fulfillmentText :: Maybe String -- ^ The text to be shown on the screen
+  , fulfillmentMessages :: [Message] -- ^ The collection of rich messages to present to the user
+  , source :: Maybe String -- ^ The webhook source
+  , payload :: GooglePayload -- ^ Webhook payload
+  } deriving (Show)
 
 instance ToJSON Response where
-  toJSON d = object [
-    "fulfillmentText" .= fulfillmentText d,
-    "fulfillmentMessages" .= fulfillmentMessages d,
-    "source" .= source d,
-    "payload" .= payload d ]
+  toJSON Response{..} =
+    object [ "fulfillmentText" .= fulfillmentText
+           , "fulfillmentMessages" .= fulfillmentMessages
+           , "source" .= source
+           , "payload" .= payload ]
 
-newtype FulfillmentMessage = FulfillmentMessage { unSimpleResponses :: SimpleResponses }
-  deriving (Eq, Generic, Show)
-
-instance FromJSON FulfillmentMessage
-instance ToJSON FulfillmentMessage where
-  toJSON s = object [ "simpleResponses" .= unSimpleResponses s ]
-
-data GooglePayload = GooglePayload { expectUserResponse :: Bool
-                                   , richResponse :: [SimpleResponse]
-                                   } deriving (Eq, Show)
-
-instance FromJSON GooglePayload where
-  parseJSON = withObject "payload" $ \gp -> do
-    payload <- gp .: "payload"
-    googlePayload <- payload .: "google"
-    expectUserResponse <- googlePayload .: "expectUserResponse"
-    richResponses <- googlePayload .: "richResponse"
-    richResponse <- richResponses .: "items"
-    return GooglePayload{..}
+data GooglePayload = GooglePayload
+  { expectUserResponse :: Bool
+  , richResponse :: [SimpleResponse]
+  } deriving (Eq, Show)
 
 instance ToJSON GooglePayload where
   toJSON gp =

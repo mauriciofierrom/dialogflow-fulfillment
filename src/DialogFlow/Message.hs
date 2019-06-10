@@ -227,6 +227,12 @@ instance ToJSON (Msg t) where
            , "items" .= items ]
   toJSON (CarouselSelect items) = object [ "items" .= items ]
 
+instance Show Message where
+  show (Message o) = show o
+
+instance ToJSON Message where
+  toJSON (Message o) = toJSON o
+
 data Item = Item
   { iInfo :: SelectItemInfo -- ^ Additional information about this option
   , iTitle :: String -- ^ The title of the list item

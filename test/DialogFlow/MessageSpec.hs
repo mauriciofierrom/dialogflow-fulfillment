@@ -1,6 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module DialogFlow.MessageSpec where 
+module DialogFlow.MessageSpec where
+
 import Data.Aeson (encode)
 import Test.Hspec
 
