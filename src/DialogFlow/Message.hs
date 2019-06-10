@@ -223,6 +223,9 @@ instance ToJSON (Msg t) where
   toJSON (Suggestions xs) = object [ "suggestions" .= xs ]
   toJSON (LinkOutSuggestion name uri) =
     object [ "destinationName" .= name, "uri" .= uri ]
+  toJSON (ListSelect mbTitle items) =
+    object [ "title" .= mbTitle
+           , "items" .= items ]
 
 data ListItem = ListItem
   { liInfo :: SelectItemInfo -- ^ Additional information about this option
@@ -230,6 +233,13 @@ data ListItem = ListItem
   , liDescription :: String -- ^ The main text describing the item
   , liImage :: Msg 'MsgImage -- ^ The image to display
   } deriving (Show)
+
+instance ToJSON ListItem where
+  toJSON ListItem{..} =
+    object [ "info" .= liInfo
+           , "title" .= liTitle
+           , "description" .= liDescription
+           , "image" .= liImage ]
 
 data CarouselItem = CarouselItem
   { ciInfo :: SelectItemInfo -- ^ Additional info about the option item
