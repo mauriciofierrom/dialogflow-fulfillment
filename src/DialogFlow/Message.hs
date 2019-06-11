@@ -225,7 +225,7 @@ instance ToJSON (Msg t) where
            , "imageUri" .= imageUri
            , "buttons" .= buttons ]
   toJSON (SimpleResponses simpleResponses) =
-    object [ "simpleResponses" .= simpleResponses ]
+    object [ "simpleResponses" .= object ["simpleResponses" .= simpleResponses ] ]
   toJSON (BasicCard mbTitle mbSubtitle content buttons) = Object $
     HM.fromList [ "title" .= mbTitle
                 , "subtitle" .= mbSubtitle
