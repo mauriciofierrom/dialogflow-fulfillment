@@ -13,11 +13,11 @@ import DialogFlow.Message
 spec :: Spec
 spec = do
   describe "SpeechText toJSON" $ do
-    context "when it is a TextToSpeech" $ do
+    context "when it is a TextToSpeech" $
       it "should have the desired structure" $
         let textToSpeech = TextToSpeech "the text"
          in encode textToSpeech `shouldBe` "{\"textToSpeech\":\"the text\"}"
-    context "when it is a SSML" $ do
+    context "when it is a SSML" $
       it "shourld have the desired structure" $
         let ssml = SSML "the xml"
          in encode ssml `shouldBe` "{\"ssml\":\"the xml\"}"
@@ -34,12 +34,12 @@ spec = do
               "{\"displayText\":\"the maybe text\",\"ssml\":\"the xml\"}"
             simpleResponse = SimpleResponse (SSML "the xml") (Just "the maybe text")
          in encode simpleResponse `shouldBe` expectedJson
-  describe "CardButton toJSON" $ do
+  describe "CardButton toJSON" $
     it "should have the desired structure" $
       let cardButton = CardButton (Just "the text") (Just "the postback")
           expectedJson = "{\"text\":\"the text\",\"postback\":\"the postback\"}"
        in encode cardButton `shouldBe` expectedJson
-  describe "BasicCardContent toJSON" $ do
+  describe "BasicCardContent toJSON" $
     context "when it is an Image" $
       it "should have the desired structure" $
         let image = BasicCardImage (Image (Just "the uri") (Just "the ally text"))
@@ -50,38 +50,34 @@ spec = do
       let openUriAction = OpenUriAction "the uri"
           expectedJson = "{\"uri\":\"the uri\"}"
        in encode openUriAction `shouldBe` expectedJson
-  describe "BasicCardButton toJSON" $ do
+  describe "BasicCardButton toJSON" $
     it "should have the desired structure" $
       let openUriAction = OpenUriAction "the uri"
           basicCardButton = BasicCardButton "the title" openUriAction
           expectedJson = "{\"openUriAction\":{\"uri\":\"the uri\"},\"title\":\"the title\"}"
        in encode basicCardButton `shouldBe` expectedJson
-  describe "Suggestion toJSON" $ do
+  describe "Suggestion toJSON" $
     it "should have the desired structure" $
       let suggestion = Suggestion "the title"
           expectedJson = "{\"title\":\"the title\"}"
        in encode suggestion `shouldBe` expectedJson
-  describe "SelectedItemInfo toJSON" $ do
+  describe "SelectedItemInfo toJSON" $
     it "should have the desired structure" $
-      let selectedItemInfo = SelectItemInfo "the key" ["a synonym"]
-          expectedJson = "{\"key\":\"the key\",\"synonyms\":[\"a synonym\"]}"
+      let expectedJson = "{\"key\":\"the key\",\"synonyms\":[\"a synonym\"]}"
        in encode selectedItemInfo `shouldBe` expectedJson
-  describe "Item toJSON" $ do
+  describe "Item toJSON" $
     it "should have the desired structure" $
-      let selectedItemInfo = SelectItemInfo "the key" ["a synonym"]
-          image = Image (Just "the uri") (Just "the ally text")
-          item = Item selectedItemInfo "the title" "the description" image
-          expectedJson = "{\"image\":{\"accessibilityText\":\"the ally text\",\"imageUri\":\"the uri\"}"
+      let expectedJson = "{\"image\":{\"accessibilityText\":\"the ally text\",\"imageUri\":\"the uri\"}"
             <> ",\"title\":\"the title\",\"description\":\"the description\""
             <> ",\"info\":{\"key\":\"the key\",\"synonyms\":[\"a synonym\"]}}"
        in encode item `shouldBe` expectedJson
   describe "Message toJSON" $ do
-    context "Text" $ do
+    context "Text" $
       it "should have the desired structure" $
         let text = Text ["the text"]
             expectedJson = "{\"text\":[\"the text\"]}"
          in encode text `shouldBe` expectedJson
-    context "Image" $ do
+    context "Image" $
       it "should have the desired structure" $
         let image = Image (Just "the uri") (Just "the ally text")
             expectedJson = "{\"accessibilityText\":\"the ally text\",\"imageUri\":\"the uri\"}"
@@ -91,7 +87,7 @@ spec = do
         let quickReplies = QuickReplies (Just "the title") ["the reply"]
             expectedJson = "{\"title\":\"the title\",\"quickReplies\":[\"the reply\"]}"
          in encode quickReplies `shouldBe` expectedJson
-    context "Card" $ do
+    context "Card" $
       context "when it has an image content" $
         it "should have the desired structure" $
           let cardButton = CardButton (Just "the text") (Just "the postback")
@@ -124,34 +120,34 @@ spec = do
                 <> ",\"subtitle\":\"the subtitle\",\"title\":\"the title\""
                 <> ",\"formattedText\":\"the formatted text\"}"
              in encode basicCard `shouldBe` expectedJson
-    context "Suggestions" $ do
+    context "Suggestions" $
       it "should have the desired structure" $
         let suggestions = Suggestions [Suggestion "the suggestion"]
             expectedJson = "{\"suggestions\":[{\"title\":\"the suggestion\"}]}"
          in encode suggestions `shouldBe` expectedJson
-    context "LinkOutSuggestion" $ do
+    context "LinkOutSuggestion" $
       it "should have the desired structure" $
         let linkOutSuggestion = LinkOutSuggestion "the name" "the app"
             expectedJson = "{\"uri\":\"the app\",\"destinationName\":\"the name\"}"
          in encode linkOutSuggestion `shouldBe` expectedJson
-    context "ListSelect" $ do
+    context "ListSelect" $
       it "should have the desired structure" $
-        let selectedItemInfo = SelectItemInfo "the key" ["a synonym"]
-            image = Image (Just "the uri") (Just "the ally text")
-            item = Item selectedItemInfo "the title" "the description" image
-            listSelect = ListSelect (Just "the title") [item]
+        let listSelect = ListSelect (Just "the title") [item]
             expectedJson = "{\"items\":[{\"image\":{\"accessibilityText\":\"the ally text\",\"imageUri\":\"the uri\"}"
               <> ",\"title\":\"the title\",\"description\":\"the description\""
               <> ",\"info\":{\"key\":\"the key\",\"synonyms\":[\"a synonym\"]}}]"
               <> ",\"title\":\"the title\"}"
            in encode listSelect `shouldBe` expectedJson
-    context "CarouselSelect" $ do
+    context "CarouselSelect" $
       it "should have the desired structure" $
-        let selectedItemInfo = SelectItemInfo "the key" ["a synonym"]
-            image = Image (Just "the uri") (Just "the ally text")
-            item = Item selectedItemInfo "the title" "the description" image
-            carouselSelect = CarouselSelect [item]
+        let carouselSelect = CarouselSelect [item]
             expectedJson = "{\"items\":[{\"image\":{\"accessibilityText\":\"the ally text\",\"imageUri\":\"the uri\"}"
               <> ",\"title\":\"the title\",\"description\":\"the description\""
               <> ",\"info\":{\"key\":\"the key\",\"synonyms\":[\"a synonym\"]}}]}"
            in encode carouselSelect `shouldBe` expectedJson
+  where
+    selectedItemInfo = SelectItemInfo "the key" ["a synonym"]
+    image = Image (Just "the uri") (Just "the ally text")
+    item = Item selectedItemInfo "the title" "the description" image
+
+
