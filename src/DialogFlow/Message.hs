@@ -145,7 +145,7 @@ data Msg t where
 
   QuickReplies
     :: Maybe String   -- ^ The title of the collection of quick replies
-    -> Maybe [String] -- ^ The collection of quick replies
+    -> [String] -- ^ The collection of quick replies
     -> Msg 'MsgQuickReplies
 
   Card
@@ -216,6 +216,9 @@ instance ToJSON (Msg t) where
   toJSON (Image uri accesibilityText) =
     object [ "imageUri" .= uri
            , "accessibilityText" .= accesibilityText ]
+  toJSON (QuickReplies mbTitle quickReplies) =
+    object [ "title" .= mbTitle
+           , "quickReplies" .= quickReplies ]
   toJSON (BasicCard mbTitle mbSubtitle content buttons) = Object $
     HM.fromList [ "title" .= mbTitle
                 , "subtitle" .= mbSubtitle
