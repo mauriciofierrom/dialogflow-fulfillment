@@ -220,16 +220,17 @@ instance ToJSON (Msg t) where
     object [ "title" .= mbTitle
            , "quickReplies" .= quickReplies ]
   toJSON (Card title subtitle imageUri buttons) =
-    object [ "title" .= title
-           , "subtitle" .= subtitle
-           , "imageUri" .= imageUri
-           , "buttons" .= buttons ]
+    object [ "card" .= object ["title" .= title
+                              , "subtitle" .= subtitle
+                              , "imageUri" .= imageUri
+                              , "buttons" .= buttons ] ]
   toJSON (SimpleResponses simpleResponses) =
     object [ "simpleResponses" .= object ["simpleResponses" .= simpleResponses ] ]
-  toJSON (BasicCard mbTitle mbSubtitle content buttons) = Object $
-    HM.fromList [ "title" .= mbTitle
-                , "subtitle" .= mbSubtitle
-      , "buttons" .= buttons] <> toObject content
+  toJSON (BasicCard mbTitle mbSubtitle content buttons) =
+    let obj = Object $ HM.fromList [ "title" .= mbTitle
+                                   , "subtitle" .= mbSubtitle
+                                   , "buttons" .= buttons ] <> toObject content
+      in object [ "basicCard" .= obj ]
   toJSON (Suggestions xs) = object [ "suggestions" .= xs ]
   toJSON (LinkOutSuggestion name uri) =
     object [ "destinationName" .= name, "uri" .= uri ]
