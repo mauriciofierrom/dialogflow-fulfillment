@@ -76,6 +76,11 @@ spec = do
             <> ",\"info\":{\"key\":\"the key\",\"synonyms\":[\"a synonym\"]}}"
        in encode item `shouldBe` expectedJson
   describe "Message toJSON" $ do
+    context "Text" $ do
+      it "should have the desired structure" $
+        let text = Text ["the text"]
+            expectedJson = "{\"text\":[\"the text\"]}"
+         in encode text `shouldBe` expectedJson
     context "Image" $ do
       it "should have the desired structure" $
         let image = Image (Just "the uri") (Just "the ally text")

@@ -212,6 +212,7 @@ instance Show (Msg t) where
   show (CarouselSelect items) = "CarouselSelect " <> show items
 
 instance ToJSON (Msg t) where
+  toJSON (Text mbText) = object [ "text" .= mbText ]
   toJSON (Image uri accesibilityText) =
     object [ "imageUri" .= uri
            , "accessibilityText" .= accesibilityText ]
