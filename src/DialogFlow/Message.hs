@@ -45,8 +45,8 @@ import qualified Data.HashMap.Strict as HM
 import DialogFlow.Util
 
 data CardButton = CardButton
-  { cbText :: String -- ^ The text to show on the button
-  , cbPostback :: String -- ^ The text to send to the DialogFlow API or URI to open
+  { cbText :: Maybe String -- ^ The text to show on the button
+  , cbPostback :: Maybe String -- ^ The text to send to the DialogFlow API or URI to open
   } deriving (Eq, Show)
 
 instance ToJSON CardButton where
@@ -152,7 +152,7 @@ data Msg t where
     :: Maybe String -- ^ The title of the card
     -> Maybe String -- ^ The subtitle of the card
     -> Maybe String -- ^ The public URI to an image file for the card
-    -> Maybe [CardButton] -- ^ The collection of card buttons
+    -> [CardButton] -- ^ The collection of card buttons
     -> Msg 'MsgCard
 
   SimpleResponses
@@ -219,6 +219,11 @@ instance ToJSON (Msg t) where
   toJSON (QuickReplies mbTitle quickReplies) =
     object [ "title" .= mbTitle
            , "quickReplies" .= quickReplies ]
+  toJSON (Card title subtitle imageUri buttons) =
+    object [ "title" .= title
+           , "subtitle" .= subtitle
+           , "imageUri" .= imageUri
+           , "buttons" .= buttons ]
   toJSON (BasicCard mbTitle mbSubtitle content buttons) = Object $
     HM.fromList [ "title" .= mbTitle
                 , "subtitle" .= mbSubtitle

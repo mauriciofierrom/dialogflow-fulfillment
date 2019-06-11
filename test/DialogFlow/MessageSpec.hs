@@ -36,7 +36,7 @@ spec = do
          in encode simpleResponse `shouldBe` expectedJson
   describe "CardButton toJSON" $ do
     it "should have the desired structure" $
-      let cardButton = CardButton "the text" "the postback"
+      let cardButton = CardButton (Just "the text") (Just "the postback")
           expectedJson = "{\"text\":\"the text\",\"postback\":\"the postback\"}"
        in encode cardButton `shouldBe` expectedJson
   describe "BasicCardContent toJSON" $ do
@@ -91,6 +91,16 @@ spec = do
         let quickReplies = QuickReplies (Just "the title") ["the reply"]
             expectedJson = "{\"title\":\"the title\",\"quickReplies\":[\"the reply\"]}"
          in encode quickReplies `shouldBe` expectedJson
+    context "Card" $ do
+      context "when it has an image content" $
+        it "should have the desired structure" $
+          let cardButton = CardButton (Just "the text") (Just "the postback")
+              card =
+                Card (Just "the title") (Just "the subtitle") (Just "the uri") [cardButton]
+              expectedJson = "{\"buttons\":[{\"text\":\"the text\",\"postback\":\"the postback\"}]"
+                <> ",\"imageUri\":\"the uri\",\"subtitle\":\"the subtitle\""
+                <> ",\"title\":\"the title\"}"
+             in encode card `shouldBe` expectedJson
     context "BasicCard" $ do
       context "when it has an image content" $
         it "should have the desired structure" $
