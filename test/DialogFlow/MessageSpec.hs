@@ -97,6 +97,12 @@ spec = do
                 <> ",\"imageUri\":\"the uri\",\"subtitle\":\"the subtitle\""
                 <> ",\"title\":\"the title\"}"
              in encode card `shouldBe` expectedJson
+    context "SimpleResponses" $
+      it "should have the desired structure" $
+        let simpleResponses = SimpleResponses [SimpleResponse (TextToSpeech "the text") (Just "the display text")]
+            expectedJson = "{\"simpleResponses\":[{\"displayText\":\"the display text\""
+              <> ",\"textToSpeech\":\"the text\"}]}"
+           in encode simpleResponses `shouldBe` expectedJson
     context "BasicCard" $ do
       context "when it has an image content" $
         it "should have the desired structure" $
