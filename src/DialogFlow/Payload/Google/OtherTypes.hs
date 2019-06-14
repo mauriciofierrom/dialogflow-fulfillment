@@ -1,4 +1,4 @@
-module DialogFlow.OtherTypes where
+module DialogFlow.Payload.Google.OtherTypes where
 
 data ActionType = UNKNOWN
                 | VIEW_DETAILS

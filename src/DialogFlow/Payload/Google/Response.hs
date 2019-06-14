@@ -2,12 +2,12 @@
 {-# LANGUAGE DataKinds #-}
 {-# LANGUAGE FlexibleContexts #-}
 
-module DialogFlow.Payload.Google
+module DialogFlow.Payload.Google.Response
   (
   ) where
 
 import qualified DialogFlow.Message as M
-import DialogFlow.OtherTypes
+import DialogFlow.Payload.Google.OtherTypes
 
 data RichMessageType = RMTSimpleResponse
                      | RMTBasicCard
