@@ -15,6 +15,7 @@ module DialogFlow.Message
   , SimpleResponse(..)
   , Suggestion(..)
   , SelectItemInfo(..)
+  , MsgType(..)
   , Msg( Text
        , Image
        , QuickReplies

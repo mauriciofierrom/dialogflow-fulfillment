@@ -1,10 +1,9 @@
 {-# LANGUAGE GADTs #-}
 {-# LANGUAGE DataKinds #-}
 {-# LANGUAGE FlexibleContexts #-}
+{-# LANGUAGE StandaloneDeriving #-}
 
-module DialogFlow.Payload.Google.Response
-  (
-  ) where
+module DialogFlow.Payload.Google.Response where
 
 import qualified DialogFlow.Message as M
 import DialogFlow.Payload.Google.OtherTypes
@@ -43,15 +42,18 @@ data OrderUpdate =
               } deriving Show
 
 data Res t where
-  -- SimpleResponse :: SimpleResponse -> Res 'RMTSimpleResponse
-  -- BasicCard :: BasicCard -> Res 'RMTBasicCard
+  SimpleResponse :: M.SimpleResponse -> Res 'RMTSimpleResponse
+  BasicCard :: M.Msg 'M.MsgBasicCard -> Res 'RMTBasicCard
   StructuredResponse :: OrderUpdate -> Res 'RMTStructuredResponse
   MediaResponse :: MediaType -> [MediaObject] -> Res 'RMTMediaResponse
 
 data RichResponse where
   RichResponse :: (Show (Res t)) => Res t -> RichResponse
 
+deriving instance Show RichResponse
+
 data Response =
   Response { expectUserResponse :: Bool
            , userStoreage :: String
            , richResponse :: [RichResponse] }
+           deriving Show
