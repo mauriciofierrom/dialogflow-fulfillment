@@ -112,9 +112,9 @@ spec = do
               basicCard =
                 BasicCard (Just "the title") (Just "the subtitle") (BasicCardImage image) [basicCardButton]
               imageJson = "{\"accessibilityText\":\"the ally text\",\"imageUri\":\"the uri\"}"
-              expectedJson = "{\"basicCard\":{\"image\":" <> imageJson
+              expectedJson = "{\"image\":" <> imageJson
                 <> ",\"buttons\":[{\"openUriAction\":{\"uri\":\"the uri\"},\"title\":\"the title\"}]"
-                <> ",\"subtitle\":\"the subtitle\",\"title\":\"the title\"}}"
+                <> ",\"subtitle\":\"the subtitle\",\"title\":\"the title\"}"
              in encode basicCard `shouldBe` expectedJson
       context "when it has a formattedText content" $
         it "should have the desired structure" $
@@ -122,9 +122,9 @@ spec = do
               basicCardButton = BasicCardButton "the title" openUriAction
               basicCard =
                 BasicCard (Just "the title") (Just "the subtitle") (BasicCardFormattedText "the formatted text") [basicCardButton]
-              expectedJson = "{\"basicCard\":{\"buttons\":[{\"openUriAction\":{\"uri\":\"the uri\"},\"title\":\"the title\"}]"
+              expectedJson = "{\"buttons\":[{\"openUriAction\":{\"uri\":\"the uri\"},\"title\":\"the title\"}]"
                 <> ",\"subtitle\":\"the subtitle\",\"title\":\"the title\""
-                <> ",\"formattedText\":\"the formatted text\"}}"
+                <> ",\"formattedText\":\"the formatted text\"}"
              in encode basicCard `shouldBe` expectedJson
     context "Suggestions" $
       it "should have the desired structure" $

@@ -54,6 +54,7 @@ library
   -- Modules exported by the library.
   exposed-modules:
     DialogFlow.Message
+    DialogFlow.Payload.Google.Response
     DialogFlow.Response
     DialogFlow.Util
 

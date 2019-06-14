@@ -4,6 +4,7 @@
 {-# LANGUAGE LambdaCase #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE RecordWildCards #-}
+{-# LANGUAGE ScopedTypeVariables #-}
 
 module DialogFlow.Message
   ( CardButton(..)
@@ -228,10 +229,9 @@ instance ToJSON (Msg t) where
   toJSON (SimpleResponses simpleResponses) =
     object [ "simpleResponses" .= object ["simpleResponses" .= simpleResponses ] ]
   toJSON (BasicCard mbTitle mbSubtitle content buttons) =
-    let obj = Object $ HM.fromList [ "title" .= mbTitle
-                                   , "subtitle" .= mbSubtitle
-                                   , "buttons" .= buttons ] <> toObject content
-      in object [ "basicCard" .= obj ]
+    Object $ HM.fromList [ "title" .= mbTitle
+                         , "subtitle" .= mbSubtitle
+                         , "buttons" .= buttons ] <> toObject content
   toJSON (Suggestions xs) = object [ "suggestions" .= xs ]
   toJSON (LinkOutSuggestion name uri) =
     object [ "destinationName" .= name, "uri" .= uri ]
@@ -244,6 +244,7 @@ instance Show Message where
   show (Message o) = show o
 
 instance ToJSON Message where
+  toJSON (Message bc@(BasicCard _ _ _ _)) = object [ "basicCard" .= toJSON bc ]
   toJSON (Message o) = toJSON o
 
 data Item = Item
