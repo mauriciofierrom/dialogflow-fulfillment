@@ -22,6 +22,9 @@ data Res t where
   BasicCard :: M.Msg 'M.MsgBasicCard -> Res 'RMTBasicCard
   MediaResponse :: MediaType -> [MediaObject] -> Res 'RMTMediaResponse
 
+instance Show (Res t) where
+  show = show
+
 instance ToJSON (Res t) where
   toJSON (SimpleResponse s) = toJSON s
   toJSON (BasicCard b) = toJSON b
