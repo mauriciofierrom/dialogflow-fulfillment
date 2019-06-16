@@ -27,25 +27,26 @@ instance Show (Res t) where
 
 instance ToJSON (Res t) where
   toJSON (SimpleResponse s) = toJSON s
-  toJSON (BasicCard b) = toJSON b
-  toJSON m@(MediaResponse _ _) = toJSON m
+  toJSON (BasicCard b) = object [ "basicCard" .= b ]
+  toJSON x = toJSON x
 
 data RichResponse where
   RichResponse :: (Show (Res t)) => Res t -> RichResponse
 
 instance ToJSON RichResponse where
-  toJSON = toJSON
+  toJSON (RichResponse x) = toJSON x
 
 deriving instance Show RichResponse
 
 data Response =
   Response { expectUserResponse :: Bool
-           , userStorage :: String
+           -- , userStorage :: String
            , richResponse :: [RichResponse] }
            deriving Show
 
+-- TODO: Change RichResponse to Item accordingly
 instance ToJSON Response where
   toJSON Response{..} =
     object [ "expectUserResponse" .= expectUserResponse
-           , "userStorage" .= userStorage
-           , "richResponse" .= richResponse ]
+           -- , "userStorage" .= userStorage
+           , "richResponse" .= object [ "items" .= richResponse ] ]
