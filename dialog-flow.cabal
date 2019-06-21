@@ -55,8 +55,6 @@ library
   exposed-modules:
     DialogFlow.Message
     DialogFlow.Payload.Google
-    DialogFlow.Payload.Google.OtherTypes
-    DialogFlow.Payload.Google.Response
     DialogFlow.Response
     DialogFlow.Util
 

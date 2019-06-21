@@ -1,10 +1,19 @@
+{-# LANGUAGE DataKinds #-}
+{-# LANGUAGE FlexibleContexts #-}
+{-# LANGUAGE GADTs #-}
+{-# LANGUAGE LambdaCase #-}
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE RecordWildCards #-}
+{-# LANGUAGE StandaloneDeriving #-}
 
 module DialogFlow.Payload.Google where
 
-import Data.Aeson (object, ToJSON, toJSON, (.=))
+import DialogFlow.Util
 
-import DialogFlow.Payload.Google.Response
+import qualified DialogFlow.Message as M
+import qualified Data.HashMap.Strict as HM
+
+import Data.Aeson (object, Value(..), ToJSON, toJSON, (.=))
 
 newtype GooglePayload =
   GooglePayload { unGooglePayload :: Response } deriving Show
@@ -12,3 +21,94 @@ newtype GooglePayload =
 instance ToJSON GooglePayload where
   toJSON gp =
     object [ "google" .= unGooglePayload gp]
+
+data Image =
+  Image { iUrl :: String
+        , iAccessibilityText :: String
+        , iHeight :: Maybe Int
+        , iWidth :: Maybe Int
+        } deriving Show
+
+instance ToJSON Image where
+  toJSON Image{..} =
+    object [ "url" .= iUrl
+           , "accessibilityText" .= iAccessibilityText
+           , "height" .= iHeight
+           , "width" .= iWidth ]
+
+data BasicCardContent = BasicCardImage Image
+                      | BasicCardFormattedText String
+                      deriving (Show)
+
+instance ToJSON BasicCardContent where
+  toJSON = \case
+    BasicCardImage image -> object [ "image" .= image ]
+    BasicCardFormattedText formattedText -> object [ "formattedText" .= formattedText ]
+
+data ImageDisplayOption = DEFAULT
+                         | WHITE
+                         | CROPPED
+                         deriving Show
+
+instance ToJSON ImageDisplayOption where
+  toJSON x = object [ "imageDisplayOptions" .= show x ]
+data MediaType = MEDIA_TYPE_UNSPECIFIED
+               | AUDIO
+               deriving Show
+
+data MediaObject =
+  MediaObject { moName :: String
+              , moDescription :: String
+              , moContentUrl :: String
+              , moLargeImage :: Image
+              , moIcon :: Image
+              } deriving Show
+
+data RichMessageType = RMTSimpleResponse
+                     | RMTBasicCard
+                     | RMTMediaResponse
+
+data Res t where
+  SimpleResponse :: M.SimpleResponse -> Res 'RMTSimpleResponse
+  BasicCard :: Maybe String -- ^ Title
+            -> Maybe String -- ^ Subtitle
+            -> BasicCardContent
+            -> [M.BasicCardButton]
+            -> ImageDisplayOption
+            -> Res 'RMTBasicCard
+
+  MediaResponse :: MediaType -> [MediaObject] -> Res 'RMTMediaResponse
+
+instance Show (Res t) where
+  show = show
+
+instance ToJSON (Res t) where
+  toJSON (SimpleResponse s) = object [ "simpleResponse" .=  s ]
+  toJSON (BasicCard t s c b d) =
+    object [ "basicCard" .= obj ]
+      where
+        obj = Object $ HM.fromList [ "title" .= t
+                                   , "subtitle" .= s
+                                   , "buttons" .= b ] <> toObject c <> toObject d
+  toJSON x = toJSON x
+
+data RichResponse where
+  RichResponse :: (Show (Res t)) => Res t -> RichResponse
+
+instance ToJSON RichResponse where
+  toJSON (RichResponse x) = toJSON x
+
+deriving instance Show RichResponse
+
+data Response =
+  Response { expectUserResponse :: Bool
+           -- , userStorage :: String
+           , richResponse :: [RichResponse] }
+           deriving Show
+
+-- TODO: Change RichResponse to Item accordingly
+instance ToJSON Response where
+  toJSON Response{..} =
+    object [ "expectUserResponse" .= expectUserResponse
+           -- , "userStorage" .= userStorage
+           , "richResponse" .= object [ "items" .= richResponse ] ]
