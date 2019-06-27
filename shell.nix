@@ -13,7 +13,7 @@ let
         src = ./.;
         libraryHaskellDepends = [ aeson base containers text unordered-containers ghcid
         hlint];
-        testHaskellDepends = [ aeson base hspec hspec-discover ];
+        testHaskellDepends = [ aeson base containers hspec hspec-discover ];
         testToolDepends = [ hspec-discover ];
         homepage = "https://github.com/mauriciofierrom/dialog-flow";
         description = "A Dialog Flow library for Haskell";

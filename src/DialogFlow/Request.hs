@@ -4,7 +4,7 @@
 
 module DialogFlow.Request where
 
-import Data.Aeson (FromJSON, parseJSON, withObject, (.:))
+import Data.Aeson (FromJSON, parseJSON, withObject, (.:), (.:!))
 import GHC.Generics
 
 import qualified Data.Map as M
@@ -21,16 +21,21 @@ instance FromJSON Intent where
     return Intent {..}
 
 data Context =
-  Context { name :: String
+  Context { ctxName :: String
           -- ^ The unique identifier of the context
-          , lifespanCount :: Int
+          , ctxLifespanCount :: Maybe Int
           -- ^ The number of conversational query requests after which the
           -- context expires
-          , outputContextParameters :: M.Map String String
+          , ctxParameters :: M.Map String String
           -- ^ The collection of parameters associated with this context
           } deriving (Eq, Generic, Show)
 
-instance FromJSON Context
+instance FromJSON Context where
+  parseJSON = withObject "context" $ \c -> do
+    ctxName <- c .: "name"
+    ctxLifespanCount <- c .:! "lifespanCount"
+    ctxParameters <- c .: "parameters"
+    return Context{..}
 
 -- TODO: Include Messages when FromJSON instances are added
 data QueryResult =
@@ -42,13 +47,13 @@ data QueryResult =
               -- ^ Set to false if required parameters are missing in query
               , fulfillmentText :: Maybe String
               -- ^ Text to be pronounced to the user or shown on the screen
-              -- , outputContexts :: [Context]
+              , outputContexts :: Maybe [Context]
               -- ^ Collection of output contexts
               , intent :: Maybe Intent
               -- ^ The intent that matched the user's query
               , intentDetectionConfidence :: Maybe Float
               -- ^ Matching score for the intent
-              -- , diagnosticInfo :: M.Map String String
+              , diagnosticInfo :: Maybe (M.Map String String)
               -- ^ Free-form diagnostic info
               , languageCode :: String
               -- ^ The language that was triggered during intent matching
@@ -63,8 +68,6 @@ data Request =
           -- ^ Unique session id
           , queryResult :: QueryResult
           -- ^ Result of the conversation query or event processing
-          -- , originalDetectIntentRequest :: M.Map String String
-          -- ^ Full request coming from an integrated platform
           } deriving(Generic, Show)
 
 instance FromJSON Request
