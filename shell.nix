@@ -4,14 +4,14 @@ let
 
   inherit (nixpkgs) pkgs;
 
-  f = { mkDerivation, aeson, base, hspec, hspec-discover, stdenv
+  f = { mkDerivation, aeson, base, containers, hspec, hspec-discover, stdenv
       , text, unordered-containers, ghcid, hlint
       }:
       mkDerivation {
         pname = "dialog-flow";
         version = "0.1.0.0";
         src = ./.;
-        libraryHaskellDepends = [ aeson base text unordered-containers ghcid
+        libraryHaskellDepends = [ aeson base containers text unordered-containers ghcid
         hlint];
         testHaskellDepends = [ aeson base hspec hspec-discover ];
         testToolDepends = [ hspec-discover ];
