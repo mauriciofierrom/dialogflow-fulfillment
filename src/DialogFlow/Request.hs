@@ -4,7 +4,15 @@
 
 module DialogFlow.Request where
 
-import Data.Aeson (FromJSON, parseJSON, withObject, (.:), (.:!))
+import Data.Aeson ( FromJSON
+                  , parseJSON
+                  , ToJSON
+                  , toJSON
+                  , object
+                  , withObject
+                  , (.:)
+                  , (.:!)
+                  , (.=))
 import GHC.Generics
 
 import qualified Data.Map as M
@@ -36,6 +44,12 @@ instance FromJSON Context where
     ctxLifespanCount <- c .:! "lifespanCount"
     ctxParameters <- c .: "parameters"
     return Context{..}
+
+instance ToJSON Context where
+  toJSON Context{..} =
+    object [ "name" .= ctxName
+           , "lifespanCount" .= ctxLifespanCount
+           , "parameters" .= ctxParameters ]
 
 -- TODO: Include Messages when FromJSON instances are added
 data QueryResult =

@@ -48,4 +48,6 @@ instance ToJSON Response where
     object [ "fulfillmentText" .= fulfillmentText
            , "fulfillmentMessages" .= fulfillmentMessages
            , "source" .= source
-           , "payload" .= payload ]
+           , "payload" .= payload
+           , "outputContexts" .= outputContexts
+           , "followupEventInput" .= followupEventInput ]
