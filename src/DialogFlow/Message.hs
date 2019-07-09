@@ -244,7 +244,7 @@ instance Show Message where
   show (Message o) = show o
 
 instance ToJSON Message where
-  toJSON (Message bc@(BasicCard _ _ _ _)) = object [ "basicCard" .= toJSON bc ]
+  toJSON (Message bc@BasicCard{}) = object [ "basicCard" .= toJSON bc ]
   toJSON (Message o) = toJSON o
 
 data Item = Item
