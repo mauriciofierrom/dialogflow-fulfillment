@@ -1,6 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE RecordWildCards #-}
 {-# LANGUAGE DeriveGeneric #-}
+{-# LANGUAGE NamedFieldPuns #-}
 
 module DialogFlow.Request where
 
@@ -16,6 +17,7 @@ import Data.Aeson ( FromJSON
 import GHC.Generics
 
 import qualified Data.Map as M
+import Data.List (find)
 
 data Intent =
   Intent { intentName :: String -- ^ Intent name
@@ -85,3 +87,11 @@ data Request =
           } deriving(Generic, Show)
 
 instance FromJSON Request
+
+getContextParam :: [Context] -> String -> String -> Maybe String
+getContextParam ctxs ctxName param = do
+  mbCtx <- find (ctxByParam param) ctxs
+  M.lookup param (ctxParameters mbCtx)
+    where
+      ctxByParam :: String -> Context -> Bool
+      ctxByParam param Context{ctxParameters} = M.member param ctxParameters
