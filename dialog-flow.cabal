@@ -69,6 +69,7 @@ library
   build-depends:
       aeson
     , base ^>=4.12.0.0
+    , bytestring
     , containers
     , text
     , unordered-containers
@@ -92,6 +93,7 @@ test-suite dialog-flow-test
   build-depends:
       aeson
     , base ^>=4.12.0.0
+    , bytestring
     , containers
     , dialog-flow
     , hspec

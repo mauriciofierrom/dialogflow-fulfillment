@@ -4,19 +4,22 @@ let
 
   inherit (nixpkgs) pkgs;
 
-  f = { mkDerivation, aeson, base, containers, hspec, hspec-discover, stdenv
-      , text, unordered-containers, ghcid, hlint
+  f = { mkDerivation, aeson, base, containers, hspec
+      , hspec-discover, stdenv, text, unordered-containers, bytestring
       }:
       mkDerivation {
         pname = "dialog-flow";
         version = "0.1.0.0";
         src = ./.;
-        libraryHaskellDepends = [ aeson base containers text unordered-containers ghcid
-        hlint];
-        testHaskellDepends = [ aeson base containers hspec hspec-discover ];
+        libraryHaskellDepends = [
+          aeson base containers text unordered-containers bytestring
+        ];
+        testHaskellDepends = [
+          aeson base containers hspec hspec-discover bytestring
+        ];
         testToolDepends = [ hspec-discover ];
         homepage = "https://github.com/mauriciofierrom/dialog-flow";
-        description = "A Dialog Flow library for Haskell";
+        description = "A Dialogflow library for Haskell";
         license = stdenv.lib.licenses.bsd3;
       };
 

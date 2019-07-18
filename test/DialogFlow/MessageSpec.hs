@@ -2,8 +2,12 @@
 
 module DialogFlow.MessageSpec where
 
-import Data.Aeson (encode)
+
+import Data.Aeson (encode, decode, ToJSON, FromJSON)
 import Test.Hspec
+import System.IO (withFile, IOMode(ReadMode))
+
+import qualified Data.ByteString.Lazy as B
 
 import DialogFlow.Message
 
@@ -16,11 +20,13 @@ spec = do
     context "when it is a TextToSpeech" $
       it "should have the desired structure" $
         let textToSpeech = TextToSpeech "the text"
-         in encode textToSpeech `shouldBe` "{\"textToSpeech\":\"the text\"}"
+         in checkSerialization "files/message/text_to_speech.json" textToSpeech
     context "when it is a SSML" $
-      it "shourld have the desired structure" $
-        let ssml = SSML "the xml"
-         in encode ssml `shouldBe` "{\"ssml\":\"the xml\"}"
+      it "should have the desired structure" $
+        withFile "files/message/text_to_speech.json" ReadMode $ \h -> do
+          contents <- B.hGetContents h
+          let textToSpeech = TextToSpeech "the text"
+           in encode textToSpeech `shouldBe` "{\"textToSpeech\":\"the text\"}"
   describe "SimpleResponse toJSON" $ do
     context "when it has a TextToSpeech" $
       it "should have the desired structure" $
@@ -156,4 +162,8 @@ spec = do
     image = Image (Just "the uri") (Just "the ally text")
     item = Item selectedItemInfo "the title" "the description" image
 
-
+checkSerialization :: (FromJSON a, ToJSON a, Show a, Eq a) => FilePath -> a -> IO ()
+checkSerialization path x =
+  withFile path ReadMode $ \h -> do
+    contents <- B.hGetContents h
+    Just x `shouldBe` decode contents
