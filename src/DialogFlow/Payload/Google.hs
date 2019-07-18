@@ -52,9 +52,13 @@ data ImageDisplayOption = DEFAULT
 
 instance ToJSON ImageDisplayOption where
   toJSON x = object [ "imageDisplayOptions" .= show x ]
+
 data MediaType = MEDIA_TYPE_UNSPECIFIED
                | AUDIO
                deriving Show
+
+instance ToJSON MediaType where
+  toJSON x = object [ "mediaType" .= show x ]
 
 data MediaObject =
   MediaObject { moName :: String
@@ -64,6 +68,14 @@ data MediaObject =
               , moIcon :: Image
               } deriving Show
 
+instance ToJSON MediaObject where
+  toJSON MediaObject{..} =
+    object [ "name" .= moName
+           , "description" .= moDescription
+           , "contentUrl" .= moContentUrl
+           , "largeImage" .= moLargeImage
+           , "icon" .= moIcon ]
+
 data RichMessageType = RMTSimpleResponse
                      | RMTBasicCard
                      | RMTMediaResponse
@@ -72,11 +84,10 @@ data Res t where
   SimpleResponse :: M.SimpleResponse -> Res 'RMTSimpleResponse
   BasicCard :: Maybe String -- ^ Title
             -> Maybe String -- ^ Subtitle
-            -> BasicCardContent
-            -> [M.BasicCardButton]
-            -> ImageDisplayOption
+            -> BasicCardContent -- ^ Card content can be an image of formatted text
+            -> [M.BasicCardButton] -- ^ Buttons. Currently supports at most 1.
+            -> ImageDisplayOption -- ^ Type of display option
             -> Res 'RMTBasicCard
-
   MediaResponse :: MediaType -> [MediaObject] -> Res 'RMTMediaResponse
 
 instance Show (Res t) where
@@ -90,7 +101,8 @@ instance ToJSON (Res t) where
         obj = Object $ HM.fromList [ "title" .= t
                                    , "subtitle" .= s
                                    , "buttons" .= b ] <> toObject c <> toObject d
-  toJSON x = toJSON x
+  toJSON (MediaResponse mediaType mos) =
+    object [ "mediaResponse" .= (toObject mediaType <> toObject mos) ]
 
 data RichResponse where
   RichResponse :: (Show (Res t)) => Res t -> RichResponse
