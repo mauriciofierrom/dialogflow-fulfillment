@@ -1,10 +1,12 @@
 {-# LANGUAGE DataKinds #-}
 {-# LANGUAGE FlexibleContexts #-}
+{-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE GADTs #-}
 {-# LANGUAGE LambdaCase #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE RecordWildCards #-}
 {-# LANGUAGE ScopedTypeVariables #-}
+{-# LANGUAGE StandaloneDeriving #-}
 
 module DialogFlow.Message
   ( CardButton(..)
@@ -51,6 +53,12 @@ data CardButton = CardButton
   , cbPostback :: Maybe String -- ^ The text to send to the DialogFlow API or URI to open
   } deriving (Eq, Show)
 
+instance FromJSON CardButton where
+  parseJSON = withObject "cardButton" $ \cb -> do
+    cbText <- cb .: "text"
+    cbPostback <- cb .: "postback"
+    return CardButton{..}
+
 instance ToJSON CardButton where
   toJSON CardButton{..} =
     object [ "text" .= cbText
@@ -58,7 +66,12 @@ instance ToJSON CardButton where
 
 data BasicCardContent = BasicCardImage (Msg 'MsgImage)
                       | BasicCardFormattedText String
-                      deriving (Show)
+                      deriving (Eq, Show)
+
+instance FromJSON BasicCardContent where
+  parseJSON = withObject "Image or formatted text" $ \bcc ->
+    asum [ BasicCardImage <$> bcc .: "image"
+         , BasicCardFormattedText <$> bcc .: "formattedText" ]
 
 instance ToJSON BasicCardContent where
   toJSON = \case
@@ -84,6 +97,13 @@ data SimpleResponse = SimpleResponse
   { simpleResponseText :: SpeechText -- ^ The speech text
   , displayText :: Maybe String -- ^ The text to display
   } deriving (Eq, Show)
+
+instance FromJSON SimpleResponse where
+  parseJSON = withObject "simpleResponse" $ \sr -> do
+    simpleResponseText <- parseJSON (Object sr)
+    displayText <- sr .: "displayText"
+    return SimpleResponse{..}
+
 
 instance ToJSON SimpleResponse where
   toJSON SimpleResponse{..} = Object $
@@ -187,14 +207,16 @@ data Msg t where
     :: [Item] -- ^ Carousel items
     -> Msg 'MsgCarouselSelect
 
+deriving instance Eq (Msg t)
+
 data Message where
   Message :: (Show (Msg t)) => Msg t -> Message
 
 -- TODO: Make sure homoiconicity is respected
 instance Show (Msg t) where
   show (Text ts) = "Text " <> show ts
-  show (Image mbUri mbAccessibilityText) =
-    "Image " <> show mbUri <> " " <> show mbAccessibilityText
+  show (Image mbUri mbAllyText) =
+    "Image " <> show mbUri <> " " <> show mbAllyText
   show (QuickReplies  mbTitle mbReplies) =
     "QuickReplies " <> show mbTitle <> " " <> show mbReplies
   show (Card mbTitle mbSubtitle mbUri mbCardButtons) =
@@ -212,6 +234,13 @@ instance Show (Msg t) where
   show (LinkOutSuggestion name uri) = "LinkOuSuggestion " <> name <> " " <> uri
   show (ListSelect mbTitle items) = "ListSelect " <> show mbTitle <> " " <> show items
   show (CarouselSelect items) = "CarouselSelect " <> show items
+
+instance FromJSON (Msg 'MsgImage) where
+  parseJSON = withObject "image" $ \i -> do
+    uri <- i .: "imageUri"
+    allyText <- i .: "accessibilityText"
+    return (Image uri allyText)
+
 
 instance ToJSON (Msg t) where
   toJSON (Text mbText) = object [ "text" .= mbText ]
@@ -252,7 +281,7 @@ data Item = Item
   , iTitle :: String -- ^ The title of the list item
   , iDescription :: String -- ^ The main text describing the item
   , iImage :: Msg 'MsgImage -- ^ The image to display
-  } deriving (Show)
+  } deriving (Eq, Show)
 
 instance ToJSON Item where
   toJSON Item{..} =

@@ -23,34 +23,26 @@ spec = do
          in checkSerialization "files/message/text_to_speech.json" textToSpeech
     context "when it is a SSML" $
       it "should have the desired structure" $
-        withFile "files/message/text_to_speech.json" ReadMode $ \h -> do
-          contents <- B.hGetContents h
-          let textToSpeech = TextToSpeech "the text"
-           in encode textToSpeech `shouldBe` "{\"textToSpeech\":\"the text\"}"
+        let ssml = SSML "the xml"
+         in checkSerialization "files/message/ssml.json" ssml
   describe "SimpleResponse toJSON" $ do
     context "when it has a TextToSpeech" $
       it "should have the desired structure" $
-        let expectedJson =
-              "{\"displayText\":\"the maybe text\",\"textToSpeech\":\"the text\"}"
-            simpleResponse = SimpleResponse (TextToSpeech "the text") (Just "the maybe text")
-         in encode simpleResponse `shouldBe` expectedJson
+        let simpleResponse = SimpleResponse (TextToSpeech "the text") (Just "the maybe text")
+         in checkSerialization "files/message/simple_response_text.json" simpleResponse
     context "when it has a SSML" $
       it "should have the desired structure" $
-        let expectedJson =
-              "{\"displayText\":\"the maybe text\",\"ssml\":\"the xml\"}"
-            simpleResponse = SimpleResponse (SSML "the xml") (Just "the maybe text")
-         in encode simpleResponse `shouldBe` expectedJson
+        let simpleResponse = SimpleResponse (SSML "the xml") (Just "the maybe text")
+         in checkSerialization "files/message/simple_response_ssml.json" simpleResponse
   describe "CardButton toJSON" $
     it "should have the desired structure" $
       let cardButton = CardButton (Just "the text") (Just "the postback")
-          expectedJson = "{\"text\":\"the text\",\"postback\":\"the postback\"}"
-       in encode cardButton `shouldBe` expectedJson
+       in checkSerialization "files/message/card_button.json" cardButton
   describe "BasicCardContent toJSON" $
     context "when it is an Image" $
       it "should have the desired structure" $
         let image = BasicCardImage (Image (Just "the uri") (Just "the ally text"))
-            expectedJson = "{\"image\":{\"accessibilityText\":\"the ally text\",\"imageUri\":\"the uri\"}}"
-         in encode image `shouldBe` expectedJson
+         in checkSerialization "files/message/basic_card_image.json" image
   describe "OpenUriAction toJSON" $
     it "should have the desired structure" $
       let openUriAction = OpenUriAction "the uri"
