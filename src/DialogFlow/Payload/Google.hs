@@ -104,25 +104,37 @@ instance ToJSON (Res t) where
   toJSON (MediaResponse mediaType mos) =
     object [ "mediaResponse" .= (toObject mediaType <> toObject mos) ]
 
-data RichResponse where
-  RichResponse :: (Show (Res t)) => Res t -> RichResponse
+data Item where
+  Item :: (Show (Res t)) => Res t -> Item
+
+instance ToJSON Item where
+  toJSON (Item x) = toJSON x
+
+deriving instance Show Item
+
+data RichResponse = RichResponse
+  { items :: [Item]
+  , suggestions :: [Suggestion]
+  , linkOutSuggestion :: LinkOutSuggestion
+  } deriving Show
 
 instance ToJSON RichResponse where
-  toJSON (RichResponse x) = toJSON x
-
-deriving instance Show RichResponse
+  toJSON RichResponse{..} =
+    object [ "items" .= items
+           , "suggestions" .= suggestions
+           , "linkOutSuggestion" .= linkOutSuggestion ]
 
 data Response =
   Response { expectUserResponse :: Bool
-           -- , userStorage :: String
-           , richResponse :: [RichResponse] }
+           , userStorage :: Maybe String
+           , richResponse :: RichResponse }
            deriving Show
 
 instance ToJSON Response where
   toJSON Response{..} =
     object [ "expectUserResponse" .= expectUserResponse
-           -- , "userStorage" .= userStorage
-           , "richResponse" .= object [ "items" .= richResponse ] ]
+           , "userStorage" .= userStorage
+           , "richResponse" .= richResponse ]
 
 data UrlTypeHint = URL_TYPE_HINT_UNSPECIFIED
                  | AMP_CONTENT
