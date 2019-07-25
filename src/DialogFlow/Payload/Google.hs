@@ -118,9 +118,59 @@ data Response =
            , richResponse :: [RichResponse] }
            deriving Show
 
--- TODO: Change RichResponse to Item accordingly
 instance ToJSON Response where
   toJSON Response{..} =
     object [ "expectUserResponse" .= expectUserResponse
            -- , "userStorage" .= userStorage
            , "richResponse" .= object [ "items" .= richResponse ] ]
+
+data UrlTypeHint = URL_TYPE_HINT_UNSPECIFIED
+                 | AMP_CONTENT
+                 deriving (Eq, Show)
+
+instance ToJSON UrlTypeHint where
+  toJSON x = object [ "urlTypeHint" .= show x ]
+
+data VersionFilter = VersionFilter
+  { minVersion :: Int
+  , maxVersion :: Int
+  } deriving (Eq, Show)
+
+instance ToJSON VersionFilter where
+  toJSON VersionFilter{..} =
+    object [ "minVersion" .= minVersion
+           , "maxVersion" .= maxVersion ]
+
+data AndroidApp = AndroidApp
+  { aaPackageName :: String
+  , aaVersions :: [VersionFilter]
+  } deriving (Eq, Show)
+
+instance ToJSON AndroidApp where
+  toJSON AndroidApp{..} =
+    object [ "packageName" .= aaPackageName
+           , "versions" .= aaVersions ]
+
+data OpenUrlAction =
+  OpenUrlAction { ouaUrl :: String
+                , ouaAndroidApp :: AndroidApp
+                , ouaUrlTypeHint :: UrlTypeHint
+                } deriving (Eq, Show)
+
+instance ToJSON OpenUrlAction where
+  toJSON OpenUrlAction{..} =
+    Object $ HM.fromList [ "url" .= ouaUrl
+                         , "androidApp" .= ouaAndroidApp
+                         ] <> toObject ouaUrlTypeHint
+
+data LinkOutSuggestion = LinkOutSuggestion
+  { losDestinationName :: String
+  , losUrl :: String
+  , losOpenUrlAction :: OpenUrlAction
+  } deriving (Eq, Show)
+
+instance ToJSON LinkOutSuggestion where
+  toJSON LinkOutSuggestion{..} =
+    object [ "destinationName" .= losDestinationName
+           , "url" .= losUrl
+           , "openUrlAction" .= losOpenUrlAction ]
