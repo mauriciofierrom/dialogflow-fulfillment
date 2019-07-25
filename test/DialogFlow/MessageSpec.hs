@@ -46,8 +46,7 @@ spec = do
   describe "OpenUriAction toJSON" $
     it "should have the desired structure" $
       let openUriAction = OpenUriAction "the uri"
-          expectedJson = "{\"uri\":\"the uri\"}"
-       in encode openUriAction `shouldBe` expectedJson
+       in checkSerialization "files/message/open_uri_action.json" openUriAction
   describe "BasicCardButton toJSON" $
     it "should have the desired structure" $
       let openUriAction = OpenUriAction "the uri"

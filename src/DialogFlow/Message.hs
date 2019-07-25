@@ -116,6 +116,11 @@ newtype OpenUriAction = OpenUriAction
 instance ToJSON OpenUriAction where
   toJSON oua = object [ "uri" .= unOpenUriAction oua ]
 
+instance FromJSON OpenUriAction where
+  parseJSON = withObject "openUriAction" $ \oua -> do
+    uri <- oua .: "uri"
+    return $ OpenUriAction uri
+
 data BasicCardButton = BasicCardButton
   { bcbTitle :: String -- ^ The title of the button
   , bcbOpenUriAction :: OpenUriAction -- ^ Action to take when a user taps on the button
