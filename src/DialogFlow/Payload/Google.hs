@@ -174,3 +174,9 @@ instance ToJSON LinkOutSuggestion where
     object [ "destinationName" .= losDestinationName
            , "url" .= losUrl
            , "openUrlAction" .= losOpenUrlAction ]
+
+newtype Suggestion = Suggestion { unSuggestion :: String }
+  deriving (Eq, Show)
+
+instance ToJSON Suggestion where
+  toJSON s = object [ "title" .= (unSuggestion s) ]
