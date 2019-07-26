@@ -74,8 +74,7 @@ spec = do
     context "QuickReplies" $
       it "should have the desired structure" $
         let quickReplies = QuickReplies (Just "the title") ["the reply"]
-            expectedJson = "{\"title\":\"the title\",\"quickReplies\":[\"the reply\"]}"
-         in encode quickReplies `shouldBe` expectedJson
+         in checkSerialization "files/message/quick_replies.json" quickReplies
     context "Card" $
       context "when it has an image content" $
         it "should have the desired structure" $

@@ -268,6 +268,12 @@ instance FromJSON (Msg 'MsgText) where
     text <- t .: "text"
     return $ Text text
 
+instance FromJSON (Msg 'MsgQuickReplies) where
+  parseJSON = withObject "quickReplies" $ \qr -> do
+    title <- qr .: "title"
+    replies <- qr .: "quickReplies"
+    return $ QuickReplies title replies
+  
 instance ToJSON (Msg t) where
   toJSON (Text mbText) = object [ "text" .= mbText ]
   toJSON (Image uri accesibilityText) =
