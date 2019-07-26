@@ -66,8 +66,7 @@ spec = do
     context "Text" $
       it "should have the desired structure" $
         let text = Text ["the text"]
-            expectedJson = "{\"text\":[\"the text\"]}"
-         in encode text `shouldBe` expectedJson
+         in checkSerialization "files/message/text.json" text
     context "Image" $
       it "should have the desired structure" $
         let image = Image (Just "the uri") (Just "the ally text")

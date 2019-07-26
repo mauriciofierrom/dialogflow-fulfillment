@@ -263,6 +263,10 @@ instance FromJSON (Msg 'MsgImage) where
     allyText <- i .: "accessibilityText"
     return (Image uri allyText)
 
+instance FromJSON (Msg 'MsgText) where
+  parseJSON = withObject "text" $ \t -> do
+    text <- t .: "text"
+    return $ Text text
 
 instance ToJSON (Msg t) where
   toJSON (Text mbText) = object [ "text" .= mbText ]
