@@ -141,6 +141,11 @@ newtype Suggestion = Suggestion
   { unSuggestionTitle :: String -- ^ The text shown in the suggestion chip
   } deriving (Eq, Show)
 
+instance FromJSON Suggestion where
+  parseJSON = withObject "suggestion" $ \s -> do
+    unSuggestionTitle <- s .: "title"
+    return $ Suggestion unSuggestionTitle
+
 instance ToJSON Suggestion where
   toJSON s =
     object [ "title" .= unSuggestionTitle s ]
@@ -150,6 +155,12 @@ data SelectItemInfo = SelectItemInfo
   , siiSynonyms :: [String] -- ^ A list of synonyms that can also be used to trigger this item in dialog
   } deriving (Eq, Show)
 
+instance FromJSON SelectItemInfo where
+  parseJSON = withObject "selectedItemInfo" $ \sii -> do
+    siiKey <- sii .: "key"
+    siiSynonyms <- sii .: "synonyms"
+    return SelectItemInfo{..}
+    
 instance ToJSON SelectItemInfo where
   toJSON SelectItemInfo{..} =
     object [ "key" .= siiKey

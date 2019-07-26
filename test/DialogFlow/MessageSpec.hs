@@ -55,12 +55,10 @@ spec = do
   describe "Suggestion toJSON" $
     it "should have the desired structure" $
       let suggestion = Suggestion "the title"
-          expectedJson = "{\"title\":\"the title\"}"
-       in encode suggestion `shouldBe` expectedJson
+       in checkSerialization "files/message/suggestion.json" suggestion
   describe "SelectedItemInfo toJSON" $
     it "should have the desired structure" $
-      let expectedJson = "{\"key\":\"the key\",\"synonyms\":[\"a synonym\"]}"
-       in encode selectedItemInfo `shouldBe` expectedJson
+       checkSerialization "files/message/selected_item_info.json" selectedItemInfo
   describe "Item toJSON" $
     it "should have the desired structure" $
       let expectedJson = "{\"image\":{\"accessibilityText\":\"the ally text\",\"imageUri\":\"the uri\"}"
