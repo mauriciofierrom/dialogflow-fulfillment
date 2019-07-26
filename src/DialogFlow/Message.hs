@@ -126,6 +126,12 @@ data BasicCardButton = BasicCardButton
   , bcbOpenUriAction :: OpenUriAction -- ^ Action to take when a user taps on the button
   } deriving (Eq, Show)
 
+instance FromJSON BasicCardButton where
+  parseJSON = withObject "basicCardButton" $ \bcb -> do
+    bcbTitle <- bcb .: "title"
+    bcbOpenUriAction <- bcb .: "openUriAction"
+    return BasicCardButton{..}
+
 instance ToJSON BasicCardButton where
   toJSON BasicCardButton{..} =
     object [ "title" .= bcbTitle
