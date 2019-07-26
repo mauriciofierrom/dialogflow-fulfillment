@@ -160,7 +160,7 @@ instance FromJSON SelectItemInfo where
     siiKey <- sii .: "key"
     siiSynonyms <- sii .: "synonyms"
     return SelectItemInfo{..}
-    
+
 instance ToJSON SelectItemInfo where
   toJSON SelectItemInfo{..} =
     object [ "key" .= siiKey
@@ -304,6 +304,14 @@ data Item = Item
   , iDescription :: String -- ^ The main text describing the item
   , iImage :: Msg 'MsgImage -- ^ The image to display
   } deriving (Eq, Show)
+
+instance FromJSON Item where
+    parseJSON = withObject "Item" $ \i -> do
+      iInfo <- i .: "info"
+      iTitle <- i .: "title"
+      iDescription <- i .: "description"
+      iImage <- i .: "image"
+      return Item{..}
 
 instance ToJSON Item where
   toJSON Item{..} =

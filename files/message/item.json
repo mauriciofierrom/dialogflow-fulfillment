@@ -1,0 +1,13 @@
+{
+    "title": "the title",
+    "description":"the description",
+    "info": {
+        "key": "the key",
+        "synonyms": ["a synonym"]
+    },
+    "image":
+    {
+        "accessibilityText": "the ally text",
+        "imageUri":"the uri"
+    }
+}

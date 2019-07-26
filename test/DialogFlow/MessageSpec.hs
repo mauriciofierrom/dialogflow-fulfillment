@@ -61,10 +61,7 @@ spec = do
        checkSerialization "files/message/selected_item_info.json" selectedItemInfo
   describe "Item toJSON" $
     it "should have the desired structure" $
-      let expectedJson = "{\"image\":{\"accessibilityText\":\"the ally text\",\"imageUri\":\"the uri\"}"
-            <> ",\"title\":\"the title\",\"description\":\"the description\""
-            <> ",\"info\":{\"key\":\"the key\",\"synonyms\":[\"a synonym\"]}}"
-       in encode item `shouldBe` expectedJson
+      checkSerialization "files/message/item.json" item
   describe "Message toJSON" $ do
     context "Text" $
       it "should have the desired structure" $
