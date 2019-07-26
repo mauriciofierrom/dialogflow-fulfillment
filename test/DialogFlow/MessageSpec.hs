@@ -70,8 +70,7 @@ spec = do
     context "Image" $
       it "should have the desired structure" $
         let image = Image (Just "the uri") (Just "the ally text")
-            expectedJson = "{\"accessibilityText\":\"the ally text\",\"imageUri\":\"the uri\"}"
-         in encode image `shouldBe` expectedJson
+         in checkSerialization "files/message/image.json" image
     context "QuickReplies" $
       it "should have the desired structure" $
         let quickReplies = QuickReplies (Just "the title") ["the reply"]
