@@ -308,6 +308,11 @@ instance FromJSON (Msg 'MsgListSelect) where
     items <- ls .: "items"
     return $ ListSelect title items
 
+instance FromJSON (Msg 'MsgCarouselSelect) where
+  parseJSON = withObject "carouselSelect" $ \cs -> do
+    items <- cs .: "items"
+    return $ CarouselSelect items
+
 instance ToJSON (Msg t) where
   toJSON (Text mbText) = object [ "text" .= mbText ]
   toJSON (Image uri accesibilityText) =

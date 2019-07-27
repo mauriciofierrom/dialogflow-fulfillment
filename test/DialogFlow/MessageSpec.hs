@@ -118,10 +118,7 @@ spec = do
     context "CarouselSelect" $
       it "should have the desired structure" $
         let carouselSelect = CarouselSelect [item]
-            expectedJson = "{\"items\":[{\"image\":{\"accessibilityText\":\"the ally text\",\"imageUri\":\"the uri\"}"
-              <> ",\"title\":\"the title\",\"description\":\"the description\""
-              <> ",\"info\":{\"key\":\"the key\",\"synonyms\":[\"a synonym\"]}}]}"
-           in encode carouselSelect `shouldBe` expectedJson
+           in checkSerialization "files/message/carousel_select.json" carouselSelect
   where
     selectedItemInfo = SelectItemInfo "the key" ["a synonym"]
     image = Image (Just "the uri") (Just "the ally text")
