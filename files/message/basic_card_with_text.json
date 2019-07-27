@@ -1,0 +1,11 @@
+{
+    "title": "the title",
+    "subtitle": "the subtitle",
+    "formattedText": "the formatted text",
+    "buttons": [{
+        "openUriAction": {
+            "uri": "the uri"
+        },
+        "title": "the title"
+    }]
+}

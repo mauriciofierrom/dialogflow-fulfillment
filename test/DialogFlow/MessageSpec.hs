@@ -101,10 +101,7 @@ spec = do
               basicCardButton = BasicCardButton "the title" openUriAction
               basicCard =
                 BasicCard (Just "the title") (Just "the subtitle") (BasicCardFormattedText "the formatted text") [basicCardButton]
-              expectedJson = "{\"buttons\":[{\"openUriAction\":{\"uri\":\"the uri\"},\"title\":\"the title\"}]"
-                <> ",\"subtitle\":\"the subtitle\",\"title\":\"the title\""
-                <> ",\"formattedText\":\"the formatted text\"}"
-             in encode basicCard `shouldBe` expectedJson
+             in checkSerialization "files/message/basic_card_with_text.json" basicCard
     context "Suggestions" $
       it "should have the desired structure" $
         let suggestions = Suggestions [Suggestion "the suggestion"]
