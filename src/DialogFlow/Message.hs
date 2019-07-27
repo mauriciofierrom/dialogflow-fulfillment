@@ -302,6 +302,12 @@ instance FromJSON (Msg 'MsgSuggestions) where
     suggestions <- sgs .: "suggestions"
     return $ Suggestions suggestions
 
+instance FromJSON (Msg 'MsgListSelect) where
+  parseJSON = withObject "listSelect" $ \ls -> do
+    title <- ls .: "title"
+    items <- ls .: "items"
+    return $ ListSelect title items
+
 instance ToJSON (Msg t) where
   toJSON (Text mbText) = object [ "text" .= mbText ]
   toJSON (Image uri accesibilityText) =
