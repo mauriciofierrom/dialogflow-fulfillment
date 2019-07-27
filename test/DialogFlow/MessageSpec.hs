@@ -76,18 +76,16 @@ spec = do
         let quickReplies = QuickReplies (Just "the title") ["the reply"]
          in checkSerialization "files/message/quick_replies.json" quickReplies
     context "Card" $
-      context "when it has an image content" $
-        it "should have the desired structure" $
-          let cardButton = CardButton (Just "the text") (Just "the postback")
-              card =
-                Card (Just "the title") (Just "the subtitle") (Just "the uri") [cardButton]
-             in checkSerialization "files/message/card_image.json" card
+      it "should have the desired structure" $
+        let cardButton = CardButton (Just "the text") (Just "the postback")
+            card =
+              Card (Just "the title") (Just "the subtitle") (Just "the uri") [cardButton]
+            in checkSerialization "files/message/card_image.json" card
     context "SimpleResponses" $
       it "should have the desired structure" $
         let simpleResponses = SimpleResponses [SimpleResponse (TextToSpeech "the text") (Just "the display text")]
-            expectedJson = "{\"simpleResponses\":{\"simpleResponses\":[{\"displayText\":\"the display text\""
-              <> ",\"textToSpeech\":\"the text\"}]}}"
-           in encode simpleResponses `shouldBe` expectedJson
+            
+           in checkSerialization "files/message/simple_responses.json" simpleResponses
     context "BasicCard" $ do
       context "when it has an image content" $
         it "should have the desired structure" $

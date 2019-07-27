@@ -283,6 +283,11 @@ instance FromJSON (Msg 'MsgCard) where
     cardButtons <- c .: "buttons"
     return $ Card mbTitle mbSubtitle mbUri cardButtons
 
+instance FromJSON (Msg 'MsgSimpleResponses) where
+  parseJSON = withObject "simpleResponses" $ \sr -> do
+    srs <- sr .: "simpleResponses"
+    responses <- srs .: "simpleResponses"
+    return $ SimpleResponses responses
 instance ToJSON (Msg t) where
   toJSON (Text mbText) = object [ "text" .= mbText ]
   toJSON (Image uri accesibilityText) =
