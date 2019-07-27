@@ -33,6 +33,7 @@ module DialogFlow.Message
   , Message(..)
   ) where
 
+import Control.Applicative ((<|>))
 import Data.Aeson ( FromJSON
                   , parseJSON
                   , ToJSON
@@ -288,6 +289,15 @@ instance FromJSON (Msg 'MsgSimpleResponses) where
     srs <- sr .: "simpleResponses"
     responses <- srs .: "simpleResponses"
     return $ SimpleResponses responses
+
+instance FromJSON (Msg 'MsgBasicCard) where
+  parseJSON = withObject "basicCard" $ \bc -> do
+    mbTitle <- bc .: "title"
+    mbSubtitle <- bc .: "subtitle"
+    content <- parseJSON (Object bc)
+    buttons <- bc .: "buttons"
+    return $ BasicCard mbTitle mbSubtitle content buttons
+
 instance ToJSON (Msg t) where
   toJSON (Text mbText) = object [ "text" .= mbText ]
   toJSON (Image uri accesibilityText) =

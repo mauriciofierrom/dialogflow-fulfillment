@@ -94,11 +94,7 @@ spec = do
               basicCardButton = BasicCardButton "the title" openUriAction
               basicCard =
                 BasicCard (Just "the title") (Just "the subtitle") (BasicCardImage image) [basicCardButton]
-              imageJson = "{\"accessibilityText\":\"the ally text\",\"imageUri\":\"the uri\"}"
-              expectedJson = "{\"image\":" <> imageJson
-                <> ",\"buttons\":[{\"openUriAction\":{\"uri\":\"the uri\"},\"title\":\"the title\"}]"
-                <> ",\"subtitle\":\"the subtitle\",\"title\":\"the title\"}"
-             in encode basicCard `shouldBe` expectedJson
+             in checkSerialization "files/message/basic_card_with_image.json" basicCard
       context "when it has a formattedText content" $
         it "should have the desired structure" $
           let openUriAction = OpenUriAction "the uri"

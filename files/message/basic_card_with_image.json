@@ -1,0 +1,14 @@
+{
+    "title": "the title",
+    "subtitle": "the subtitle",
+    "image": {
+        "accessibilityText": "the ally text",
+        "imageUri": "the uri"
+    },
+    "buttons": [{
+        "openUriAction": {
+            "uri": "the uri"
+        },
+        "title": "the title"
+    }]
+}
