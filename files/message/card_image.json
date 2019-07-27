@@ -1,0 +1,8 @@
+{
+    "card": {
+        "buttons": [{"text": "the text", "postback": "the postback"}],
+        "imageUri": "the uri",
+        "subtitle": "the subtitle",
+        "title": "the title"
+    }
+}

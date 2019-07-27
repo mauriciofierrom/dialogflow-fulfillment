@@ -81,10 +81,7 @@ spec = do
           let cardButton = CardButton (Just "the text") (Just "the postback")
               card =
                 Card (Just "the title") (Just "the subtitle") (Just "the uri") [cardButton]
-              expectedJson = "{\"card\":{\"buttons\":[{\"text\":\"the text\",\"postback\":\"the postback\"}]"
-                <> ",\"imageUri\":\"the uri\",\"subtitle\":\"the subtitle\""
-                <> ",\"title\":\"the title\"}}"
-             in encode card `shouldBe` expectedJson
+             in checkSerialization "files/message/card_image.json" card
     context "SimpleResponses" $
       it "should have the desired structure" $
         let simpleResponses = SimpleResponses [SimpleResponse (TextToSpeech "the text") (Just "the display text")]
