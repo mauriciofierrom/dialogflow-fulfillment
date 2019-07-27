@@ -3,7 +3,7 @@
 {-# LANGUAGE DeriveGeneric #-}
 {-# LANGUAGE NamedFieldPuns #-}
 
-module DialogFlow.Request where
+module Dialogflow.Request where
 
 import Data.Aeson ( FromJSON
                   , parseJSON

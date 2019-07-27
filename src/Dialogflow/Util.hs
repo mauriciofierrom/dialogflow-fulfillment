@@ -1,4 +1,4 @@
-module DialogFlow.Util
+module Dialogflow.Util
   ( toObject
   , noNullObjects
   ) where

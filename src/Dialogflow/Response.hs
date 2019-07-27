@@ -1,7 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE RecordWildCards #-}
 
-module DialogFlow.Response where
+module Dialogflow.Response where
 
 import Data.Aeson ( object
                   , toJSON
@@ -10,10 +10,10 @@ import Data.Aeson ( object
 
 import qualified Data.Map as M
 
-import DialogFlow.Request (Context)
-import DialogFlow.Message
+import Dialogflow.Request (Context)
+import Dialogflow.Message
 
-import qualified DialogFlow.Payload.Google as G
+import qualified Dialogflow.Payload.Google as G
 
 data EventInput =
   EventInput { eventInputName :: String

@@ -6,11 +6,11 @@
 {-# LANGUAGE RecordWildCards #-}
 {-# LANGUAGE StandaloneDeriving #-}
 
-module DialogFlow.Payload.Google where
+module Dialogflow.Payload.Google where
 
-import DialogFlow.Util
+import Dialogflow.Util
 
-import qualified DialogFlow.Message as M
+import qualified Dialogflow.Message as M
 import qualified Data.HashMap.Strict as HM
 
 import Data.Aeson (object, Value(..), ToJSON, toJSON, (.=))

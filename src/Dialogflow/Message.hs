@@ -8,7 +8,7 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE StandaloneDeriving #-}
 
-module DialogFlow.Message
+module Dialogflow.Message
   ( CardButton(..)
   , BasicCardContent(..)
   , BasicCardButton(..)
@@ -46,11 +46,11 @@ import Data.Foldable (asum)
 
 import qualified Data.HashMap.Strict as HM
 
-import DialogFlow.Util
+import Dialogflow.Util
 
 data CardButton = CardButton
   { cbText :: Maybe String -- ^ The text to show on the button
-  , cbPostback :: Maybe String -- ^ The text to send to the DialogFlow API or URI to open
+  , cbPostback :: Maybe String -- ^ The text to send to the Dialogflow API or URI to open
   } deriving (Eq, Show)
 
 instance FromJSON CardButton where

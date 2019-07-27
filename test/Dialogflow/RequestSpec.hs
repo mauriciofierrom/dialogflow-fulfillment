@@ -1,13 +1,13 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module DialogFlow.RequestSpec where
+module Dialogflow.RequestSpec where
 
 import Data.Aeson (eitherDecode)
 import Test.Hspec
 
 import qualified Data.Map as M
 
-import DialogFlow.Request
+import Dialogflow.Request
 
 spec :: Spec
 spec = do

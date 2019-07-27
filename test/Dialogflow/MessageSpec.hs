@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module DialogFlow.MessageSpec where
+module Dialogflow.MessageSpec where
 
 
 import Data.Aeson (encode, decode, ToJSON, FromJSON)
@@ -9,7 +9,7 @@ import System.IO (withFile, IOMode(ReadMode))
 
 import qualified Data.ByteString.Lazy as B
 
-import DialogFlow.Message
+import Dialogflow.Message
 
 -- TODO: Make tests less flaky. Currently it depends on the order the fields are
 -- generated, and iirc the aeson docs states they don't make assurances about
