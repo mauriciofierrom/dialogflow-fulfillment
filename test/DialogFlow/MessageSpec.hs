@@ -105,8 +105,7 @@ spec = do
     context "Suggestions" $
       it "should have the desired structure" $
         let suggestions = Suggestions [Suggestion "the suggestion"]
-            expectedJson = "{\"suggestions\":[{\"title\":\"the suggestion\"}]}"
-         in encode suggestions `shouldBe` expectedJson
+         in checkSerialization "files/message/suggestions.json" suggestions
     context "LinkOutSuggestion" $
       it "should have the desired structure" $
         let linkOutSuggestion = LinkOutSuggestion "the name" "the app"

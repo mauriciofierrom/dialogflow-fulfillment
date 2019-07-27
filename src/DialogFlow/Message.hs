@@ -33,7 +33,6 @@ module DialogFlow.Message
   , Message(..)
   ) where
 
-import Control.Applicative ((<|>))
 import Data.Aeson ( FromJSON
                   , parseJSON
                   , ToJSON
@@ -297,6 +296,11 @@ instance FromJSON (Msg 'MsgBasicCard) where
     content <- parseJSON (Object bc)
     buttons <- bc .: "buttons"
     return $ BasicCard mbTitle mbSubtitle content buttons
+
+instance FromJSON (Msg 'MsgSuggestions) where
+  parseJSON = withObject "suggestions" $ \sgs -> do
+    suggestions <- sgs .: "suggestions"
+    return $ Suggestions suggestions
 
 instance ToJSON (Msg t) where
   toJSON (Text mbText) = object [ "text" .= mbText ]
