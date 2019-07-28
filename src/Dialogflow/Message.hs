@@ -8,6 +8,17 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE StandaloneDeriving #-}
 
+{-|
+Module      : Dialogflow.Util
+Description : Dialogflow messages
+Copyright   : (c) Mauricio Fierro, 2019
+License     : BSD3-Clause
+Maintainer  : Mauricio Fierro <mauriciofierrom@gmail.com>
+
+This module contains types for Dialogflow messages to be use in
+a fulfillment webhook response.
+-}
+
 module Dialogflow.Message
   ( CardButton(..)
   , BasicCardContent(..)
@@ -48,9 +59,10 @@ import qualified Data.HashMap.Strict as HM
 
 import Dialogflow.Util
 
+-- | Button for a 'Card' message
 data CardButton = CardButton
-  { cbText :: Maybe String -- ^ The text to show on the button
-  , cbPostback :: Maybe String -- ^ The text to send to the Dialogflow API or URI to open
+  { cbText     :: Maybe String -- ^ The text to show on the button.
+  , cbPostback :: Maybe String -- ^ The text to send to the Dialogflow API or URI to open.
   } deriving (Eq, Show)
 
 instance FromJSON CardButton where
@@ -64,6 +76,8 @@ instance ToJSON CardButton where
     object [ "text" .= cbText
            , "postback" .= cbPostback ]
 
+-- | The 'BasicCard' message can have either an 'Image' or
+-- formatted text as content.
 data BasicCardContent = BasicCardImage (Msg 'MsgImage)
                       | BasicCardFormattedText String
                       deriving (Eq, Show)
@@ -78,9 +92,10 @@ instance ToJSON BasicCardContent where
     BasicCardImage image -> object [ "image" .= image ]
     BasicCardFormattedText formattedText -> object [ "formattedText" .= formattedText ]
 
-
+-- | A 'SimpleResponse' can have text-to-speech in plain text
+-- or SSML format.
 data SpeechText = TextToSpeech String -- ^ The plain text of the speech output
-                | SSML String -- ^ Structured spoken response to the user in SSML format
+                | SSML String         -- ^ Structured spoken response to the user in SSML format
                 deriving (Eq, Show)
 
 instance FromJSON SpeechText where
@@ -93,9 +108,10 @@ instance ToJSON SpeechText where
     TextToSpeech textToSpeech -> object ["textToSpeech" .= textToSpeech]
     SSML ssml -> object ["ssml" .= ssml]
 
+-- | A simple response message containing speech or text
 data SimpleResponse = SimpleResponse
-  { simpleResponseText :: SpeechText -- ^ The speech text
-  , displayText :: Maybe String -- ^ The text to display
+  { simpleResponseText :: SpeechText   -- ^ The speech text
+  , displayText        :: Maybe String -- ^ The text to display
   } deriving (Eq, Show)
 
 instance FromJSON SimpleResponse where
@@ -104,11 +120,11 @@ instance FromJSON SimpleResponse where
     displayText <- sr .: "displayText"
     return SimpleResponse{..}
 
-
 instance ToJSON SimpleResponse where
   toJSON SimpleResponse{..} = Object $
     toObject simpleResponseText <> HM.fromList ["displayText" .= displayText ]
 
+-- | An action to open the given URI. Used in 'BasicCardButton's.
 newtype OpenUriAction = OpenUriAction
   { unOpenUriAction :: String -- ^ The HTTP or HTTPS scheme URI
   } deriving (Eq, Show)
@@ -121,8 +137,9 @@ instance FromJSON OpenUriAction where
     uri <- oua .: "uri"
     return $ OpenUriAction uri
 
+-- | Buttons for 'BasicCard's.
 data BasicCardButton = BasicCardButton
-  { bcbTitle :: String -- ^ The title of the button
+  { bcbTitle :: String                -- ^ The title of the button
   , bcbOpenUriAction :: OpenUriAction -- ^ Action to take when a user taps on the button
   } deriving (Eq, Show)
 
@@ -137,6 +154,7 @@ instance ToJSON BasicCardButton where
     object [ "title" .= bcbTitle
            , "openUriAction" .= bcbOpenUriAction ]
 
+-- | Suggestion chips.
 newtype Suggestion = Suggestion
   { unSuggestionTitle :: String -- ^ The text shown in the suggestion chip
   } deriving (Eq, Show)
@@ -150,9 +168,12 @@ instance ToJSON Suggestion where
   toJSON s =
     object [ "title" .= unSuggestionTitle s ]
 
+-- | Additional information about an 'Item' for when it is triggered in a dialog.
 data SelectItemInfo = SelectItemInfo
-  { siiKey :: String -- ^ A unique key that will be sent back to the agent if this response is given
-  , siiSynonyms :: [String] -- ^ A list of synonyms that can also be used to trigger this item in dialog
+  { siiKey      :: String
+  -- ^ A unique key that will be sent back to the agent if this response is given.
+  , siiSynonyms :: [String]
+  -- ^ A list of synonyms that can also be used to trigger this item in dialog.
   } deriving (Eq, Show)
 
 instance FromJSON SelectItemInfo where
@@ -177,21 +198,26 @@ data MsgType = MsgText
              | MsgListSelect
              | MsgCarouselSelect
 
+-- | The messages to be included in the Response
 data Msg t where
+  -- | The text response message.
   Text
     :: [String] -- ^ The collection of the agent's responses
     -> Msg 'MsgText
 
+  -- | The image response message.
   Image
     :: Maybe String -- ^ The public URI to an image file
     -> Maybe String -- ^ A text description of the image to be used for accessibility
     -> Msg 'MsgImage
 
+  -- | The quick replies response message.
   QuickReplies
     :: Maybe String   -- ^ The title of the collection of quick replies
-    -> [String] -- ^ The collection of quick replies
+    -> [String]       -- ^ The collection of quick replies
     -> Msg 'MsgQuickReplies
 
+  -- | The card response.
   Card
     :: Maybe String -- ^ The title of the card
     -> Maybe String -- ^ The subtitle of the card
@@ -199,38 +225,46 @@ data Msg t where
     -> [CardButton] -- ^ The collection of card buttons
     -> Msg 'MsgCard
 
+  -- | The collection of 'SimpleResponse' candidates.
   SimpleResponses
     :: [SimpleResponse] -- ^ The list of simple responses
     -> Msg 'MsgSimpleResponses
 
 -- TODO: Check if the formattedText and image fields are mutually exclusive
+  -- | The basic card message. Useful for displaying information.
   BasicCard
-    :: Maybe String -- ^ The title of the card
-    -> Maybe String -- ^ The subtitle of the card
-    -> BasicCardContent -- ^ The body text or image of the card
+    :: Maybe String      -- ^ The title of the card
+    -> Maybe String      -- ^ The subtitle of the card
+    -> BasicCardContent  -- ^ The body text or image of the card
     -> [BasicCardButton] -- ^ The collection of card buttons
     -> Msg 'MsgBasicCard
 
+  -- | The collection of 'Suggestion'.
   Suggestions
     :: [Suggestion] -- ^ The list of suggested replies
     -> Msg 'MsgSuggestions
 
+  -- | The suggestion chip message that allows the user to jump
+  -- out to the app or the website associated with this agent.
   LinkOutSuggestion
     :: String -- ^ The name of the app or site this chip is linking to
     -> String -- ^ The URI of the app or site to open when the user taps the suggestion chip
     -> Msg 'MsgLinkOutSuggestion
 
+  -- | The card for presenting a list of options to select from.
   ListSelect
     :: Maybe String -- ^ The overall title of the list
     -> [Item] -- ^ List items
     -> Msg 'MsgListSelect
 
+  -- | The card for representing a carousel of options to select from.
   CarouselSelect
     :: [Item] -- ^ Carousel items
     -> Msg 'MsgCarouselSelect
 
 deriving instance Eq (Msg t)
 
+-- | This type is used to wrap the messages under one type.
 data Message where
   Message :: (Show (Msg t)) => Msg t -> Message
 
@@ -273,7 +307,7 @@ instance FromJSON (Msg 'MsgQuickReplies) where
     title <- qr .: "title"
     replies <- qr .: "quickReplies"
     return $ QuickReplies title replies
-  
+
 instance FromJSON (Msg 'MsgCard) where
   parseJSON = withObject "card" $ \card -> do
     c <- card .: "card"
@@ -347,6 +381,7 @@ instance ToJSON Message where
   toJSON (Message bc@BasicCard{}) = object [ "basicCard" .= toJSON bc ]
   toJSON (Message o) = toJSON o
 
+-- | An item in 'ListSelect' and 'CarouselSelect'.
 data Item = Item
   { iInfo :: SelectItemInfo -- ^ Additional information about this option
   , iTitle :: String -- ^ The title of the list item
