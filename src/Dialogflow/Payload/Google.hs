@@ -115,7 +115,7 @@ deriving instance Show Item
 data RichResponse = RichResponse
   { items :: [Item]
   , suggestions :: [Suggestion]
-  , linkOutSuggestion :: LinkOutSuggestion
+  , linkOutSuggestion :: Maybe LinkOutSuggestion
   } deriving Show
 
 instance ToJSON RichResponse where
