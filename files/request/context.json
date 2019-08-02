@@ -1,0 +1,8 @@
+{
+  "name": "the context name",
+  "lifespanCount": 5,
+  "parameters": {
+    "param1": "value1",
+    "param2": "value2"
+  }
+}

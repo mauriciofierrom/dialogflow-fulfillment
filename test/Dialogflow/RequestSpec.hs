@@ -4,17 +4,19 @@ module Dialogflow.RequestSpec where
 
 import Data.Aeson (eitherDecode)
 import Test.Hspec
-
 import qualified Data.Map as M
 
 import Dialogflow.Request
+import TestUtil
+
+requestPath :: FilePath -> FilePath
+requestPath = (<>) "files/request/"
 
 spec :: Spec
 spec =
   describe "Context FromJSON" $
     it "should decode to a Context type" $
-      let json = "{\"name\":\"the name\",\"lifespanCount\":5,\"parameters\":{\"param\":\"param value\"}}"
-          ctx = Context "the name" (Just 5) (M.fromList [("param", "param value")])
-          Right s = eitherDecode json :: Either String Context
-       in s `shouldBe` ctx
+      let ctx =
+            Context "the context name" (Just 5) (M.fromList [("param1", "value1"),("param2","value2")])
+       in checkSerialization (requestPath "context.json") ctx
 

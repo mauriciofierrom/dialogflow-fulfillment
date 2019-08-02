@@ -50,7 +50,7 @@ data Context =
           -- context expires.
           , ctxParameters :: M.Map String String
           -- ^ The collection of parameters associated with this context.
-          } deriving (Eq, Generic, Show)
+          } deriving (Eq, Show)
 
 instance FromJSON Context where
   parseJSON = withObject "context" $ \c -> do
