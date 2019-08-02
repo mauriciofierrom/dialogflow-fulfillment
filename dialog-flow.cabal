@@ -87,6 +87,7 @@ test-suite dialog-flow-test
   other-modules:
       TestUtil
       Dialogflow.MessageSpec
+      Dialogflow.Payload.GoogleSpec
       Dialogflow.RequestSpec
   hs-source-dirs:
       test

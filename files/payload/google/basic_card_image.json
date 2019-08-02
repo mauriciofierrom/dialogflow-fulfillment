@@ -1,0 +1,8 @@
+{
+  "image": {
+    "url": "the url",
+    "accessibilityText": "the ally text",
+    "height": 300,
+    "width": 700
+  }
+}

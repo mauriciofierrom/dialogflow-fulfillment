@@ -8,12 +8,20 @@
 
 module Dialogflow.Payload.Google where
 
-import Dialogflow.Util
-
-import qualified Dialogflow.Message as M
+import Data.Aeson ( object
+                  , parseJSON
+                  , toJSON
+                  , withObject
+                  , FromJSON
+                  , ToJSON
+                  , Value(..)
+                  , (.=)
+                  , (.:) )
+import Data.Foldable (asum)
 import qualified Data.HashMap.Strict as HM
 
-import Data.Aeson (object, parseJSON, Value(..), FromJSON, withObject, ToJSON, toJSON, (.=), (.:))
+import Dialogflow.Util
+import qualified Dialogflow.Message as M
 
 -- | This field can be used to provide responses for different platforms
 -- like Actions on Google.
@@ -47,11 +55,15 @@ instance ToJSON Image where
            , "height" .= iHeight
            , "width" .= iWidth ]
 
-
 -- | A 'BasicCard' can either contain an image or formatted text.
 data BasicCardContent = BasicCardImage Image
                       | BasicCardFormattedText String
-                      deriving (Show)
+                      deriving (Eq, Show)
+
+instance FromJSON BasicCardContent where
+  parseJSON = withObject "Image or formatted text" $ \bcc ->
+    asum [ BasicCardImage <$> bcc .: "image"
+         , BasicCardFormattedText <$> bcc .: "formattedText" ]
 
 instance ToJSON BasicCardContent where
   toJSON = \case
