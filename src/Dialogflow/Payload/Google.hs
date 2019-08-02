@@ -13,7 +13,7 @@ import Dialogflow.Util
 import qualified Dialogflow.Message as M
 import qualified Data.HashMap.Strict as HM
 
-import Data.Aeson (object, Value(..), ToJSON, toJSON, (.=))
+import Data.Aeson (object, parseJSON, Value(..), FromJSON, withObject, ToJSON, toJSON, (.=), (.:))
 
 -- | This field can be used to provide responses for different platforms
 -- like Actions on Google.
@@ -30,7 +30,15 @@ data Image =
         , iAccessibilityText :: String
         , iHeight :: Maybe Int
         , iWidth :: Maybe Int
-        } deriving Show
+        } deriving (Eq, Show)
+
+instance FromJSON Image where
+  parseJSON = withObject "image" $ \i -> do
+    iUrl <- i .: "url"
+    iAccessibilityText <- i .: "accessibilityText"
+    iHeight <- i .: "height"
+    iWidth <- i .: "width"
+    return Image{..}
 
 instance ToJSON Image where
   toJSON Image{..} =
@@ -38,6 +46,7 @@ instance ToJSON Image where
            , "accessibilityText" .= iAccessibilityText
            , "height" .= iHeight
            , "width" .= iWidth ]
+
 
 -- | A 'BasicCard' can either contain an image or formatted text.
 data BasicCardContent = BasicCardImage Image
