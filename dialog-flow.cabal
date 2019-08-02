@@ -5,7 +5,7 @@ cabal-version:       2.4
 -- http://haskell.org/cabal/users-guide/
 
 -- The name of the package.
-name:                dialog-flow
+name:                dialogflow
 
 -- The package version.  See the Haskell package versioning policy (PVP)
 -- for standards guiding when and how versions should be incremented.
@@ -22,7 +22,7 @@ synopsis:            A Dialogflow library for Haskell.
 -- description:
 
 -- URL for the project homepage or repository.
-homepage:            https://github.com/mauriciofierrom/dialog-flow
+homepage:            https://github.com/mauriciofierrom/dialogflow
 
 -- A URL where users can report bugs.
 -- bug-reports:
@@ -85,6 +85,7 @@ test-suite dialog-flow-test
   type: exitcode-stdio-1.0
   main-is: Spec.hs
   other-modules:
+      TestUtil
       Dialogflow.MessageSpec
       Dialogflow.RequestSpec
   hs-source-dirs:
@@ -95,7 +96,7 @@ test-suite dialog-flow-test
     , base ^>=4.12.0.0
     , bytestring
     , containers
-    , dialog-flow
+    , dialogflow
     , hspec
     , hspec-discover
   default-language: Haskell2010

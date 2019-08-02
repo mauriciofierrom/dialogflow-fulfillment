@@ -2,12 +2,8 @@
 
 module Dialogflow.MessageSpec where
 
-
-import Data.Aeson (encode, decode, ToJSON, FromJSON)
 import Test.Hspec
-import System.IO (withFile, IOMode(ReadMode))
-
-import qualified Data.ByteString.Lazy as B
+import TestUtil
 
 import Dialogflow.Message
 
@@ -109,8 +105,7 @@ spec = do
     context "LinkOutSuggestion" $
       it "should have the desired structure" $
         let linkOutSuggestion = LinkOutSuggestion "the name" "the app"
-            expectedJson = "{\"uri\":\"the app\",\"destinationName\":\"the name\"}"
-         in encode linkOutSuggestion `shouldBe` expectedJson
+         in checkSerialization "files/message/link_out_suggestion.json" linkOutSuggestion
     context "ListSelect" $
       it "should have the desired structure" $
         let listSelect = ListSelect (Just "the title") [item]
@@ -123,9 +118,3 @@ spec = do
     selectedItemInfo = SelectItemInfo "the key" ["a synonym"]
     image = Image (Just "the uri") (Just "the ally text")
     item = Item selectedItemInfo "the title" "the description" image
-
-checkSerialization :: (FromJSON a, ToJSON a, Show a, Eq a) => FilePath -> a -> IO ()
-checkSerialization path x =
-  withFile path ReadMode $ \h -> do
-    contents <- B.hGetContents h
-    Just x `shouldBe` decode contents

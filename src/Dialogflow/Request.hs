@@ -101,6 +101,7 @@ data WebhookRequest =
 
 instance FromJSON WebhookRequest
 
+-- TODO: This should be fixed.
 -- | Get a context parameter.
 getContextParam :: [Context] -- ^ Collection of contexts.
                 -> String    -- ^ Name of the context to get the param from.
@@ -111,4 +112,4 @@ getContextParam ctxs ctxName param = do
   M.lookup param (ctxParameters mbCtx)
     where
       ctxByParam :: String -> Context -> Bool
-      ctxByParam param Context{ctxParameters} = M.member param ctxParameters
+      ctxByParam paramName Context{ctxParameters} = M.member paramName ctxParameters

@@ -10,7 +10,7 @@ import qualified Data.Map as M
 import Dialogflow.Request
 
 spec :: Spec
-spec = do
+spec =
   describe "Context FromJSON" $
     it "should decode to a Context type" $
       let json = "{\"name\":\"the name\",\"lifespanCount\":5,\"parameters\":{\"param\":\"param value\"}}"

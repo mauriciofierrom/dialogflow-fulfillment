@@ -8,7 +8,7 @@ mkDerivation {
   libraryHaskellDepends = [ aeson base containers text unordered-containers ];
   testHaskellDepends = [ aeson base containers hspec hspec-discover ];
   testToolDepends = [ hspec-discover ];
-  homepage = "https://github.com/mauriciofierrom/dialog-flow";
-  description = "A Dialog Flow library for Haskell";
+  homepage = "https://github.com/mauriciofierrom/dialogflow";
+  description = "A Dialogflow library for Haskell";
   license = stdenv.lib.licenses.bsd3;
 }

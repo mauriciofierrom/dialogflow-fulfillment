@@ -336,6 +336,12 @@ instance FromJSON (Msg 'MsgSuggestions) where
     suggestions <- sgs .: "suggestions"
     return $ Suggestions suggestions
 
+instance FromJSON (Msg 'MsgLinkOutSuggestion) where
+  parseJSON = withObject "linkOutSuggestion" $ \los -> do
+    uri <- los .: "uri"
+    destinationName <- los .: "destinationName"
+    return $ LinkOutSuggestion destinationName uri
+
 instance FromJSON (Msg 'MsgListSelect) where
   parseJSON = withObject "listSelect" $ \ls -> do
     title <- ls .: "title"
