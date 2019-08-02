@@ -22,6 +22,16 @@ spec = do
       it "should have the desired structure" $
         let basicCardText = BasicCardFormattedText "the formatted text"
          in checkSerialization (googlePayloadPath "basic_card_formatted_text.json") basicCardText
+  describe "ImageDisplayOption to/parseJSON instances" $ do
+    context "when the value is DEFAULT" $
+      it "should have the desired structure" $
+         checkSerialization (googlePayloadPath "image_display_option_default.json") DEFAULT
+    context "when the value is WHITE" $
+      it "should have the desired structure" $
+        checkSerialization (googlePayloadPath "image_display_option_white.json") WHITE
+    context "when the value is WHITE" $
+      it "should have the desired structure" $
+        checkSerialization (googlePayloadPath "image_display_option_cropped.json") CROPPED
   where
     image :: Image
     image = Image "the url" "the ally text" (Just 300) (Just 700)

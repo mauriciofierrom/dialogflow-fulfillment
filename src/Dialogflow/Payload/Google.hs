@@ -87,7 +87,12 @@ data ImageDisplayOption = DEFAULT
                           -- if the scaled 'Image' width is greater than the container width.
                           -- This is similar to "Zoom Mode" on a widescreen TV when playing
                           -- a 4:3 video.
-                        deriving Show
+                        deriving (Eq, Show, Read)
+
+instance FromJSON ImageDisplayOption where
+  parseJSON = withObject "imageDisplayOption" $ \x -> do
+    val <- x .: "imageDisplayOption"
+    return $ read val
 
 instance ToJSON ImageDisplayOption where
   toJSON x = object [ "imageDisplayOptions" .= show x ]
