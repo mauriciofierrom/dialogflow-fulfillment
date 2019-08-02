@@ -1,0 +1,10 @@
+{
+  "queryText": "the original text",
+  "parameters": {
+    "param1": "value1"
+  },
+  "allRequiredParamsPresent": true,
+  "fulfillmentText": "the fulfillment text",
+  "intentDetectionConfidence": 10.5,
+  "languageCode": "esES"
+}

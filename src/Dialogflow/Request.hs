@@ -90,9 +90,10 @@ data QueryResult =
               -- ^ Free-form diagnostic info.
               , languageCode :: String
               -- ^ The language that was triggered during intent matching.
-              } deriving (Generic, Show)
+              } deriving (Eq, Generic, Show)
 
 instance FromJSON QueryResult
+instance ToJSON QueryResult
 
 -- | The request message for a webhook call.
 data WebhookRequest =
@@ -102,9 +103,10 @@ data WebhookRequest =
                  -- ^ Unique session id.
                  , queryResult :: QueryResult
                  -- ^ Result of the conversation query or event processing.
-                 } deriving(Generic, Show)
+                 } deriving(Eq, Generic, Show)
 
 instance FromJSON WebhookRequest
+instance ToJSON WebhookRequest
 
 -- TODO: This should be fixed.
 -- | Get a context parameter.
