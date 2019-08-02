@@ -33,13 +33,18 @@ import Data.List (find)
 data Intent =
   Intent { intentName :: String  -- ^ Intent name.
          , displayName :: String -- ^ Display name for the intent.
-         } deriving (Eq, Generic, Show)
+         } deriving (Eq, Show)
 
 instance FromJSON Intent where
   parseJSON = withObject "intent" $ \i -> do
     intentName <- i .: "name"
     displayName <- i .: "displayName"
     return Intent {..}
+
+instance ToJSON Intent where
+  toJSON Intent{..} =
+    object [ "name" .= intentName
+           , "displayName" .= displayName ]
 
 -- | Represents a context.
 data Context =
