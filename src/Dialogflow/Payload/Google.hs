@@ -258,6 +258,12 @@ data VersionFilter = VersionFilter
     -- A null range implies any version.
   } deriving (Eq, Show)
 
+instance FromJSON VersionFilter where
+  parseJSON = withObject "versionFilter" $ \vf -> do
+    minVersion <- vf .: "minVersion"
+    maxVersion <- vf .: "maxVersion"
+    return VersionFilter{..}
+
 instance ToJSON VersionFilter where
   toJSON VersionFilter{..} =
     object [ "minVersion" .= minVersion
