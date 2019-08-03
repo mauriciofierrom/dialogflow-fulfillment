@@ -5,6 +5,8 @@ import Test.Hspec
 import TestUtil
 import Dialogflow.Payload.Google
 
+import qualified Dialogflow.Message as M
+
 googlePayloadPath :: FilePath -> FilePath
 googlePayloadPath = (<>) "files/payload/google/"
 
@@ -39,6 +41,17 @@ spec = do
     context "When the value is AUDIO" $
       it "should have the desired structure" $
         checkSerialization (googlePayloadPath "media_type_audio.json") AUDIO
+  describe "MediaObject to/parseJSON instances" $
+    it "should have the desired structure" $
+      let mediaObject = MediaObject "the name" "the description" "the content url" image image
+       in checkSerialization (googlePayloadPath "media_object.json") mediaObject
+  describe "UrlTypeHint to/parseJSON instances" $ do
+    context "URL_TYPE_HINT_UNSPECIFIED" $
+      it "should have the desired structure" $
+        checkSerialization (googlePayloadPath "url_type_hint_unspecified.json") URL_TYPE_HINT_UNSPECIFIED
+    context "AMP_CONTENT" $
+      it "should have the desired structure" $
+        checkSerialization (googlePayloadPath "url_type_hint_amp_content.json") AMP_CONTENT
   where
     image :: Image
     image = Image "the url" "the ally text" (Just 300) (Just 700)

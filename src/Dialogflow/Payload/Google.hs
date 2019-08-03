@@ -124,7 +124,16 @@ data MediaObject =
               , moIcon :: Image
                 -- ^ A small 'Image' icon displayed on the right from the title.
                 -- It's resized to 36x36 dp.
-              } deriving Show
+              } deriving (Eq, Show)
+
+instance FromJSON MediaObject where
+  parseJSON = withObject "MediaObject" $ \mo -> do
+    moName <- mo .: "name"
+    moDescription <- mo .: "description"
+    moContentUrl <- mo .: "contentUrl"
+    moLargeImage <- mo .: "largeImage"
+    moIcon <- mo .: "icon"
+    return MediaObject{..}
 
 instance ToJSON MediaObject where
   toJSON MediaObject{..} =
@@ -229,7 +238,12 @@ data UrlTypeHint = URL_TYPE_HINT_UNSPECIFIED
                  | AMP_CONTENT
                    -- ^ URL that points directly to AMP content, or to a canonical
                    -- URL which refers to AMP content via .
-                 deriving (Eq, Show)
+                 deriving (Eq, Read, Show)
+
+instance FromJSON UrlTypeHint where
+  parseJSON = withObject "urlTypeHint" $ \x -> do
+    uth <- x .: "urlTypeHint"
+    return $ read uth
 
 instance ToJSON UrlTypeHint where
   toJSON x = object [ "urlTypeHint" .= show x ]
