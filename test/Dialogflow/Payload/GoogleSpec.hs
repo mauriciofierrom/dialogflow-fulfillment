@@ -32,6 +32,13 @@ spec = do
     context "when the value is WHITE" $
       it "should have the desired structure" $
         checkSerialization (googlePayloadPath "image_display_option_cropped.json") CROPPED
+  describe "MediaType to/parseJSON instances" $ do
+    context "When the value is MEDIA_TYPE_UNSPECIFIED" $
+      it "should have the desired structure" $
+        checkSerialization (googlePayloadPath "media_type_unspecified.json") MEDIA_TYPE_UNSPECIFIED
+    context "When the value is AUDIO" $
+      it "should have the desired structure" $
+        checkSerialization (googlePayloadPath "media_type_audio.json") AUDIO
   where
     image :: Image
     image = Image "the url" "the ally text" (Just 300) (Just 700)

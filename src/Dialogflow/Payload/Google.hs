@@ -87,12 +87,12 @@ data ImageDisplayOption = DEFAULT
                           -- if the scaled 'Image' width is greater than the container width.
                           -- This is similar to "Zoom Mode" on a widescreen TV when playing
                           -- a 4:3 video.
-                        deriving (Eq, Show, Read)
+                        deriving (Eq, Read, Show)
 
 instance FromJSON ImageDisplayOption where
   parseJSON = withObject "imageDisplayOption" $ \x -> do
-    val <- x .: "imageDisplayOption"
-    return $ read val
+    ido <- x .: "imageDisplayOption"
+    return $ read ido
 
 instance ToJSON ImageDisplayOption where
   toJSON x = object [ "imageDisplayOptions" .= show x ]
@@ -100,7 +100,12 @@ instance ToJSON ImageDisplayOption where
 -- | The type of the media within the response.
 data MediaType = MEDIA_TYPE_UNSPECIFIED -- ^ Unspecified.
                | AUDIO                  -- ^ Audio stream.
-               deriving Show
+               deriving (Eq, Read, Show)
+
+instance FromJSON MediaType where
+  parseJSON = withObject "mediaType" $ \x -> do
+    mt <- x .: "mediaType"
+    return $ read mt
 
 instance ToJSON MediaType where
   toJSON x = object [ "mediaType" .= show x ]
