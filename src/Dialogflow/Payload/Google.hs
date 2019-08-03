@@ -277,6 +277,12 @@ data AndroidApp = AndroidApp
     -- ^ When multiple filters are specified, any filter match will trigger the app.
   } deriving (Eq, Show)
 
+instance FromJSON AndroidApp where
+  parseJSON = withObject "androidApp" $ \aa -> do
+    aaPackageName <- aa .: "packageName"
+    aaVersions <- aa .: "versions"
+    return AndroidApp{..}
+
 instance ToJSON AndroidApp where
   toJSON AndroidApp{..} =
     object [ "packageName" .= aaPackageName

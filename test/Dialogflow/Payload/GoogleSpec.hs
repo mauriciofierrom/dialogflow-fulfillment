@@ -52,10 +52,14 @@ spec = do
     context "AMP_CONTENT" $
       it "should have the desired structure" $
         checkSerialization (googlePayloadPath "url_type_hint_amp_content.json") AMP_CONTENT
-  describe "VersionFilter to/parseJSON" $
+  describe "VersionFilter to/parseJSON instances" $
     it "should have the desired structure" $
       let versionFilter = VersionFilter 1 2
        in checkSerialization (googlePayloadPath "version_filter.json") versionFilter
+  describe "AndroidApp to/parseJSON instances" $
+    it "should have the desired structure" $
+      let androidApp = AndroidApp "the package name" [VersionFilter 1 2]
+       in checkSerialization (googlePayloadPath "android_app.json") androidApp
   where
     image :: Image
     image = Image "the url" "the ally text" (Just 300) (Just 700)
