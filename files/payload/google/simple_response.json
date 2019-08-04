@@ -1,0 +1,6 @@
+{
+  "simpleResponse": {
+    "textToSpeech": "the tts",
+    "displayText": "the display text"
+  }
+}

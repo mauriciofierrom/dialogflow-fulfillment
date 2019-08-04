@@ -1,5 +1,6 @@
 {-# LANGUAGE DataKinds #-}
 {-# LANGUAGE FlexibleContexts #-}
+{-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE GADTs #-}
 {-# LANGUAGE LambdaCase #-}
 {-# LANGUAGE OverloadedStrings #-}
@@ -164,8 +165,13 @@ data Res t where
                 -> [MediaObject] -- ^ The list of 'MediaObject's.
                 -> Res 'RMTMediaResponse
 
-instance Show (Res t) where
-  show = show
+deriving instance Eq (Res t)
+deriving instance Show (Res t)
+
+instance FromJSON (Res 'RMTSimpleResponse) where
+  parseJSON = withObject "simpleResponse" $ \sr -> do
+    simpleResponse <- sr .: "simpleResponse"
+    return $ SimpleResponse simpleResponse
 
 instance ToJSON (Res t) where
   toJSON (SimpleResponse s) = object [ "simpleResponse" .=  s ]

@@ -71,6 +71,12 @@ spec = do
     it "should have the desired structure" $
       let suggestion = Suggestion "the suggestion"
        in checkSerialization (googlePayloadPath "suggestion.json") suggestion
+  describe "Item to/parseJSON instances" $ do
+    context "SimpleResponse" $
+      it "should have the desired structure" $
+        let simpleResponse =
+              SimpleResponse (M.SimpleResponse (M.TextToSpeech "the tts") (Just "the display text"))
+         in checkSerialization (googlePayloadPath "simple_response.json") simpleResponse
   where
     image :: Image
     image = Image "the url" "the ally text" (Just 300) (Just 700)
