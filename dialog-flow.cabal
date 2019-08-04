@@ -89,6 +89,7 @@ test-suite dialog-flow-test
       Dialogflow.MessageSpec
       Dialogflow.Payload.GoogleSpec
       Dialogflow.RequestSpec
+      Dialogflow.ResponseSpec
   hs-source-dirs:
       test
   ghc-options: -threaded -rtsopts -with-rtsopts=-N

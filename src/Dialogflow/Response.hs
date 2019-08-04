@@ -4,8 +4,12 @@
 module Dialogflow.Response where
 
 import Data.Aeson ( object
+                  , parseJSON
                   , toJSON
+                  , withObject
+                  , FromJSON
                   , ToJSON
+                  , (.:)
                   , (.=) )
 
 import qualified Data.Map as M
@@ -19,15 +23,21 @@ data EventInput =
   EventInput { eventInputName :: String
              , eventInputParameters :: M.Map String String
              , eventInputLanguageCode :: String
-             } deriving Show
+             } deriving (Eq, Show)
+
+instance FromJSON EventInput where
+  parseJSON = withObject "eventInput" $ \ei -> do
+    eventInputName <- ei .: "name"
+    eventInputParameters <- ei .: "parameters"
+    eventInputLanguageCode <- ei .: "language_code"
+    return EventInput{..}
 
 instance ToJSON EventInput where
   toJSON EventInput{..} =
     object [ "name" .= eventInputName
            , "parameters" .= eventInputParameters
-           , "languageCode" .= eventInputLanguageCode ]
+           , "language_code" .= eventInputLanguageCode ]
 
--- TODO: Output contexts & followup event input
 data Response = Response
   { fulfillmentText :: Maybe String
   -- ^ The text to be shown on the screen
