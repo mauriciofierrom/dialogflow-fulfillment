@@ -256,7 +256,7 @@ data VersionFilter = VersionFilter
   , maxVersion :: Int
     -- ^ Max version code, inclusive. The range considered is [minVersion:maxVersion].
     -- A null range implies any version.
-  } deriving (Eq, Show)
+  } deriving (Eq, Read, Show)
 
 instance FromJSON VersionFilter where
   parseJSON = withObject "versionFilter" $ \vf -> do
@@ -275,7 +275,7 @@ data AndroidApp = AndroidApp
     -- ^ Package name must be specified when specifing Android Fulfillment.
   , aaVersions :: [VersionFilter]
     -- ^ When multiple filters are specified, any filter match will trigger the app.
-  } deriving (Eq, Show)
+  } deriving (Eq, Read, Show)
 
 instance FromJSON AndroidApp where
   parseJSON = withObject "androidApp" $ \aa -> do
@@ -298,7 +298,14 @@ data OpenUrlAction =
                 -- to be fulfilled by an Android App.
                 , ouaUrlTypeHint :: UrlTypeHint
                 -- ^  Indicates a hint for the url type.
-                } deriving (Eq, Show)
+                } deriving (Eq, Read, Show)
+
+instance FromJSON OpenUrlAction where
+  parseJSON = withObject "openUrlAction" $ \oua -> do
+    ouaUrl <- oua .: "url"
+    ouaAndroidApp <- oua .: "androidApp"
+    ouaUrlTypeHint <- parseJSON (Object oua)
+    return OpenUrlAction{..}
 
 instance ToJSON OpenUrlAction where
   toJSON OpenUrlAction{..} =

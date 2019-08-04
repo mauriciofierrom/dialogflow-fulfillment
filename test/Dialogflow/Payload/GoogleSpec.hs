@@ -4,6 +4,7 @@ import Test.Hspec
 
 import TestUtil
 import Dialogflow.Payload.Google
+import Data.Aeson
 
 import qualified Dialogflow.Message as M
 
@@ -58,8 +59,14 @@ spec = do
        in checkSerialization (googlePayloadPath "version_filter.json") versionFilter
   describe "AndroidApp to/parseJSON instances" $
     it "should have the desired structure" $
-      let androidApp = AndroidApp "the package name" [VersionFilter 1 2]
-       in checkSerialization (googlePayloadPath "android_app.json") androidApp
+      checkSerialization (googlePayloadPath "android_app.json") androidApp
+  describe "OpenUrlAction to/parseJSON instances" $
+    it "should have the desired structure" $
+      let openUrlAction = OpenUrlAction "the url" androidApp URL_TYPE_HINT_UNSPECIFIED
+       in checkSerialization (googlePayloadPath "open_url_action.json") openUrlAction
   where
     image :: Image
     image = Image "the url" "the ally text" (Just 300) (Just 700)
+
+    androidApp :: AndroidApp
+    androidApp = AndroidApp "the package name" [VersionFilter 1 2]
