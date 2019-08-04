@@ -327,6 +327,13 @@ data LinkOutSuggestion = LinkOutSuggestion
     -- developer console, or the suggestion will not be shown to the user.
   } deriving (Eq, Show)
 
+instance FromJSON LinkOutSuggestion where
+  parseJSON = withObject "linkOutSuggestion" $ \los -> do
+    losDestinationName <- los .: "destinationName"
+    losUrl <- los .: "url"
+    losOpenUrlAction <- los .: "openUrlAction"
+    return LinkOutSuggestion{..}
+
 instance ToJSON LinkOutSuggestion where
   toJSON LinkOutSuggestion{..} =
     object [ "destinationName" .= losDestinationName
