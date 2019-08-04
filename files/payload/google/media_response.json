@@ -1,0 +1,20 @@
+{
+  "mediaType": "AUDIO",
+  "mediaObjects": [{
+    "name": "the name",
+    "description": "the description",
+    "contentUrl": "the content url",
+    "largeImage": {
+      "url": "the url",
+      "accessibilityText": "the ally text",
+      "height": 300,
+      "width": 700
+    },
+    "icon": {
+      "url": "the url",
+      "accessibilityText": "the ally text",
+      "height": 300,
+      "width": 700
+    }
+  }]
+}

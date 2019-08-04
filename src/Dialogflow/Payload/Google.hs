@@ -182,6 +182,12 @@ instance FromJSON (Res 'RMTBasicCard) where
     imageDisplayOption <- parseJSON (Object bc)
     return $ BasicCard mbTitle mbSubtitle content buttons imageDisplayOption
 
+instance FromJSON (Res 'RMTMediaResponse) where
+  parseJSON = withObject "mediaResponse" $ \mr -> do
+    mediaType <- parseJSON (Object mr)
+    mediaObjects <- mr .: "mediaObjects"
+    return $ MediaResponse mediaType mediaObjects
+
 instance ToJSON (Res t) where
   toJSON (SimpleResponse s) = object [ "simpleResponse" .=  s ]
   toJSON (BasicCard t s c b d) =

@@ -44,7 +44,7 @@ spec = do
         checkSerialization (googlePayloadPath "media_type_audio.json") AUDIO
   describe "MediaObject to/parseJSON instances" $
     it "should have the desired structure" $
-      let mediaObject = MediaObject "the name" "the description" "the content url" image image
+      let 
        in checkSerialization (googlePayloadPath "media_object.json") mediaObject
   describe "UrlTypeHint to/parseJSON instances" $ do
     context "URL_TYPE_HINT_UNSPECIFIED" $
@@ -82,6 +82,10 @@ spec = do
         let basicCard =
               BasicCard (Just "the title") (Just "the subtitle") (BasicCardImage image) [] DEFAULT
            in checkSerialization (googlePayloadPath "basic_card.json") basicCard
+    context "MediaResponse" $
+      it "should have the desired structure" $
+        let mediaResponse = MediaResponse AUDIO [mediaObject]
+         in checkSerialization (googlePayloadPath "media_response.json") mediaResponse
   where
     image :: Image
     image = Image "the url" "the ally text" (Just 300) (Just 700)
@@ -91,3 +95,6 @@ spec = do
 
     openUrlAction :: OpenUrlAction
     openUrlAction = OpenUrlAction "the url" androidApp URL_TYPE_HINT_UNSPECIFIED
+
+    mediaObject :: MediaObject
+    mediaObject = MediaObject "the name" "the description" "the content url" image image
