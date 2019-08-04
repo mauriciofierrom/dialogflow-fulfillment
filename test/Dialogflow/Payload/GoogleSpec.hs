@@ -67,6 +67,10 @@ spec = do
     it "should have the desired structure" $
       let linkOutSuggestion = LinkOutSuggestion "the destination name" "the url" openUrlAction
        in checkSerialization (googlePayloadPath "open_url_action.json") openUrlAction
+  describe "Suggestion to/parseJSON instances" $
+    it "should have the desired structure" $
+      let suggestion = Suggestion "the suggestion"
+       in checkSerialization (googlePayloadPath "suggestion.json") suggestion
   where
     image :: Image
     image = Image "the url" "the ally text" (Just 300) (Just 700)

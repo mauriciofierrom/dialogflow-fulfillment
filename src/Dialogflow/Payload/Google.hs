@@ -345,5 +345,10 @@ instance ToJSON LinkOutSuggestion where
 newtype Suggestion = Suggestion { unSuggestion :: String }
   deriving (Eq, Show)
 
+instance FromJSON Suggestion where
+  parseJSON = withObject "suggestion" $ \s -> do
+    suggestion <- s .: "suggestion"
+    return $ Suggestion suggestion
+
 instance ToJSON Suggestion where
   toJSON s = object [ "title" .= unSuggestion s ]
