@@ -77,6 +77,11 @@ spec = do
         let simpleResponse =
               SimpleResponse (M.SimpleResponse (M.TextToSpeech "the tts") (Just "the display text"))
          in checkSerialization (googlePayloadPath "simple_response.json") simpleResponse
+    context "BasicCard" $
+      it "should have the desired structure" $
+        let basicCard =
+              BasicCard (Just "the title") (Just "the subtitle") (BasicCardImage image) [] DEFAULT
+           in checkSerialization (googlePayloadPath "basic_card.json") basicCard
   where
     image :: Image
     image = Image "the url" "the ally text" (Just 300) (Just 700)

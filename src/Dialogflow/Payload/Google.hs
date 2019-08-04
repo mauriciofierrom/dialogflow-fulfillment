@@ -173,6 +173,15 @@ instance FromJSON (Res 'RMTSimpleResponse) where
     simpleResponse <- sr .: "simpleResponse"
     return $ SimpleResponse simpleResponse
 
+instance FromJSON (Res 'RMTBasicCard) where
+  parseJSON = withObject "basicCard" $ \bc -> do
+    mbTitle <- bc .: "title"
+    mbSubtitle <- bc .: "subtitle"
+    content <- parseJSON (Object bc)
+    buttons <- bc .: "buttons"
+    imageDisplayOption <- parseJSON (Object bc)
+    return $ BasicCard mbTitle mbSubtitle content buttons imageDisplayOption
+
 instance ToJSON (Res t) where
   toJSON (SimpleResponse s) = object [ "simpleResponse" .=  s ]
   toJSON (BasicCard t s c b d) =

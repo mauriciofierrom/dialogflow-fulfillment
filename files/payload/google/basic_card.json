@@ -1,0 +1,12 @@
+{
+  "title": "the title",
+  "subtitle": "the subtitle",
+  "image": {
+    "url": "the url",
+    "accessibilityText": "the ally text",
+    "height": 300,
+    "width": 700
+  },
+  "buttons": [],
+  "imageDisplayOption": "DEFAULT"
+}
