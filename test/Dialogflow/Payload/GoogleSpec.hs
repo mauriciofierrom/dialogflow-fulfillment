@@ -44,8 +44,7 @@ spec = do
         checkSerialization (googlePayloadPath "media_type_audio.json") AUDIO
   describe "MediaObject to/parseJSON instances" $
     it "should have the desired structure" $
-      let 
-       in checkSerialization (googlePayloadPath "media_object.json") mediaObject
+      checkSerialization (googlePayloadPath "media_object.json") mediaObject
   describe "UrlTypeHint to/parseJSON instances" $ do
     context "URL_TYPE_HINT_UNSPECIFIED" $
       it "should have the desired structure" $
