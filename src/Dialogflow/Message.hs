@@ -262,34 +262,8 @@ data Msg t where
     :: [Item] -- ^ Carousel items
     -> Msg 'MsgCarouselSelect
 
+deriving instance Show (Msg t)
 deriving instance Eq (Msg t)
-
--- | This type is used to wrap the messages under one type.
-data Message where
-  Message :: (Show (Msg t)) => Msg t -> Message
-
--- TODO: Make sure homoiconicity is respected
-instance Show (Msg t) where
-  show (Text ts) = "Text " <> show ts
-  show (Image mbUri mbAllyText) =
-    "Image " <> show mbUri <> " " <> show mbAllyText
-  show (QuickReplies  mbTitle mbReplies) =
-    "QuickReplies " <> show mbTitle <> " " <> show mbReplies
-  show (Card mbTitle mbSubtitle mbUri mbCardButtons) =
-    "Card " <> show mbTitle
-            <> " " <> show mbSubtitle
-            <> " " <> show mbUri
-            <> " " <> show mbCardButtons
-  show (SimpleResponses simpleResponses) = "SimpleRespnses " <> show simpleResponses
-  show (BasicCard mbTitle mbSubtitle mbBasicCardContent mbBasicCardButtons) =
-    "BasicCard " <> show mbTitle
-                 <> " " <> show mbSubtitle
-                 <> " " <> show mbBasicCardContent
-                 <> " " <> show mbBasicCardButtons
-  show (Suggestions suggestions) = "Suggestions " <> show suggestions
-  show (LinkOutSuggestion name uri) = "LinkOuSuggestion " <> name <> " " <> uri
-  show (ListSelect mbTitle items) = "ListSelect " <> show mbTitle <> " " <> show items
-  show (CarouselSelect items) = "CarouselSelect " <> show items
 
 instance FromJSON (Msg 'MsgImage) where
   parseJSON = withObject "image" $ \i -> do
@@ -380,12 +354,28 @@ instance ToJSON (Msg t) where
            , "items" .= items ]
   toJSON (CarouselSelect items) = object [ "items" .= items ]
 
+-- | This type is used to wrap the messages under one type.
+data Message where
+  Message :: (Show (Msg t)) => Msg t -> Message
+
 instance Show Message where
   show (Message o) = show o
 
 instance ToJSON Message where
   toJSON (Message bc@BasicCard{}) = object [ "basicCard" .= toJSON bc ]
   toJSON (Message o) = toJSON o
+
+instance Eq Message where
+  (==) (Message x@Text{}) (Message y@Text{}) = x == y
+  (==) (Message x@Image{}) (Message y@Image{}) = x == y
+  (==) (Message x@QuickReplies{}) (Message y@QuickReplies{}) = x == y
+  (==) (Message x@Card{}) (Message y@Card{}) = x == y
+  (==) (Message x@SimpleResponses{}) (Message y@SimpleResponses{}) = x == y
+  (==) (Message x@BasicCard{}) (Message y@BasicCard{}) = x == y
+  (==) (Message x@Suggestions{}) (Message y@Suggestions{}) = x == y
+  (==) (Message x@LinkOutSuggestion{}) (Message y@LinkOutSuggestion{}) = x == y
+  (==) (Message x@ListSelect{}) (Message y@ListSelect{}) = x == y
+  (==) (Message x@CarouselSelect{}) (Message y@CarouselSelect{}) = x == y
 
 -- | An item in 'ListSelect' and 'CarouselSelect'.
 data Item = Item

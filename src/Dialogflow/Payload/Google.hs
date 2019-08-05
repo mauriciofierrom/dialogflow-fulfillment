@@ -202,6 +202,11 @@ instance ToJSON (Res t) where
 data Item where
   Item :: (Show (Res t)) => Res t -> Item
 
+instance Eq Item where
+  (==) (Item x@BasicCard{}) (Item y@BasicCard{}) = x == y
+  (==) (Item x@SimpleResponse{}) (Item y@SimpleResponse{}) = x == y
+  (==) (Item x@MediaResponse{}) (Item y@MediaResponse{}) = x == y
+
 instance ToJSON Item where
   toJSON (Item x) = toJSON x
 
