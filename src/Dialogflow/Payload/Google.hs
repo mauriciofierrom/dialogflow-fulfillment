@@ -5,6 +5,7 @@
 {-# LANGUAGE LambdaCase #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE RecordWildCards #-}
+{-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE StandaloneDeriving #-}
 
 module Dialogflow.Payload.Google where
@@ -27,12 +28,7 @@ import qualified Dialogflow.Message as M
 -- | This field can be used to provide responses for different platforms
 -- like Actions on Google.
 newtype GooglePayload =
-  GooglePayload { unGooglePayload :: Response } deriving Show
-
-instance FromJSON GooglePayload where
-  parseJSON = withObject "payload" $ \p -> do
-    payload <- p .: "google"
-    return $ GooglePayload payload
+  GooglePayload { unGooglePayload :: Response } deriving (Eq, Show)
 
 instance ToJSON GooglePayload where
   toJSON gp =
@@ -211,9 +207,7 @@ instance Eq Item where
   (==) (Item x@BasicCard{}) (Item y@BasicCard{}) = x == y
   (==) (Item x@SimpleResponse{}) (Item y@SimpleResponse{}) = x == y
   (==) (Item x@MediaResponse{}) (Item y@MediaResponse{}) = x == y
-
-instance FromJSON Item where
-  parseJSON = parseJSON
+  (==) _ _ = False
 
 instance ToJSON Item where
   toJSON (Item x) = toJSON x
@@ -237,14 +231,7 @@ data RichResponse = RichResponse
   , linkOutSuggestion :: Maybe LinkOutSuggestion
   -- ^  An additional suggestion chip that can link out to the associated app
   -- or site.
-  } deriving Show
-
-instance FromJSON RichResponse where
-  parseJSON = withObject "richResponse" $ \rr -> do
-    items <- rr .: "items"
-    suggestions <- rr .: "suggestions"
-    linkOutSuggestion <- rr .: "linkOutSuggestion"
-    return RichResponse{..}
+  } deriving (Eq, Show)
 
 instance ToJSON RichResponse where
   toJSON RichResponse{..} =
@@ -265,14 +252,7 @@ data Response =
              -- ^ This field contains audio, text, cards, suggestions, or structured
              -- data for the Assistant to render. To learn more about using rich
              -- responses for Actions on Google, see 'Res'.
-           } deriving Show
-
-instance FromJSON Response where
-  parseJSON = withObject "response" $ \r -> do
-    expectUserResponse <- r .: "expectUserResponse"
-    userStorage <- r .: "userStorage"
-    richResponse <- r .: "richResponse"
-    return Response{..}
+           } deriving (Eq, Show)
 
 instance ToJSON Response where
   toJSON Response{..} =

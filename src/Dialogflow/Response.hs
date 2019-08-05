@@ -45,23 +45,13 @@ data Response = Response
   -- ^ The collection of rich messages to present to the user
   , source :: Maybe String
   -- ^ The webhook source
-  , payload :: G.GooglePayload
+  , payload :: Maybe G.GooglePayload
   -- ^ Webhook payload
   , outputContexts :: Maybe [Context]
   -- ^ The collection of output contexts
   , followupEventInput :: Maybe EventInput
   -- ^ Makes the platform immediately invoke another sessions
-  } deriving (Show)
-
-instance FromJSON Response where
-  parseJSON = withObject "response" $ \r -> do
-    fulfillmentText <- r .: "fulfillmentText"
-    fulfillmentMessages <- r .: "fulfillmentMessages"
-    source <- r .: "source"
-    payload <- r .: "payload"
-    outputContexts <- r .: "outputContexts"
-    followupEventInput <- r .: "followupEventInput"
-    return Response{..}
+  } deriving (Eq, Show)
 
 instance ToJSON Response where
   toJSON Response{..} =

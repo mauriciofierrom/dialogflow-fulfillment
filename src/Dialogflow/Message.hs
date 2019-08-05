@@ -379,6 +379,7 @@ instance Eq Message where
   (==) (Message x@LinkOutSuggestion{}) (Message y@LinkOutSuggestion{}) = x == y
   (==) (Message x@ListSelect{}) (Message y@ListSelect{}) = x == y
   (==) (Message x@CarouselSelect{}) (Message y@CarouselSelect{}) = x == y
+  (==) _ _ = False
 
 -- | An item in 'ListSelect' and 'CarouselSelect'.
 data Item = Item
