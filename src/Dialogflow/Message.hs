@@ -361,6 +361,9 @@ data Message where
 instance Show Message where
   show (Message o) = show o
 
+instance FromJSON Message where
+  parseJSON = parseJSON
+
 instance ToJSON Message where
   toJSON (Message bc@BasicCard{}) = object [ "basicCard" .= toJSON bc ]
   toJSON (Message o) = toJSON o

@@ -53,6 +53,16 @@ data Response = Response
   -- ^ Makes the platform immediately invoke another sessions
   } deriving (Show)
 
+instance FromJSON Response where
+  parseJSON = withObject "response" $ \r -> do
+    fulfillmentText <- r .: "fulfillmentText"
+    fulfillmentMessages <- r .: "fulfillmentMessages"
+    source <- r .: "source"
+    payload <- r .: "payload"
+    outputContexts <- r .: "outputContexts"
+    followupEventInput <- r .: "followupEventInput"
+    return Response{..}
+
 instance ToJSON Response where
   toJSON Response{..} =
     object [ "fulfillmentText" .= fulfillmentText

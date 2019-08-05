@@ -29,6 +29,11 @@ import qualified Dialogflow.Message as M
 newtype GooglePayload =
   GooglePayload { unGooglePayload :: Response } deriving Show
 
+instance FromJSON GooglePayload where
+  parseJSON = withObject "payload" $ \p -> do
+    payload <- p .: "google"
+    return $ GooglePayload payload
+
 instance ToJSON GooglePayload where
   toJSON gp =
     object [ "google" .= unGooglePayload gp]
@@ -207,6 +212,9 @@ instance Eq Item where
   (==) (Item x@SimpleResponse{}) (Item y@SimpleResponse{}) = x == y
   (==) (Item x@MediaResponse{}) (Item y@MediaResponse{}) = x == y
 
+instance FromJSON Item where
+  parseJSON = parseJSON
+
 instance ToJSON Item where
   toJSON (Item x) = toJSON x
 
@@ -231,6 +239,13 @@ data RichResponse = RichResponse
   -- or site.
   } deriving Show
 
+instance FromJSON RichResponse where
+  parseJSON = withObject "richResponse" $ \rr -> do
+    items <- rr .: "items"
+    suggestions <- rr .: "suggestions"
+    linkOutSuggestion <- rr .: "linkOutSuggestion"
+    return RichResponse{..}
+
 instance ToJSON RichResponse where
   toJSON RichResponse{..} =
     object [ "items" .= items
@@ -251,6 +266,13 @@ data Response =
              -- data for the Assistant to render. To learn more about using rich
              -- responses for Actions on Google, see 'Res'.
            } deriving Show
+
+instance FromJSON Response where
+  parseJSON = withObject "response" $ \r -> do
+    expectUserResponse <- r .: "expectUserResponse"
+    userStorage <- r .: "userStorage"
+    richResponse <- r .: "richResponse"
+    return Response{..}
 
 instance ToJSON Response where
   toJSON Response{..} =
