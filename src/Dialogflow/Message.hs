@@ -10,13 +10,13 @@
 
 {-|
 Module      : Dialogflow.Util
-Description : Dialogflow messages
+Description : Dialogflow types for response messages.
 Copyright   : (c) Mauricio Fierro, 2019
 License     : BSD3-Clause
 Maintainer  : Mauricio Fierro <mauriciofierrom@gmail.com>
 
-This module contains types for Dialogflow messages to be use in
-a fulfillment webhook response.
+This module contains types for Dialogflow messages to be used in
+a fulfillment webhook response. see the Dialogflow <https://cloud.google.com/dialogflow/docs/reference/rpc/google.cloud.dialogflow.v2#google.cloud.dialogflow.v2.Intent.Message documentation>.
 -}
 
 module Dialogflow.Message
@@ -187,6 +187,7 @@ instance ToJSON SelectItemInfo where
     object [ "key" .= siiKey
            , "synonyms" .= siiSynonyms ]
 
+-- | The possible types of 'Message'.
 data MsgType = MsgText
              | MsgImage
              | MsgQuickReplies
@@ -198,7 +199,7 @@ data MsgType = MsgText
              | MsgListSelect
              | MsgCarouselSelect
 
--- | The messages to be included in the Response
+-- | The messages to be included in the Response.
 data Msg t where
   -- | The text response message.
   Text

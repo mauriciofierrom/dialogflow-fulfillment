@@ -8,6 +8,17 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE StandaloneDeriving #-}
 
+{-|
+Module      : Dialogflow.Payload.Google
+Description : Dialogflow types for Google Actions payload.
+Copyright   : (c) Mauricio Fierro, 2019
+License     : BSD3-Clause
+Maintainer  : Mauricio Fierro <mauriciofierrom@gmail.com>
+
+This module contains types for the Google Actions payload to be included
+in the webhook reponse. See the Dialogflow <https://developers.google.com/actions/build/json/dialogflow-webhook-json#dialogflow-response-body documentation>.
+-}
+
 module Dialogflow.Payload.Google where
 
 import Data.Aeson ( object
@@ -145,10 +156,12 @@ instance ToJSON MediaObject where
            , "largeImage" .= moLargeImage
            , "icon" .= moIcon ]
 
+-- | The possible types of @RichMessage@s.
 data RichMessageType = RMTSimpleResponse
                      | RMTBasicCard
                      | RMTMediaResponse
 
+-- | The response items.
 data Res t where
   -- | A simple response containing speech or text to show the user.
   SimpleResponse :: M.SimpleResponse -> Res 'RMTSimpleResponse
@@ -200,6 +213,7 @@ instance ToJSON (Res t) where
   toJSON (MediaResponse mediaType mos) =
     object [ "mediaResponse" .= (toObject mediaType <> toObject mos) ]
 
+-- | The items to include in the 'RichResponse'
 data Item where
   Item :: (Show (Res t)) => Res t -> Item
 
