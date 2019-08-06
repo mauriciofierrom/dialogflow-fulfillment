@@ -5,12 +5,12 @@
 
 {-|
 Module      : Dialogflow.Request
-Description : Dialogflow requests
+Description : Dialogflow types for the webhook request.
 Copyright   : (c) Mauricio Fierro, 2019
 License     : BSD3-Clause
 Maintainer  : Mauricio Fierro <mauriciofierrom@gmail.com>
 
-This module contains types for Dialogflow webhook requests.
+This module contains types for Dialogflow webhook requests. See the Dialogflow <https://cloud.google.com/dialogflow/docs/reference/rpc/google.cloud.dialogflow.v2#webhookrequest documentation>.
 -}
 
 module Dialogflow.Request where

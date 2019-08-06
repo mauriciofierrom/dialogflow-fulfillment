@@ -4,7 +4,6 @@ import Test.Hspec
 
 import qualified Data.Map as M
 
-import Dialogflow.Message
 import Dialogflow.Response
 import TestUtil
 
