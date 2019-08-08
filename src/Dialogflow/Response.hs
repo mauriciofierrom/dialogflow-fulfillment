@@ -36,7 +36,7 @@ import qualified Dialogflow.Payload.Google as G
 -- the fulfillment_text, fulfillment_messages, and payload fields.
 data EventInput =
   EventInput { eventInputName :: String
-             , eventInputParameters :: M.Map String String
+             , eventInputParameters :: Maybe (M.Map String String)
              , eventInputLanguageCode :: String
              } deriving (Eq, Show)
 
@@ -57,7 +57,7 @@ instance ToJSON EventInput where
 data WebhookResponse = WebhookResponse
   { fulfillmentText :: Maybe String
   -- ^ The text to be shown on the screen
-  , fulfillmentMessages :: [Message]
+  , fulfillmentMessages :: Maybe [Message]
   -- ^ The collection of rich messages to present to the user
   , source :: Maybe String
   -- ^ The webhook source

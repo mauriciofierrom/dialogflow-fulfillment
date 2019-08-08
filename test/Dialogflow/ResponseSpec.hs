@@ -14,5 +14,7 @@ spec :: Spec
 spec =
   describe "EventInput to/parseJSON instances" $
     it "should have the desired structure" $
-      let eventInput = EventInput "the name" (M.fromList [("param1","value1")]) "esES"
+      let eventInput =
+            EventInput "the name"
+                       (Just $ M.fromList [("param1","value1")]) "esES"
        in checkSerialization (responsePath "event_input.json") eventInput
