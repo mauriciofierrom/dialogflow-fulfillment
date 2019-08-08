@@ -116,4 +116,4 @@ spec = do
   where
     selectedItemInfo = SelectItemInfo "the key" ["a synonym"]
     image = Image "the uri" (Just "the ally text")
-    item = Item selectedItemInfo "the title" "the description" image
+    item = Item selectedItemInfo "the title" (Just "the description") image

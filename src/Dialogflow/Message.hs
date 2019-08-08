@@ -389,7 +389,7 @@ instance Eq Message where
 data Item = Item
   { iInfo :: SelectItemInfo -- ^ Additional information about this option
   , iTitle :: String -- ^ The title of the list item
-  , iDescription :: String -- ^ The main text describing the item
+  , iDescription :: Maybe String -- ^ The main text describing the item
   , iImage :: Msg 'MsgImage -- ^ The image to display
   } deriving (Eq, Show)
 
@@ -397,7 +397,7 @@ instance FromJSON Item where
     parseJSON = withObject "Item" $ \i -> do
       iInfo <- i .: "info"
       iTitle <- i .: "title"
-      iDescription <- i .: "description"
+      iDescription <- i .:! "description"
       iImage <- i .: "image"
       return Item{..}
 
