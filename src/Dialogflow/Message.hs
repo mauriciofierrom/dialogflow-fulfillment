@@ -283,7 +283,7 @@ instance FromJSON (Msg 'MsgText) where
 instance FromJSON (Msg 'MsgQuickReplies) where
   parseJSON = withObject "quickReplies" $ \qr -> do
     title <- qr .:! "title"
-    replies <- qr .: "quickReplies"
+    replies <- qr .: "quick_replies"
     return $ QuickReplies title replies
 
 instance FromJSON (Msg 'MsgCard) where
@@ -338,7 +338,7 @@ instance ToJSON (Msg t) where
            , "accessibility_text" .= accesibilityText ]
   toJSON (QuickReplies mbTitle quickReplies) =
     object [ "title" .= mbTitle
-           , "quickReplies" .= quickReplies ]
+           , "quick_replies" .= quickReplies ]
   toJSON (Card title subtitle imageUri buttons) =
     object [ "card" .= object ["title" .= title
                               , "subtitle" .= subtitle
