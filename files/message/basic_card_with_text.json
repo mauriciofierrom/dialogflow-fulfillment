@@ -3,7 +3,7 @@
     "subtitle": "the subtitle",
     "formatted_text": "the formatted text",
     "buttons": [{
-        "openUriAction": {
+        "open_uri_action": {
             "uri": "the uri"
         },
         "title": "the title"

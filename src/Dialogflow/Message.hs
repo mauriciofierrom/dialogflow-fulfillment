@@ -149,13 +149,13 @@ data BasicCardButton = BasicCardButton
 instance FromJSON BasicCardButton where
   parseJSON = withObject "basicCardButton" $ \bcb -> do
     bcbTitle <- bcb .: "title"
-    bcbOpenUriAction <- bcb .: "openUriAction"
+    bcbOpenUriAction <- bcb .: "open_uri_action"
     return BasicCardButton{..}
 
 instance ToJSON BasicCardButton where
   toJSON BasicCardButton{..} =
     object [ "title" .= bcbTitle
-           , "openUriAction" .= bcbOpenUriAction ]
+           , "open_uri_action" .= bcbOpenUriAction ]
 
 -- | Suggestion chips.
 newtype Suggestion = Suggestion

@@ -6,7 +6,7 @@
         "image_uri": "the uri"
     },
     "buttons": [{
-        "openUriAction": {
+        "open_uri_action": {
             "uri": "the uri"
         },
         "title": "the title"
