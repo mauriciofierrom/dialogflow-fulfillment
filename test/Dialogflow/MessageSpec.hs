@@ -88,14 +88,14 @@ spec = do
               openUriAction = OpenUriAction "the uri"
               basicCardButton = BasicCardButton "the title" openUriAction
               basicCard =
-                BasicCard (Just "the title") (Just "the subtitle") (BasicCardImage image) [basicCardButton]
+                BasicCard (Just "the title") (Just "the subtitle") (BasicCardImage image) (Just [basicCardButton])
              in checkSerialization (messagePath "basic_card_with_image.json") basicCard
       context "when it has a formattedText content" $
         it "should have the desired structure" $
           let openUriAction = OpenUriAction "the uri"
               basicCardButton = BasicCardButton "the title" openUriAction
               basicCard =
-                BasicCard (Just "the title") (Just "the subtitle") (BasicCardFormattedText "the formatted text") [basicCardButton]
+                BasicCard (Just "the title") (Just "the subtitle") (BasicCardFormattedText "the formatted text") (Just [basicCardButton])
              in checkSerialization (messagePath "basic_card_with_text.json") basicCard
     context "Suggestions" $
       it "should have the desired structure" $

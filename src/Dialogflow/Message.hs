@@ -240,7 +240,7 @@ data Msg t where
     :: Maybe String      -- ^ The title of the card
     -> Maybe String      -- ^ The subtitle of the card
     -> BasicCardContent  -- ^ The body text or image of the card
-    -> [BasicCardButton] -- ^ The collection of card buttons
+    -> Maybe [BasicCardButton] -- ^ The collection of card buttons
     -> Msg 'MsgBasicCard
 
   -- | The collection of 'Suggestion'.
@@ -306,7 +306,7 @@ instance FromJSON (Msg 'MsgBasicCard) where
     mbTitle <- bc .:! "title"
     mbSubtitle <- bc .:! "subtitle"
     content <- parseJSON (Object bc)
-    buttons <- bc .: "buttons"
+    buttons <- bc .:! "buttons"
     return $ BasicCard mbTitle mbSubtitle content buttons
 
 instance FromJSON (Msg 'MsgSuggestions) where
