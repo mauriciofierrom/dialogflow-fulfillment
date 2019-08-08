@@ -16,7 +16,9 @@ License     : BSD3-Clause
 Maintainer  : Mauricio Fierro <mauriciofierrom@gmail.com>
 
 This module contains types for Dialogflow messages to be used in
-a fulfillment webhook response. see the Dialogflow <https://cloud.google.com/dialogflow/docs/reference/rpc/google.cloud.dialogflow.v2#google.cloud.dialogflow.v2.Intent.Message documentation>.
+a fulfillment webhook response. see the Dialogflow <https://cloud.
+google.com/dialogflow/docs/reference/rpc/google.cloud.dialogflow.v2
+#google.cloud.dialogflow.v2.Intent.Message documentation>.
 -}
 
 module Dialogflow.Message
@@ -204,7 +206,7 @@ data MsgType = MsgText
 data Msg t where
   -- | The text response message.
   Text
-    :: [String] -- ^ The collection of the agent's responses
+    :: Maybe [String] -- ^ The collection of the agent's responses
     -> Msg 'MsgText
 
   -- | The image response message.

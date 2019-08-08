@@ -61,7 +61,7 @@ spec = do
   describe "Message toJSON" $ do
     context "Text" $
       it "should have the desired structure" $
-        let text = Text ["the text"]
+        let text = Text (Just ["the text"])
          in checkSerialization (messagePath "text.json") text
     context "Image" $
       it "should have the desired structure" $
