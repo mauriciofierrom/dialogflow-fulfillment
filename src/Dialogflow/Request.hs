@@ -23,7 +23,6 @@ import Data.Aeson ( FromJSON
                   , (.:)
                   , (.:!)
                   , (.=))
-import Data.List (find)
 
 import qualified Data.Map as M
 
@@ -51,7 +50,7 @@ data Context =
           , ctxLifespanCount :: Maybe Int
           -- ^ The number of conversational query requests after which the
           -- context expires.
-          , ctxParameters :: M.Map String String
+          , ctxParameters :: Maybe (M.Map String String)
           -- ^ The collection of parameters associated with this context.
           } deriving (Eq, Show)
 
@@ -136,16 +135,3 @@ instance ToJSON WebhookRequest where
     object [ "responseId" .= responseId
            , "session" .= session
            , "queryResult" .= queryResult ]
-
--- TODO: This should be fixed.
--- | Get a context parameter.
-getContextParam :: [Context] -- ^ Collection of contexts.
-                -> String    -- ^ Name of the context to get the param from.
-                -> String    -- ^ Name of the param to get from the context.
-                -> Maybe String
-getContextParam ctxs ctxName param = do
-  mbCtx <- find (ctxByParam param) ctxs
-  M.lookup param (ctxParameters mbCtx)
-    where
-      ctxByParam :: String -> Context -> Bool
-      ctxByParam paramName Context{ctxParameters} = M.member paramName ctxParameters
