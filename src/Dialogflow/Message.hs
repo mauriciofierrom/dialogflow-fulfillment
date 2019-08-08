@@ -88,12 +88,12 @@ data BasicCardContent = BasicCardImage (Msg 'MsgImage)
 instance FromJSON BasicCardContent where
   parseJSON = withObject "Image or formatted text" $ \bcc ->
     asum [ BasicCardImage <$> bcc .: "image"
-         , BasicCardFormattedText <$> bcc .: "formattedText" ]
+         , BasicCardFormattedText <$> bcc .: "formatted_text" ]
 
 instance ToJSON BasicCardContent where
   toJSON = \case
     BasicCardImage image -> object [ "image" .= image ]
-    BasicCardFormattedText formattedText -> object [ "formattedText" .= formattedText ]
+    BasicCardFormattedText formattedText -> object [ "formatted_text" .= formattedText ]
 
 -- | A 'SimpleResponse' can have text-to-speech in plain text
 -- or SSML format.

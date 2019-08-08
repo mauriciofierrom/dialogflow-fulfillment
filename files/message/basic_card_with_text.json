@@ -1,7 +1,7 @@
 {
     "title": "the title",
     "subtitle": "the subtitle",
-    "formattedText": "the formatted text",
+    "formatted_text": "the formatted text",
     "buttons": [{
         "openUriAction": {
             "uri": "the uri"
