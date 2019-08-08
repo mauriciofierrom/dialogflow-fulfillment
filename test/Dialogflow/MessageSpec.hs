@@ -114,6 +114,6 @@ spec = do
         let carouselSelect = CarouselSelect [item]
            in checkSerialization (messagePath "carousel_select.json") carouselSelect
   where
-    selectedItemInfo = SelectItemInfo "the key" ["a synonym"]
+    selectedItemInfo = SelectItemInfo "the key" (Just ["a synonym"])
     image = Image "the uri" (Just "the ally text")
     item = Item selectedItemInfo "the title" (Just "the description") image

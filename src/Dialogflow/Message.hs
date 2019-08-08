@@ -175,7 +175,7 @@ instance ToJSON Suggestion where
 data SelectItemInfo = SelectItemInfo
   { siiKey      :: String
   -- ^ A unique key that will be sent back to the agent if this response is given.
-  , siiSynonyms :: [String]
+  , siiSynonyms :: Maybe [String]
   -- ^ A list of synonyms that can also be used to trigger this item in dialog.
   } deriving (Eq, Show)
 
