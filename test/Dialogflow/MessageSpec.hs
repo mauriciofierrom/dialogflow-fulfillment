@@ -75,7 +75,7 @@ spec = do
       it "should have the desired structure" $
         let cardButton = CardButton (Just "the text") (Just "the postback")
             card =
-              Card (Just "the title") (Just "the subtitle") (Just "the uri") [cardButton]
+              Card (Just "the title") (Just "the subtitle") (Just "the uri") (Just [cardButton])
             in checkSerialization (messagePath "card_image.json") card
     context "SimpleResponses" $
       it "should have the desired structure" $

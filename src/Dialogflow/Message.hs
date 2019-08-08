@@ -226,7 +226,7 @@ data Msg t where
     :: Maybe String -- ^ The title of the card
     -> Maybe String -- ^ The subtitle of the card
     -> Maybe String -- ^ The public URI to an image file for the card
-    -> [CardButton] -- ^ The collection of card buttons
+    -> Maybe [CardButton] -- ^ The collection of card buttons
     -> Msg 'MsgCard
 
   -- | The collection of 'SimpleResponse' candidates.
@@ -291,8 +291,8 @@ instance FromJSON (Msg 'MsgCard) where
     c <- card .: "card"
     mbTitle <- c .:! "title"
     mbSubtitle <- c .:! "subtitle"
-    mbUri <- c .:! "imageUri"
-    cardButtons <- c .: "buttons"
+    mbUri <- c .:! "image_uri"
+    cardButtons <- c .:! "buttons"
     return $ Card mbTitle mbSubtitle mbUri cardButtons
 
 instance FromJSON (Msg 'MsgSimpleResponses) where
@@ -342,7 +342,7 @@ instance ToJSON (Msg t) where
   toJSON (Card title subtitle imageUri buttons) =
     object [ "card" .= object ["title" .= title
                               , "subtitle" .= subtitle
-                              , "imageUri" .= imageUri
+                              , "image_uri" .= imageUri
                               , "buttons" .= buttons ] ]
   toJSON (SimpleResponses simpleResponses) =
     object [ "simpleResponses" .= object ["simpleResponses" .= simpleResponses ] ]
