@@ -29,7 +29,8 @@ import Data.Aeson ( object
                   , ToJSON
                   , Value(..)
                   , (.=)
-                  , (.:) )
+                  , (.:)
+                  , (.:!) )
 import Data.Foldable (asum)
 import qualified Data.HashMap.Strict as HM
 
@@ -57,8 +58,8 @@ instance FromJSON Image where
   parseJSON = withObject "image" $ \i -> do
     iUrl <- i .: "url"
     iAccessibilityText <- i .: "accessibilityText"
-    iHeight <- i .: "height"
-    iWidth <- i .: "width"
+    iHeight <- i .:! "height"
+    iWidth <- i .:! "width"
     return Image{..}
 
 instance ToJSON Image where
@@ -189,8 +190,8 @@ instance FromJSON (Res 'RMTSimpleResponse) where
 
 instance FromJSON (Res 'RMTBasicCard) where
   parseJSON = withObject "basicCard" $ \bc -> do
-    mbTitle <- bc .: "title"
-    mbSubtitle <- bc .: "subtitle"
+    mbTitle <- bc .:! "title"
+    mbSubtitle <- bc .:! "subtitle"
     content <- parseJSON (Object bc)
     buttons <- bc .: "buttons"
     imageDisplayOption <- parseJSON (Object bc)
