@@ -52,6 +52,7 @@ import Data.Aeson ( FromJSON
                   , Value(..)
                   , withObject
                   , (.:)
+                  , (.:!)
                   , (.=))
 import Data.Foldable (asum)
 
@@ -67,8 +68,8 @@ data CardButton = CardButton
 
 instance FromJSON CardButton where
   parseJSON = withObject "cardButton" $ \cb -> do
-    cbText <- cb .: "text"
-    cbPostback <- cb .: "postback"
+    cbText <- cb .:! "text"
+    cbPostback <- cb .:! "postback"
     return CardButton{..}
 
 instance ToJSON CardButton where
@@ -117,7 +118,7 @@ data SimpleResponse = SimpleResponse
 instance FromJSON SimpleResponse where
   parseJSON = withObject "simpleResponse" $ \sr -> do
     simpleResponseText <- parseJSON (Object sr)
-    displayText <- sr .: "displayText"
+    displayText <- sr .:! "displayText"
     return SimpleResponse{..}
 
 instance ToJSON SimpleResponse where
@@ -268,8 +269,8 @@ deriving instance Eq (Msg t)
 
 instance FromJSON (Msg 'MsgImage) where
   parseJSON = withObject "image" $ \i -> do
-    uri <- i .: "imageUri"
-    allyText <- i .: "accessibilityText"
+    uri <- i .:! "imageUri"
+    allyText <- i .:! "accessibilityText"
     return (Image uri allyText)
 
 instance FromJSON (Msg 'MsgText) where
@@ -279,16 +280,16 @@ instance FromJSON (Msg 'MsgText) where
 
 instance FromJSON (Msg 'MsgQuickReplies) where
   parseJSON = withObject "quickReplies" $ \qr -> do
-    title <- qr .: "title"
+    title <- qr .:! "title"
     replies <- qr .: "quickReplies"
     return $ QuickReplies title replies
 
 instance FromJSON (Msg 'MsgCard) where
   parseJSON = withObject "card" $ \card -> do
     c <- card .: "card"
-    mbTitle <- c .: "title"
-    mbSubtitle <- c .: "subtitle"
-    mbUri <- c .: "imageUri"
+    mbTitle <- c .:! "title"
+    mbSubtitle <- c .:! "subtitle"
+    mbUri <- c .:! "imageUri"
     cardButtons <- c .: "buttons"
     return $ Card mbTitle mbSubtitle mbUri cardButtons
 
@@ -300,8 +301,8 @@ instance FromJSON (Msg 'MsgSimpleResponses) where
 
 instance FromJSON (Msg 'MsgBasicCard) where
   parseJSON = withObject "basicCard" $ \bc -> do
-    mbTitle <- bc .: "title"
-    mbSubtitle <- bc .: "subtitle"
+    mbTitle <- bc .:! "title"
+    mbSubtitle <- bc .:! "subtitle"
     content <- parseJSON (Object bc)
     buttons <- bc .: "buttons"
     return $ BasicCard mbTitle mbSubtitle content buttons
@@ -319,7 +320,7 @@ instance FromJSON (Msg 'MsgLinkOutSuggestion) where
 
 instance FromJSON (Msg 'MsgListSelect) where
   parseJSON = withObject "listSelect" $ \ls -> do
-    title <- ls .: "title"
+    title <- ls .:! "title"
     items <- ls .: "items"
     return $ ListSelect title items
 
