@@ -1,6 +1,1 @@
-{
-  "simpleResponse": {
-    "textToSpeech": "the tts",
-    "displayText": "the display text"
-  }
-}
+{"simpleResponse":{"displayText":"the display text","textToSpeech":"the tts"}}

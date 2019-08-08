@@ -1,7 +1,1 @@
-{
-  "name": "the name",
-  "parameters": {
-    "param1": "value1"
-  },
-  "language_code": "esES"
-}
+{"name":"the name","parameters":{"param1":"value1"},"language_code":"esES"}

@@ -36,8 +36,8 @@ spec = do
                         (M.fromList [("param1","value1")])
                         True
                         (Just "the fulfillment text")
-                        Nothing
-                        Nothing
+                        (Just [])
+                        (Just $ Intent "the intent name" "the display name")
                         (Just 10.5)
-                        Nothing
+                        (Just $ M.fromList [])
                         "esES"

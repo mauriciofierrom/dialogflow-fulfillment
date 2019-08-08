@@ -1,11 +1,1 @@
-{
-    "title": "the title",
-    "subtitle": "the subtitle",
-    "formatted_text": "the formatted text",
-    "buttons": [{
-        "open_uri_action": {
-            "uri": "the uri"
-        },
-        "title": "the title"
-    }]
-}
+{"formatted_text":"the formatted text","buttons":[{"open_uri_action":{"uri":"the uri"},"title":"the title"}],"subtitle":"the subtitle","title":"the title"}

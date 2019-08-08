@@ -105,7 +105,7 @@ data ImageDisplayOption = DEFAULT
 
 instance FromJSON ImageDisplayOption where
   parseJSON = withObject "imageDisplayOption" $ \x -> do
-    ido <- x .: "imageDisplayOption"
+    ido <- x .: "imageDisplayOptions"
     return $ read ido
 
 instance ToJSON ImageDisplayOption where
@@ -189,16 +189,18 @@ instance FromJSON (Res 'RMTSimpleResponse) where
     return $ SimpleResponse simpleResponse
 
 instance FromJSON (Res 'RMTBasicCard) where
-  parseJSON = withObject "basicCard" $ \bc -> do
+  parseJSON = withObject "basicCard" $ \basicCard -> do
+    bc <- basicCard .: "basicCard"
     mbTitle <- bc .:! "title"
-    mbSubtitle <- bc .:! "subtitle"
+    mbSubtitle <- bc .: "subtitle"
     content <- parseJSON (Object bc)
     buttons <- bc .: "buttons"
     imageDisplayOption <- parseJSON (Object bc)
     return $ BasicCard mbTitle mbSubtitle content buttons imageDisplayOption
 
 instance FromJSON (Res 'RMTMediaResponse) where
-  parseJSON = withObject "mediaResponse" $ \mr -> do
+  parseJSON = withObject "mediaResponse" $ \mediaResponse -> do
+    mr <- mediaResponse .: "mediaResponse"
     mediaType <- parseJSON (Object mr)
     mediaObjects <- mr .: "mediaObjects"
     return $ MediaResponse mediaType mediaObjects
@@ -212,7 +214,9 @@ instance ToJSON (Res t) where
                                    , "subtitle" .= s
                                    , "buttons" .= b ] <> toObject c <> toObject d
   toJSON (MediaResponse mediaType mos) =
-    object [ "mediaResponse" .= (toObject mediaType <> toObject mos) ]
+    object [ "mediaResponse" .= obj ]
+      where
+        obj = Object $ HM.fromList [ "mediaObjects" .= mos ] <> toObject mediaType
 
 -- | The items to include in the 'RichResponse'
 data Item where
@@ -390,7 +394,7 @@ newtype Suggestion = Suggestion { unSuggestion :: String }
 
 instance FromJSON Suggestion where
   parseJSON = withObject "suggestion" $ \s -> do
-    suggestion <- s .: "suggestion"
+    suggestion <- s .: "title"
     return $ Suggestion suggestion
 
 instance ToJSON Suggestion where

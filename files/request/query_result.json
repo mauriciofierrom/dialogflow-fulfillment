@@ -1,10 +1,1 @@
-{
-  "queryText": "the original text",
-  "parameters": {
-    "param1": "value1"
-  },
-  "allRequiredParamsPresent": true,
-  "fulfillmentText": "the fulfillment text",
-  "intentDetectionConfidence": 10.5,
-  "language_code": "esES"
-}
+{"allRequiredParamsPresent":true,"intentDetectionConfidence":10.5,"intent":{"name":"the intent name","displayName":"the display name"},"queryText":"the original text","fulfillmentText":"the fulfillment text","parameters":{"param1":"value1"},"language_code":"esES","outputContexts":[],"diagnosticInfo":{}}

@@ -1,6 +1,1 @@
-{
-    "open_uri_action": {
-        "uri": "the uri"
-    },
-    "title": "the title"
-}
+{"open_uri_action":{"uri":"the uri"},"title":"the title"}

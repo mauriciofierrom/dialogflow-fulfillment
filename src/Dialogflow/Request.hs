@@ -99,7 +99,7 @@ instance FromJSON QueryResult where
     intent <- qr .:! "intent"
     intentDetectionConfidence <- qr .:! "intentDetectionConfidence"
     diagnosticInfo <- qr .:! "diagnosticInfo"
-    languageCode <-qr .: "language_code"
+    languageCode <- qr .: "language_code"
     return QueryResult{..}
 
 instance ToJSON QueryResult where
@@ -110,6 +110,7 @@ instance ToJSON QueryResult where
            , "fulfillmentText" .= fulfillmentText
            , "outputContexts" .= outputContexts
            , "intent" .= intent
+           , "intentDetectionConfidence" .= intentDetectionConfidence
            , "diagnosticInfo" .= diagnosticInfo
            , "language_code" .= languageCode ]
 

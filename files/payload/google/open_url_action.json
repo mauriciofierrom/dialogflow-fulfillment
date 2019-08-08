@@ -1,13 +1,1 @@
-{
-  "androidApp": {
-    "packageName": "the package name",
-    "versions": [
-      {
-        "minVersion": 1,
-        "maxVersion": 2
-      }
-    ]
-  },
-  "url": "the url",
-  "urlTypeHint": "URL_TYPE_HINT_UNSPECIFIED"
-}
+{"androidApp":{"packageName":"the package name","versions":[{"minVersion":1,"maxVersion":2}]},"url":"the url","urlTypeHint":"URL_TYPE_HINT_UNSPECIFIED"}

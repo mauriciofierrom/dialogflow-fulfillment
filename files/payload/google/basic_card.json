@@ -1,12 +1,1 @@
-{
-  "title": "the title",
-  "subtitle": "the subtitle",
-  "image": {
-    "url": "the url",
-    "accessibilityText": "the ally text",
-    "height": 300,
-    "width": 700
-  },
-  "buttons": [],
-  "imageDisplayOption": "DEFAULT"
-}
+{"basicCard":{"image":{"height":300,"url":"the url","accessibilityText":"the ally text","width":700},"buttons":[],"subtitle":"the subtitle","imageDisplayOptions":"DEFAULT","title":"the title"}}

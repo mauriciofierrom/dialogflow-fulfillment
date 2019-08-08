@@ -1,17 +1,1 @@
-{
-    "items": [
-        {
-            "title": "the title",
-            "description":"the description",
-            "info": {
-                "key": "the key",
-                "synonyms": ["a synonym"]
-            },
-            "image":
-            {
-                "accessibility_text": "the ally text",
-                "image_uri":"the uri"
-            }
-        }
-    ]
-}
+{"items":[{"image":{"image_uri":"the uri","accessibility_text":"the ally text"},"title":"the title","description":"the description","info":{"key":"the key","synonyms":["a synonym"]}}]}

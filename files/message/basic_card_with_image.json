@@ -1,14 +1,1 @@
-{
-    "title": "the title",
-    "subtitle": "the subtitle",
-    "image": {
-        "accessibility_text": "the ally text",
-        "image_uri": "the uri"
-    },
-    "buttons": [{
-        "open_uri_action": {
-            "uri": "the uri"
-        },
-        "title": "the title"
-    }]
-}
+{"image":{"image_uri":"the uri","accessibility_text":"the ally text"},"buttons":[{"open_uri_action":{"uri":"the uri"},"title":"the title"}],"subtitle":"the subtitle","title":"the title"}
