@@ -37,7 +37,7 @@ spec = do
   describe "BasicCardContent toJSON" $
     context "when it is an Image" $
       it "should have the desired structure" $
-        let image = BasicCardImage (Image (Just "the uri") (Just "the ally text"))
+        let image = BasicCardImage (Image "the uri" (Just "the ally text"))
          in checkSerialization (messagePath "basic_card_image.json") image
   describe "OpenUriAction toJSON" $
     it "should have the desired structure" $
@@ -65,7 +65,7 @@ spec = do
          in checkSerialization (messagePath "text.json") text
     context "Image" $
       it "should have the desired structure" $
-        let image = Image (Just "the uri") (Just "the ally text")
+        let image = Image "the uri" (Just "the ally text")
          in checkSerialization (messagePath "image.json") image
     context "QuickReplies" $
       it "should have the desired structure" $
@@ -84,7 +84,7 @@ spec = do
     context "BasicCard" $ do
       context "when it has an image content" $
         it "should have the desired structure" $
-          let image = Image (Just "the uri") (Just "the ally text")
+          let image = Image "the uri" (Just "the ally text")
               openUriAction = OpenUriAction "the uri"
               basicCardButton = BasicCardButton "the title" openUriAction
               basicCard =
@@ -115,5 +115,5 @@ spec = do
            in checkSerialization (messagePath "carousel_select.json") carouselSelect
   where
     selectedItemInfo = SelectItemInfo "the key" ["a synonym"]
-    image = Image (Just "the uri") (Just "the ally text")
+    image = Image "the uri" (Just "the ally text")
     item = Item selectedItemInfo "the title" "the description" image

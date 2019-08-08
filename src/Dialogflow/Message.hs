@@ -211,7 +211,7 @@ data Msg t where
 
   -- | The image response message.
   Image
-    :: Maybe String -- ^ The public URI to an image file
+    :: String -- ^ The public URI to an image file
     -> Maybe String -- ^ A text description of the image to be used for accessibility
     -> Msg 'MsgImage
 
@@ -271,7 +271,7 @@ deriving instance Eq (Msg t)
 
 instance FromJSON (Msg 'MsgImage) where
   parseJSON = withObject "image" $ \i -> do
-    uri <- i .:! "image_uri"
+    uri <- i .: "image_uri"
     allyText <- i .:! "accessibility_text"
     return (Image uri allyText)
 
