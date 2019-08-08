@@ -271,8 +271,8 @@ deriving instance Eq (Msg t)
 
 instance FromJSON (Msg 'MsgImage) where
   parseJSON = withObject "image" $ \i -> do
-    uri <- i .:! "imageUri"
-    allyText <- i .:! "accessibilityText"
+    uri <- i .:! "image_uri"
+    allyText <- i .:! "accessibility_text"
     return (Image uri allyText)
 
 instance FromJSON (Msg 'MsgText) where
@@ -334,8 +334,8 @@ instance FromJSON (Msg 'MsgCarouselSelect) where
 instance ToJSON (Msg t) where
   toJSON (Text mbText) = object [ "text" .= mbText ]
   toJSON (Image uri accesibilityText) =
-    object [ "imageUri" .= uri
-           , "accessibilityText" .= accesibilityText ]
+    object [ "image_uri" .= uri
+           , "accessibility_text" .= accesibilityText ]
   toJSON (QuickReplies mbTitle quickReplies) =
     object [ "title" .= mbTitle
            , "quickReplies" .= quickReplies ]

@@ -9,8 +9,8 @@
             },
             "image":
             {
-                "accessibilityText": "the ally text",
-                "imageUri":"the uri"
+                "accessibility_text": "the ally text",
+                "image_uri":"the uri"
             }
         }
     ]
