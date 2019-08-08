@@ -9,6 +9,6 @@
     "allRequiredParamsPresent": true,
     "fulfillmentText": "the fulfillment text",
     "intentDetectionConfidence": 10.5,
-    "languageCode": "esES"
+    "language_code": "esES"
   }
 }

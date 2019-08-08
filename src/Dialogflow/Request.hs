@@ -1,6 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE RecordWildCards #-}
-{-# LANGUAGE DeriveGeneric #-}
 {-# LANGUAGE NamedFieldPuns #-}
 
 {-|
@@ -24,10 +23,9 @@ import Data.Aeson ( FromJSON
                   , (.:)
                   , (.:!)
                   , (.=))
-import GHC.Generics
+import Data.List (find)
 
 import qualified Data.Map as M
-import Data.List (find)
 
 -- | Represents an intent.
 data Intent =
@@ -90,10 +88,31 @@ data QueryResult =
               -- ^ Free-form diagnostic info.
               , languageCode :: String
               -- ^ The language that was triggered during intent matching.
-              } deriving (Eq, Generic, Show)
+              } deriving (Eq, Show)
 
-instance FromJSON QueryResult
-instance ToJSON QueryResult
+instance FromJSON QueryResult where
+  parseJSON = withObject "queryResult" $ \qr -> do
+    queryText <- qr .: "queryText"
+    parameters <- qr .: "parameters"
+    allRequiredParamsPresent <- qr .: "allRequiredParamsPresent"
+    fulfillmentText <- qr .:! "fulfillmentText"
+    outputContexts <- qr .:! "outputContexts"
+    intent <- qr .:! "intent"
+    intentDetectionConfidence <- qr .:! "intentDetectionConfidence"
+    diagnosticInfo <- qr .:! "diagnosticInfo"
+    languageCode <-qr .: "language_code"
+    return QueryResult{..}
+
+instance ToJSON QueryResult where
+  toJSON QueryResult{..} =
+    object [ "queryText" .= queryText
+           , "parameters" .= parameters
+           , "allRequiredParamsPresent" .= allRequiredParamsPresent
+           , "fulfillmentText" .= fulfillmentText
+           , "outputContexts" .= outputContexts
+           , "intent" .= intent
+           , "diagnosticInfo" .= diagnosticInfo
+           , "language_code" .= languageCode ]
 
 -- | The request message for a webhook call.
 data WebhookRequest =
@@ -103,10 +122,20 @@ data WebhookRequest =
                  -- ^ Unique session id.
                  , queryResult :: QueryResult
                  -- ^ Result of the conversation query or event processing.
-                 } deriving(Eq, Generic, Show)
+                 } deriving(Eq, Show)
 
-instance FromJSON WebhookRequest
-instance ToJSON WebhookRequest
+instance FromJSON WebhookRequest where
+  parseJSON = withObject "webhookRequest" $ \wr -> do
+    responseId <- wr .: "responseId"
+    session <- wr .: "session"
+    queryResult <- wr .: "queryResult"
+    return WebhookRequest{..}
+
+instance ToJSON WebhookRequest where
+  toJSON WebhookRequest{..} =
+    object [ "responseId" .= responseId
+           , "session" .= session
+           , "queryResult" .= queryResult ]
 
 -- TODO: This should be fixed.
 -- | Get a context parameter.
