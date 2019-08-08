@@ -317,7 +317,7 @@ instance FromJSON (Msg 'MsgSuggestions) where
 instance FromJSON (Msg 'MsgLinkOutSuggestion) where
   parseJSON = withObject "linkOutSuggestion" $ \los -> do
     uri <- los .: "uri"
-    destinationName <- los .: "destinationName"
+    destinationName <- los .: "destination_name"
     return $ LinkOutSuggestion destinationName uri
 
 instance FromJSON (Msg 'MsgListSelect) where
@@ -352,7 +352,7 @@ instance ToJSON (Msg t) where
                          , "buttons" .= buttons ] <> toObject content
   toJSON (Suggestions xs) = object [ "suggestions" .= xs ]
   toJSON (LinkOutSuggestion name uri) =
-    object [ "destinationName" .= name, "uri" .= uri ]
+    object [ "destination_name" .= name, "uri" .= uri ]
   toJSON (ListSelect mbTitle items) =
     object [ "title" .= mbTitle
            , "items" .= items ]
