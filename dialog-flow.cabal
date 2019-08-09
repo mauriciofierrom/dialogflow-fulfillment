@@ -22,15 +22,13 @@ license-file:        LICENSE
 author:              Mauricio Fierro
 maintainer:          mauriciofierrom@gmail.com
 copyright:           (c) 2019 Mauricio Fierro
+extra-source-files:
+  README.md
+  CHANGELOG.md
 
 source-repository head
   type: git
   location: https://github.com/mauriciofierrom/dialogflow
-
-extra-source-files:
-    CHANGELOG.md
-    README.md
-    files/**/*.json
 
 library
   exposed-modules:
