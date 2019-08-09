@@ -1,9 +1,0 @@
-{
-    "packageName": "the package name",
-    "versions": [
-        {
-            "minVersion": 1,
-            "maxVersion": 2
-        }
-    ]
-}
