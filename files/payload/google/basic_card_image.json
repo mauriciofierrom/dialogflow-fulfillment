@@ -1,1 +1,8 @@
-{"image":{"height":300,"url":"the url","accessibilityText":"the ally text","width":700}}
+{
+    "image": {
+        "height": 300,
+        "url": "the url",
+        "accessibilityText": "the ally text",
+        "width": 700
+    }
+}

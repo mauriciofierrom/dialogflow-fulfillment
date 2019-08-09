@@ -1,1 +1,4 @@
-{"name":"the intent name","displayName":"the display name"}
+{
+    "name": "the intent name",
+    "displayName": "the display name"
+}

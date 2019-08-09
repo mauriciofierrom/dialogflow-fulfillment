@@ -1,1 +1,4 @@
-{"destination_name":"the name","uri":"the app"}
+{
+    "destination_name": "the name",
+    "uri": "the app"
+}

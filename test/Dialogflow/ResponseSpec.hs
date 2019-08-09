@@ -7,11 +7,14 @@ import qualified Data.Map as M
 import Dialogflow.Response
 import TestUtil
 
+basePath :: FilePath
+basePath = "files/response/"
+
 responsePath :: FilePath -> FilePath
-responsePath = (<>) "files/response/"
+responsePath = (<>) basePath
 
 spec :: Spec
-spec =
+spec = beforeAll (prepareDirs basePath) $
   describe "EventInput to/parseJSON instances" $
     it "should have the desired structure" $
       let eventInput =

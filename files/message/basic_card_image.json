@@ -1,1 +1,6 @@
-{"image":{"image_uri":"the uri","accessibility_text":"the ally text"}}
+{
+    "image": {
+        "image_uri": "the uri",
+        "accessibility_text": "the ally text"
+    }
+}

@@ -4,8 +4,9 @@ let
 
   inherit (nixpkgs) pkgs;
 
-  f = { mkDerivation, aeson, base, bytestring, containers, hspec
-      , hspec-discover, stdenv, text, unordered-containers
+  f = { mkDerivation, aeson, aeson-pretty, base, bytestring
+      , containers, directory, hspec, hspec-discover, stdenv, text
+      , unordered-containers
       }:
       mkDerivation {
         pname = "dialogflow";
@@ -15,7 +16,8 @@ let
           aeson base bytestring containers text unordered-containers
         ];
         testHaskellDepends = [
-          aeson base bytestring containers hspec hspec-discover
+          aeson aeson-pretty base bytestring containers directory hspec
+          hspec-discover
         ];
         testToolDepends = [ hspec-discover ];
         homepage = "https://github.com/mauriciofierrom/dialogflow";

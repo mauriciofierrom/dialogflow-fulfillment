@@ -8,11 +8,14 @@ import Data.Aeson
 
 import qualified Dialogflow.Message as M
 
+basePath :: FilePath
+basePath = "files/payload/google/"
+
 googlePayloadPath :: FilePath -> FilePath
-googlePayloadPath = (<>) "files/payload/google/"
+googlePayloadPath = (<>) basePath
 
 spec :: Spec
-spec = do
+spec = beforeAll (prepareDirs basePath) $ do
   describe "Image to/parseJSON instances" $
     it "Should have the desired structure" $
       checkSerialization (googlePayloadPath "image.json") image

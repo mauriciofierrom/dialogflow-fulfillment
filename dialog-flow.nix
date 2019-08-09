@@ -1,5 +1,6 @@
-{ mkDerivation, aeson, base, bytestring, containers, hspec
-, hspec-discover, stdenv, text, unordered-containers
+{ mkDerivation, aeson, aeson-pretty, base, bytestring, containers
+, directory, hspec, hspec-discover, stdenv, text
+, unordered-containers
 }:
 mkDerivation {
   pname = "dialogflow";
@@ -9,7 +10,8 @@ mkDerivation {
     aeson base bytestring containers text unordered-containers
   ];
   testHaskellDepends = [
-    aeson base bytestring containers hspec hspec-discover
+    aeson aeson-pretty base bytestring containers directory hspec
+    hspec-discover
   ];
   testToolDepends = [ hspec-discover ];
   homepage = "https://github.com/mauriciofierrom/dialogflow";

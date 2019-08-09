@@ -1,1 +1,17 @@
-{"icon":{"height":300,"url":"the url","accessibilityText":"the ally text","width":700},"name":"the name","contentUrl":"the content url","largeImage":{"height":300,"url":"the url","accessibilityText":"the ally text","width":700},"description":"the description"}
+{
+    "icon": {
+        "height": 300,
+        "url": "the url",
+        "accessibilityText": "the ally text",
+        "width": 700
+    },
+    "name": "the name",
+    "contentUrl": "the content url",
+    "largeImage": {
+        "height": 300,
+        "url": "the url",
+        "accessibilityText": "the ally text",
+        "width": 700
+    },
+    "description": "the description"
+}

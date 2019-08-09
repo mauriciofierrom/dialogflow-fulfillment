@@ -9,11 +9,14 @@ import qualified Data.Map as M
 import Dialogflow.Request
 import TestUtil
 
+basePath :: FilePath
+basePath = "files/request/"
+
 requestPath :: FilePath -> FilePath
-requestPath = (<>) "files/request/"
+requestPath = (<>) basePath
 
 spec :: Spec
-spec = do
+spec = beforeAll (prepareDirs basePath) $ do
   describe "Context to/parseJSON" $
     it "should have the desired structure" $
       let ctx =

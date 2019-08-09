@@ -7,11 +7,14 @@ import TestUtil
 
 import Dialogflow.Message
 
+basePath :: FilePath
+basePath = "files/message/"
+
 messagePath :: FilePath -> FilePath
-messagePath = (<>) "files/message/"
+messagePath = (<>) basePath
 
 spec :: Spec
-spec = do
+spec = beforeAll (prepareDirs basePath) $ do
   describe "SpeechText toJSON" $ do
     context "when it is a TextToSpeech" $
       it "should have the desired structure" $
