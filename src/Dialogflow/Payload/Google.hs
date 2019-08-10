@@ -21,8 +21,7 @@ in the webhook reponse. See the Dialogflow <https://developers.google.com/action
 
 module Dialogflow.Payload.Google where
 
-import Data.Aeson ( object
-                  , parseJSON
+import Data.Aeson ( parseJSON
                   , toJSON
                   , withObject
                   , FromJSON
@@ -44,7 +43,7 @@ newtype GooglePayload =
 
 instance ToJSON GooglePayload where
   toJSON gp =
-    object [ "google" .= unGooglePayload gp]
+    noNullObjects [ "google" .= unGooglePayload gp]
 
 -- | An image.
 data Image =
@@ -64,7 +63,7 @@ instance FromJSON Image where
 
 instance ToJSON Image where
   toJSON Image{..} =
-    object [ "url" .= iUrl
+    noNullObjects [ "url" .= iUrl
            , "accessibilityText" .= iAccessibilityText
            , "height" .= iHeight
            , "width" .= iWidth ]
@@ -81,8 +80,8 @@ instance FromJSON BasicCardContent where
 
 instance ToJSON BasicCardContent where
   toJSON = \case
-    BasicCardImage image -> object [ "image" .= image ]
-    BasicCardFormattedText formattedText -> object [ "formattedText" .= formattedText ]
+    BasicCardImage image -> noNullObjects [ "image" .= image ]
+    BasicCardFormattedText formattedText -> noNullObjects [ "formattedText" .= formattedText ]
 
 -- | Possible image display options for affecting the presentation of an 'Image'.
 -- This should be used for when the 'Image''s aspect ratio does not match the 'Image'
@@ -109,7 +108,7 @@ instance FromJSON ImageDisplayOption where
     return $ read ido
 
 instance ToJSON ImageDisplayOption where
-  toJSON x = object [ "imageDisplayOptions" .= show x ]
+  toJSON x = noNullObjects [ "imageDisplayOptions" .= show x ]
 
 -- | The type of the media within the response.
 data MediaType = MEDIA_TYPE_UNSPECIFIED -- ^ Unspecified.
@@ -122,9 +121,9 @@ instance FromJSON MediaType where
     return $ read mt
 
 instance ToJSON MediaType where
-  toJSON x = object [ "mediaType" .= show x ]
+  toJSON x = noNullObjects [ "mediaType" .= show x ]
 
--- | Represents one media object which is returned with 'MediaResponse'.
+-- | Represents one media noNullObjects which is returned with 'MediaResponse'.
 -- Contains information about the media, such as name, description, url, etc.
 data MediaObject =
   MediaObject { moName :: String
@@ -151,7 +150,7 @@ instance FromJSON MediaObject where
 
 instance ToJSON MediaObject where
   toJSON MediaObject{..} =
-    object [ "name" .= moName
+    noNullObjects [ "name" .= moName
            , "description" .= moDescription
            , "contentUrl" .= moContentUrl
            , "largeImage" .= moLargeImage
@@ -206,15 +205,15 @@ instance FromJSON (Res 'RMTMediaResponse) where
     return $ MediaResponse mediaType mediaObjects
 
 instance ToJSON (Res t) where
-  toJSON (SimpleResponse s) = object [ "simpleResponse" .=  s ]
+  toJSON (SimpleResponse s) = noNullObjects [ "simpleResponse" .=  s ]
   toJSON (BasicCard t s c b d) =
-    object [ "basicCard" .= obj ]
+    noNullObjects [ "basicCard" .= obj ]
       where
         obj = Object $ HM.fromList [ "title" .= t
                                    , "subtitle" .= s
                                    , "buttons" .= b ] <> toObject c <> toObject d
   toJSON (MediaResponse mediaType mos) =
-    object [ "mediaResponse" .= obj ]
+    noNullObjects [ "mediaResponse" .= obj ]
       where
         obj = Object $ HM.fromList [ "mediaObjects" .= mos ] <> toObject mediaType
 
@@ -254,7 +253,7 @@ data RichResponse = RichResponse
 
 instance ToJSON RichResponse where
   toJSON RichResponse{..} =
-    object [ "items" .= items
+    noNullObjects [ "items" .= items
            , "suggestions" .= suggestions
            , "linkOutSuggestion" .= linkOutSuggestion ]
 
@@ -275,7 +274,7 @@ data Response =
 
 instance ToJSON Response where
   toJSON Response{..} =
-    object [ "expectUserResponse" .= expectUserResponse
+    noNullObjects [ "expectUserResponse" .= expectUserResponse
            , "userStorage" .= userStorage
            , "richResponse" .= richResponse ]
 
@@ -293,7 +292,7 @@ instance FromJSON UrlTypeHint where
     return $ read uth
 
 instance ToJSON UrlTypeHint where
-  toJSON x = object [ "urlTypeHint" .= show x ]
+  toJSON x = noNullObjects [ "urlTypeHint" .= show x ]
 
 -- | VersionFilter should be included if specific version/s of the App are
 -- required.
@@ -313,7 +312,7 @@ instance FromJSON VersionFilter where
 
 instance ToJSON VersionFilter where
   toJSON VersionFilter{..} =
-    object [ "minVersion" .= minVersion
+    noNullObjects [ "minVersion" .= minVersion
            , "maxVersion" .= maxVersion ]
 
 -- | Specification of the Android App for fulfillment restrictions.
@@ -332,7 +331,7 @@ instance FromJSON AndroidApp where
 
 instance ToJSON AndroidApp where
   toJSON AndroidApp{..} =
-    object [ "packageName" .= aaPackageName
+    noNullObjects [ "packageName" .= aaPackageName
            , "versions" .= aaVersions ]
 
 -- | Opens the given url.
@@ -383,7 +382,7 @@ instance FromJSON LinkOutSuggestion where
 
 instance ToJSON LinkOutSuggestion where
   toJSON LinkOutSuggestion{..} =
-    object [ "destinationName" .= losDestinationName
+    noNullObjects [ "destinationName" .= losDestinationName
            , "url" .= losUrl
            , "openUrlAction" .= losOpenUrlAction ]
 
@@ -398,4 +397,4 @@ instance FromJSON Suggestion where
     return $ Suggestion suggestion
 
 instance ToJSON Suggestion where
-  toJSON s = object [ "title" .= unSuggestion s ]
+  toJSON s = noNullObjects [ "title" .= unSuggestion s ]

@@ -13,14 +13,14 @@ This module contains types for Dialogflow webhook response. See the Dialogflow <
 
 module Dialogflow.Response where
 
-import Data.Aeson ( object
-                  , parseJSON
+import Data.Aeson ( parseJSON
                   , toJSON
                   , withObject
                   , FromJSON
                   , ToJSON
                   , (.:)
                   , (.=) )
+import Dialogflow.Util (noNullObjects)
 
 import qualified Data.Map as M
 
@@ -49,7 +49,7 @@ instance FromJSON EventInput where
 
 instance ToJSON EventInput where
   toJSON EventInput{..} =
-    object [ "name" .= eventInputName
+    noNullObjects [ "name" .= eventInputName
            , "parameters" .= eventInputParameters
            , "language_code" .= eventInputLanguageCode ]
 
@@ -71,7 +71,7 @@ data WebhookResponse = WebhookResponse
 
 instance ToJSON WebhookResponse where
   toJSON WebhookResponse{..} =
-    object [ "fulfillmentText" .= fulfillmentText
+    noNullObjects [ "fulfillmentText" .= fulfillmentText
            , "fulfillmentMessages" .= fulfillmentMessages
            , "source" .= source
            , "payload" .= payload

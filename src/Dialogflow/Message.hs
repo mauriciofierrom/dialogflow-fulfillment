@@ -50,7 +50,6 @@ import Data.Aeson ( FromJSON
                   , parseJSON
                   , ToJSON
                   , toJSON
-                  , object
                   , Value(..)
                   , withObject
                   , (.:)
@@ -76,7 +75,7 @@ instance FromJSON CardButton where
 
 instance ToJSON CardButton where
   toJSON CardButton{..} =
-    object [ "text" .= cbText
+    noNullObjects [ "text" .= cbText
            , "postback" .= cbPostback ]
 
 -- | The 'BasicCard' message can have either an 'Image' or
@@ -92,8 +91,8 @@ instance FromJSON BasicCardContent where
 
 instance ToJSON BasicCardContent where
   toJSON = \case
-    BasicCardImage image -> object [ "image" .= image ]
-    BasicCardFormattedText formattedText -> object [ "formatted_text" .= formattedText ]
+    BasicCardImage image -> noNullObjects [ "image" .= image ]
+    BasicCardFormattedText formattedText -> noNullObjects [ "formatted_text" .= formattedText ]
 
 -- | A 'SimpleResponse' can have text-to-speech in plain text
 -- or SSML format.
@@ -108,8 +107,8 @@ instance FromJSON SpeechText where
 
 instance ToJSON SpeechText where
   toJSON = \case
-    TextToSpeech textToSpeech -> object ["textToSpeech" .= textToSpeech]
-    SSML ssml -> object ["ssml" .= ssml]
+    TextToSpeech textToSpeech -> noNullObjects ["textToSpeech" .= textToSpeech]
+    SSML ssml -> noNullObjects ["ssml" .= ssml]
 
 -- | A simple response message containing speech or text
 data SimpleResponse = SimpleResponse
@@ -133,7 +132,7 @@ newtype OpenUriAction = OpenUriAction
   } deriving (Eq, Show)
 
 instance ToJSON OpenUriAction where
-  toJSON oua = object [ "uri" .= unOpenUriAction oua ]
+  toJSON oua = noNullObjects [ "uri" .= unOpenUriAction oua ]
 
 instance FromJSON OpenUriAction where
   parseJSON = withObject "openUriAction" $ \oua -> do
@@ -154,7 +153,7 @@ instance FromJSON BasicCardButton where
 
 instance ToJSON BasicCardButton where
   toJSON BasicCardButton{..} =
-    object [ "title" .= bcbTitle
+    noNullObjects [ "title" .= bcbTitle
            , "open_uri_action" .= bcbOpenUriAction ]
 
 -- | Suggestion chips.
@@ -169,7 +168,7 @@ instance FromJSON Suggestion where
 
 instance ToJSON Suggestion where
   toJSON s =
-    object [ "title" .= unSuggestionTitle s ]
+    noNullObjects [ "title" .= unSuggestionTitle s ]
 
 -- | Additional information about an 'Item' for when it is triggered in a dialog.
 data SelectItemInfo = SelectItemInfo
@@ -187,7 +186,7 @@ instance FromJSON SelectItemInfo where
 
 instance ToJSON SelectItemInfo where
   toJSON SelectItemInfo{..} =
-    object [ "key" .= siiKey
+    noNullObjects [ "key" .= siiKey
            , "synonyms" .= siiSynonyms ]
 
 -- | The possible types of 'Message'.
@@ -332,31 +331,31 @@ instance FromJSON (Msg 'MsgCarouselSelect) where
     return $ CarouselSelect items
 
 instance ToJSON (Msg t) where
-  toJSON (Text mbText) = object [ "text" .= mbText ]
+  toJSON (Text mbText) = noNullObjects [ "text" .= mbText ]
   toJSON (Image uri accesibilityText) =
-    object [ "image_uri" .= uri
+    noNullObjects [ "image_uri" .= uri
            , "accessibility_text" .= accesibilityText ]
   toJSON (QuickReplies mbTitle quickReplies) =
-    object [ "title" .= mbTitle
+    noNullObjects [ "title" .= mbTitle
            , "quick_replies" .= quickReplies ]
   toJSON (Card title subtitle imageUri buttons) =
-    object [ "card" .= object ["title" .= title
+    noNullObjects [ "card" .= noNullObjects ["title" .= title
                               , "subtitle" .= subtitle
                               , "image_uri" .= imageUri
                               , "buttons" .= buttons ] ]
   toJSON (SimpleResponses simpleResponses) =
-    object [ "simpleResponses" .= object ["simpleResponses" .= simpleResponses ] ]
+    noNullObjects [ "simpleResponses" .= noNullObjects ["simpleResponses" .= simpleResponses ] ]
   toJSON (BasicCard mbTitle mbSubtitle content buttons) =
     Object $ HM.fromList [ "title" .= mbTitle
                          , "subtitle" .= mbSubtitle
                          , "buttons" .= buttons ] <> toObject content
-  toJSON (Suggestions xs) = object [ "suggestions" .= xs ]
+  toJSON (Suggestions xs) = noNullObjects [ "suggestions" .= xs ]
   toJSON (LinkOutSuggestion name uri) =
-    object [ "destination_name" .= name, "uri" .= uri ]
+    noNullObjects [ "destination_name" .= name, "uri" .= uri ]
   toJSON (ListSelect mbTitle items) =
-    object [ "title" .= mbTitle
+    noNullObjects [ "title" .= mbTitle
            , "items" .= items ]
-  toJSON (CarouselSelect items) = object [ "items" .= items ]
+  toJSON (CarouselSelect items) = noNullObjects [ "items" .= items ]
 
 -- | This type is used to wrap the messages under one type.
 data Message where
@@ -369,7 +368,7 @@ instance FromJSON Message where
   parseJSON = parseJSON
 
 instance ToJSON Message where
-  toJSON (Message bc@BasicCard{}) = object [ "basicCard" .= toJSON bc ]
+  toJSON (Message bc@BasicCard{}) = noNullObjects [ "basicCard" .= toJSON bc ]
   toJSON (Message o) = toJSON o
 
 instance Eq Message where
@@ -403,7 +402,7 @@ instance FromJSON Item where
 
 instance ToJSON Item where
   toJSON Item{..} =
-    object [ "info" .= iInfo
+    noNullObjects [ "info" .= iInfo
            , "title" .= iTitle
            , "description" .= iDescription
            , "image" .= iImage ]

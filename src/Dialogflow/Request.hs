@@ -18,12 +18,11 @@ import Data.Aeson ( FromJSON
                   , parseJSON
                   , ToJSON
                   , toJSON
-                  , object
                   , withObject
                   , (.:)
                   , (.:!)
                   , (.=))
-
+import Dialogflow.Util
 import qualified Data.Map as M
 
 -- | Represents an intent.
@@ -40,7 +39,7 @@ instance FromJSON Intent where
 
 instance ToJSON Intent where
   toJSON Intent{..} =
-    object [ "name" .= intentName
+    noNullObjects [ "name" .= intentName
            , "displayName" .= displayName ]
 
 -- | Represents a context.
@@ -63,7 +62,7 @@ instance FromJSON Context where
 
 instance ToJSON Context where
   toJSON Context{..} =
-    object [ "name" .= ctxName
+    noNullObjects [ "name" .= ctxName
            , "lifespanCount" .= ctxLifespanCount
            , "parameters" .= ctxParameters ]
 
@@ -104,7 +103,7 @@ instance FromJSON QueryResult where
 
 instance ToJSON QueryResult where
   toJSON QueryResult{..} =
-    object [ "queryText" .= queryText
+    noNullObjects [ "queryText" .= queryText
            , "parameters" .= parameters
            , "allRequiredParamsPresent" .= allRequiredParamsPresent
            , "fulfillmentText" .= fulfillmentText
@@ -133,6 +132,6 @@ instance FromJSON WebhookRequest where
 
 instance ToJSON WebhookRequest where
   toJSON WebhookRequest{..} =
-    object [ "responseId" .= responseId
+    noNullObjects [ "responseId" .= responseId
            , "session" .= session
            , "queryResult" .= queryResult ]
