@@ -1,11 +1,11 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Dialogflow.MessageSpec where
+module Dialogflow.V2.MessageSpec where
 
 import Test.Hspec
 import TestUtil
 
-import Dialogflow.Message
+import Dialogflow.V2.Message
 
 basePath :: FilePath
 basePath = "files/message/"

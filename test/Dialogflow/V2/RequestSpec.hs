@@ -1,12 +1,12 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Dialogflow.RequestSpec where
+module Dialogflow.V2.RequestSpec where
 
 import Data.Aeson (eitherDecode)
 import Test.Hspec
 import qualified Data.Map as M
 
-import Dialogflow.Request
+import Dialogflow.V2.Request
 import TestUtil
 
 basePath :: FilePath

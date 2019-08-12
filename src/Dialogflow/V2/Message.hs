@@ -9,7 +9,7 @@
 {-# LANGUAGE StandaloneDeriving #-}
 
 {-|
-Module      : Dialogflow.Util
+Module      : Dialogflow.V2.Util
 Description : Dialogflow types for response messages.
 Copyright   : (c) Mauricio Fierro, 2019
 License     : BSD3-Clause
@@ -19,7 +19,7 @@ This module contains types for Dialogflow messages to be used in
 a fulfillment webhook response. See the Dialogflow <https://cloud.google.com/dialogflow/docs/reference/rpc/google.cloud.dialogflow.v2#google.cloud.dialogflow.v2.Intent.Message documentation>.
 -}
 
-module Dialogflow.Message
+module Dialogflow.V2.Message
   ( CardButton(..)
   , BasicCardContent(..)
   , BasicCardButton(..)

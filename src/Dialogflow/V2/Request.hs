@@ -3,7 +3,7 @@
 {-# LANGUAGE NamedFieldPuns #-}
 
 {-|
-Module      : Dialogflow.Request
+Module      : Dialogflow.V2.Request
 Description : Dialogflow types for the webhook request.
 Copyright   : (c) Mauricio Fierro, 2019
 License     : BSD3-Clause
@@ -12,7 +12,7 @@ Maintainer  : Mauricio Fierro <mauriciofierrom@gmail.com>
 This module contains types for Dialogflow webhook requests. See the Dialogflow <https://cloud.google.com/dialogflow/docs/reference/rpc/google.cloud.dialogflow.v2#webhookrequest documentation>.
 -}
 
-module Dialogflow.Request where
+module Dialogflow.V2.Request where
 
 import Data.Aeson ( FromJSON
                   , parseJSON
@@ -22,8 +22,10 @@ import Data.Aeson ( FromJSON
                   , (.:)
                   , (.:!)
                   , (.=))
-import Dialogflow.Util
+
 import qualified Data.Map as M
+
+import Dialogflow.Util
 
 -- | Represents an intent.
 data Intent =

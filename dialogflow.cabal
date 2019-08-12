@@ -32,10 +32,10 @@ source-repository head
 
 library
   exposed-modules:
-    Dialogflow.Message
-    Dialogflow.Payload.Google
-    Dialogflow.Request
-    Dialogflow.Response
+    Dialogflow.V2.Message
+    Dialogflow.V2.Payload.Google
+    Dialogflow.V2.Request
+    Dialogflow.V2.Response
     Dialogflow.Util
 
   build-depends:
@@ -57,10 +57,10 @@ test-suite dialog-flow-test
   build-tools: hspec-discover
   other-modules:
       TestUtil
-      Dialogflow.MessageSpec
-      Dialogflow.Payload.GoogleSpec
-      Dialogflow.RequestSpec
-      Dialogflow.ResponseSpec
+      Dialogflow.V2.MessageSpec
+      Dialogflow.V2.Payload.GoogleSpec
+      Dialogflow.V2.RequestSpec
+      Dialogflow.V2.ResponseSpec
   hs-source-dirs:
       test
   ghc-options: -threaded -rtsopts -with-rtsopts=-N

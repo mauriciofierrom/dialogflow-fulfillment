@@ -9,7 +9,7 @@
 {-# LANGUAGE StandaloneDeriving #-}
 
 {-|
-Module      : Dialogflow.Payload.Google
+Module      : Dialogflow.V2.Payload.Google
 Description : Dialogflow types for Google Actions payload.
 Copyright   : (c) Mauricio Fierro, 2019
 License     : BSD3-Clause
@@ -19,7 +19,7 @@ This module contains types for the Google Actions payload to be included
 in the webhook reponse. See the Dialogflow <https://developers.google.com/actions/build/json/dialogflow-webhook-json#dialogflow-response-body documentation>.
 -}
 
-module Dialogflow.Payload.Google where
+module Dialogflow.V2.Payload.Google where
 
 import Data.Aeson ( parseJSON
                   , toJSON
@@ -34,7 +34,7 @@ import Data.Foldable (asum)
 import qualified Data.HashMap.Strict as HM
 
 import Dialogflow.Util
-import qualified Dialogflow.Message as M
+import qualified Dialogflow.V2.Message as M
 
 -- | This field can be used to provide responses for different platforms
 -- like Actions on Google.
