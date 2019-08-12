@@ -137,3 +137,16 @@ instance ToJSON WebhookRequest where
     noNullObjects [ "responseId" .= responseId
            , "session" .= session
            , "queryResult" .= queryResult ]
+
+-- TODO: Check if it's possible to have multiple Contexts with the same name
+-- or if there's an use-case for that, and update accordingly.
+-- | Given a list of 'Context', find the value of a parameter of a context in
+-- the list.
+getContextParameter :: [Context] -- ^ The list of 'Context'.
+                    -> String -- ^ The name of the 'Context'.
+                    -> String -- ^ The name of the parameter.
+                    -> Maybe String
+getContextParameter ctxs ctx param =
+  case filter (\Context{..} -> ctxName == ctx) ctxs of
+    (x:_) -> M.lookup param =<< ctxParameters x
+    [] -> Nothing
