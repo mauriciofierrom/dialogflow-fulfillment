@@ -100,7 +100,7 @@ instance FromJSON QueryResult where
     intent <- qr .:! "intent"
     intentDetectionConfidence <- qr .:! "intentDetectionConfidence"
     diagnosticInfo <- qr .:! "diagnosticInfo"
-    languageCode <- qr .: "language_code"
+    languageCode <- qr .: "languageCode"
     return QueryResult{..}
 
 instance ToJSON QueryResult where
@@ -113,7 +113,7 @@ instance ToJSON QueryResult where
            , "intent" .= intent
            , "intentDetectionConfidence" .= intentDetectionConfidence
            , "diagnosticInfo" .= diagnosticInfo
-           , "language_code" .= languageCode ]
+           , "languageCode" .= languageCode ]
 
 -- | The request message for a webhook call.
 data WebhookRequest =
