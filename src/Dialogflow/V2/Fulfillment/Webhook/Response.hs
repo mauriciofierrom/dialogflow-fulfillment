@@ -11,7 +11,7 @@ Maintainer  : Mauricio Fierro <mauriciofierrom@gmail.com>
 This module contains types for Dialogflow webhook response. See the Dialogflow <https://cloud.google.com/dialogflow/docs/reference/rpc/google.cloud.dialogflow.v2#webhookresponse documentation>.
 -}
 
-module Dialogflow.V2.Response where
+module Dialogflow.V2.Fulfillment.Webhook.Response where
 
 import Data.Aeson ( parseJSON
                   , toJSON
@@ -24,10 +24,10 @@ import Dialogflow.Util (noNullObjects)
 
 import qualified Data.Map as M
 
-import Dialogflow.V2.Request (Context)
-import Dialogflow.V2.Message
+import Dialogflow.V2.Fulfillment.Webhook.Request (Context)
+import Dialogflow.V2.Fulfillment.Message
 
-import qualified Dialogflow.V2.Payload.Google as G
+import qualified Dialogflow.V2.Fulfillment.Payload.Google as G
 
 -- TODO: When this is included, no messages or payload is taken into account.
 -- We gotta cover this.

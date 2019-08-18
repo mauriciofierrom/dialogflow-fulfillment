@@ -19,7 +19,7 @@ This module contains types for Dialogflow messages to be used in
 a fulfillment webhook response. See the Dialogflow <https://cloud.google.com/dialogflow/docs/reference/rpc/google.cloud.dialogflow.v2#google.cloud.dialogflow.v2.Intent.Message documentation>.
 -}
 
-module Dialogflow.V2.Message
+module Dialogflow.V2.Fulfillment.Message
   ( CardButton(..)
   , BasicCardContent(..)
   , BasicCardButton(..)

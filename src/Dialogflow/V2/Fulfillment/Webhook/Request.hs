@@ -1,6 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE RecordWildCards #-}
-{-# LANGUAGE NamedFieldPuns #-}
 
 {-|
 Module      : Dialogflow.V2.Request
@@ -12,7 +11,7 @@ Maintainer  : Mauricio Fierro <mauriciofierrom@gmail.com>
 This module contains types for Dialogflow webhook requests. See the Dialogflow <https://cloud.google.com/dialogflow/docs/reference/rpc/google.cloud.dialogflow.v2#webhookrequest documentation>.
 -}
 
-module Dialogflow.V2.Request where
+module Dialogflow.V2.Fulfillment.Webhook.Request where
 
 import Data.Aeson ( FromJSON
                   , parseJSON

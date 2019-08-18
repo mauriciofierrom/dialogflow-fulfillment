@@ -1,12 +1,12 @@
-module Dialogflow.V2.Payload.GoogleSpec where
+module Dialogflow.V2.Fulfillment.Payload.GoogleSpec where
 
 import Test.Hspec
 
 import TestUtil
-import Dialogflow.V2.Payload.Google
+import Dialogflow.V2.Fulfillment.Payload.Google
 import Data.Aeson
 
-import qualified Dialogflow.V2.Message as M
+import qualified Dialogflow.V2.Fulfillment.Message as M
 
 basePath :: FilePath
 basePath = "files/payload/google/"

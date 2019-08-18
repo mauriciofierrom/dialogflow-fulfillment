@@ -1,10 +1,10 @@
-module Dialogflow.V2.ResponseSpec where
+module Dialogflow.V2.Fulfillment.Webhook.ResponseSpec where
 
 import Test.Hspec
 
 import qualified Data.Map as M
 
-import Dialogflow.V2.Response
+import Dialogflow.V2.Fulfillment.Webhook.Response
 import TestUtil
 
 basePath :: FilePath
