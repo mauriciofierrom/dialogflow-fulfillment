@@ -1,9 +1,9 @@
 cabal-version:       2.4
-name:                dialogflow
+name:                dialogflow-fulfillment
 version:             0.0.1.0
 tested-with:         GHC==8.6.4
 category:            API
-synopsis:            A Dialogflow library for Haskell.
+synopsis:            A Dialogflow Fulfillment library for Haskell.
 description:
   A library to create responses for Google's Dialogflow fulfillment webhook.
   .
@@ -15,8 +15,8 @@ description:
   Check how fulfillment works in the Dialogflow
   <https://cloud.google.com/dialogflow/docs/fulfillment-how documentation>.
 
-homepage:            https://github.com/mauriciofierrom/dialogflow
-bug-reports:         https://github.com/mauriciofierrom/dialogflow/issues
+homepage:            https://github.com/mauriciofierrom/dialogflow-fulfillment
+bug-reports:         https://github.com/mauriciofierrom/dialogflow-fulfillment/issues
 license:             BSD-3-Clause
 license-file:        LICENSE
 author:              Mauricio Fierro
@@ -28,7 +28,7 @@ extra-source-files:
 
 source-repository head
   type: git
-  location: https://github.com/mauriciofierrom/dialogflow
+  location: https://github.com/mauriciofierrom/dialogflow-fulfillment
 
 library
   exposed-modules:
@@ -70,7 +70,7 @@ test-suite dialog-flow-test
     , base ^>=4.12.0.0
     , bytestring
     , containers
-    , dialogflow
+    , dialogflow-fulfillment
     , directory
     , hspec
     , hspec-discover
