@@ -1,0 +1,18 @@
+sudo: false
+
+language: nix
+nix: 2.0.4
+
+# Caching so the next build will be fast too.
+cache:
+  directories:
+  - /nix
+
+# Ensure necessary system libraries are present
+addons:
+  apt:
+    packages:
+      - libgmp-dev
+
+script:
+  - nix-shell --run "cabal new-test"
