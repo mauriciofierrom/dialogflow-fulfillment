@@ -15,4 +15,4 @@ addons:
       - libgmp-dev
 
 script:
-  - nix-shell --run "cabal new-test"
+  - nix-build

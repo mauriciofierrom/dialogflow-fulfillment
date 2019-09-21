@@ -9,7 +9,7 @@ let
       , unordered-containers
       }:
       mkDerivation {
-        pname = "dialogflow";
+        pname = "dialogflow-fulfillment";
         version = "0.0.1.0";
         src = ./.;
         libraryHaskellDepends = [
@@ -20,8 +20,8 @@ let
           hspec-discover
         ];
         testToolDepends = [ hspec-discover ];
-        homepage = "https://github.com/mauriciofierrom/dialogflow";
-        description = "A Dialogflow library for Haskell";
+        homepage = "https://github.com/mauriciofierrom/dialogflow-fulfillment";
+        description = "A Dialogflow Fulfillment library for Haskell";
         license = stdenv.lib.licenses.bsd3;
       };
 

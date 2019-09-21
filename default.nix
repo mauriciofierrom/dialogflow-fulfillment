@@ -1,4 +1,4 @@
 let
   pkgs = import <nixpkgs> { };
 in
-  pkgs.haskellPackages.callPackage ./dialog-flow.nix { }
+  pkgs.haskellPackages.callPackage ./dialogflow-fulfillment.nix { }
