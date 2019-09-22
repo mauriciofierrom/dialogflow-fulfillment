@@ -1,5 +1,5 @@
-# Revision history for dialog-flow
+# Revision history for dialogflow-fulfillment
 
-## 0.1.0.0 -- YYYY-mm-dd
+## 0.1.0.0 -- 2019-09-22
 
 * First version. Released on an unsuspecting world.

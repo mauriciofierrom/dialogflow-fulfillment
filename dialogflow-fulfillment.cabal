@@ -1,6 +1,6 @@
 cabal-version:       2.4
 name:                dialogflow-fulfillment
-version:             0.0.1.0
+version:             0.1.0.0
 tested-with:         GHC==8.6.4
 category:            API
 synopsis:            A Dialogflow Fulfillment library for Haskell.
