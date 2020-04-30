@@ -14,5 +14,11 @@ addons:
     packages:
       - libgmp-dev
 
+jobs:
+  include:
+    - name: "GHC 8.6.5"
+      env: GHC=ghc865
+    - name: "GHC 8.8.3"
+      env: GHC=ghc883
 script:
-  - nix-build
+  - nix-build --argstr compiler $GHC
