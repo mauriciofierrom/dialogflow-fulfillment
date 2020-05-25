@@ -17,3 +17,7 @@ Fix `base` bounds for GHC 8.6.* to restore hackage build.
 ## 0.1.1.2 -- 2020-05-22
 
 Update `base` bounds as required by stackage in preparation for GHC 8.10.
+
+## 0.1.1.3 -- 2020-05-25
+
+Update `aeson` bounds as required by stackage.
