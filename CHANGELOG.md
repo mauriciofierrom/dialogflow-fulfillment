@@ -21,3 +21,7 @@ Update `base` bounds as required by stackage in preparation for GHC 8.10.
 ## 0.1.1.3 -- 2020-05-25
 
 Update `aeson` bounds as required by stackage.
+
+## 0.1.1.4 -- 2021-05-12
+
+Update `hspec` and `hspec-discover` bounds as required by stackage.
