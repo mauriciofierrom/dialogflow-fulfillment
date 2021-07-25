@@ -18,10 +18,14 @@ import Data.Aeson ( FromJSON
                   , ToJSON
                   , toJSON
                   , withObject
+                  , Object
+                  , Value
                   , (.:)
                   , (.:!)
                   , (.=))
+import Data.Text (Text)
 
+import qualified Data.HashMap.Strict as HM
 import qualified Data.Map as M
 
 import Dialogflow.Util
@@ -50,7 +54,7 @@ data Context =
           , ctxLifespanCount :: Maybe Int
           -- ^ The number of conversational query requests after which the
           -- context expires.
-          , ctxParameters :: Maybe (M.Map String String)
+          , ctxParameters :: Maybe Object
           -- ^ The collection of parameters associated with this context.
           } deriving (Eq, Show)
 
@@ -142,10 +146,10 @@ instance ToJSON WebhookRequest where
 -- | Given a list of 'Context', find the value of a parameter of a context in
 -- the list.
 getContextParameter :: [Context] -- ^ The list of 'Context'.
-                    -> String -- ^ The name of the 'Context'.
-                    -> String -- ^ The name of the parameter.
-                    -> Maybe String
+                    -> String    -- ^ The name of the 'Context'.
+                    -> Text      -- ^ The name of the parameter.
+                    -> Maybe Value
 getContextParameter ctxs ctx param =
   case filter (\Context{..} -> ctxName == ctx) ctxs of
-    (x:_) -> M.lookup param =<< ctxParameters x
+    (x:_) -> (HM.lookup param =<< ctxParameters x)
     [] -> Nothing
